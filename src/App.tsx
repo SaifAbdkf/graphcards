@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { data, Edge, Network } from "vis-network";
+import { Edge, Network } from "vis-network";
 import "./App.css";
 
 export default function App() {
   const containerRef = useRef(null);
-  const [network2, setNetwork] = useState<Network | null>(null);
+  const [network, setNetwork] = useState<Network | null>(null);
 
   const nodes = useMemo(
     () => [
@@ -32,7 +32,9 @@ export default function App() {
     if (containerRef.current !== null) {
       setNetwork(new Network(containerRef.current, data, options));
     }
-    // return () => network2.destroy(); // Clean up the network when the component unmounts
+    if (network) {
+      return () => network.destroy(); // Clean up the network when the component unmounts
+    }
   }, [nodes]);
 
   // const addCard = () => {
