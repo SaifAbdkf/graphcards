@@ -1,0 +1,41 @@
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2rem;
+  padding: 0.225rem 2rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--black);
+  }
+
+  .navLinks {
+    height: 100%;
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 2rem;
+    height: 100%;
+
+    .link {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: color 0.15s ease-in-out;
+      color: var(--black);
+      font-weight: 600;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    .active {
+      color: var(--primary-color);
+    }
+  }
+}

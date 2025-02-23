@@ -5,13 +5,13 @@ import {
   emptyCardInfomation,
   TunisianCardTypes,
 } from "./Types/types";
-import { BACKEND_URL } from "./App";
 import { deepCopy } from "./utils/deepCopy";
 import styles from "./cardLab.module.scss";
 import {
   getCardFromCardInformation,
   getCardInformationFromCard,
 } from "./utils/cardUtils";
+import { BACKEND_URL } from "./pages/PlaygroundPage";
 
 export default function CardLab({
   selectedCard,

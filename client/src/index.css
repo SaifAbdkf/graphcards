@@ -1,5 +1,6 @@
 @import url(./styles/colors.css);
 * {
   margin: 0;
-  font-family: Helvetica, sans-serif;
+  font-family: Verdana, sans-serif;
+  background-color: var(--background-white);
 }

@@ -1,0 +1,29 @@
+.appContainer {
+  width: 100%;
+
+  position: relative;
+  background-color: rgb(225, 161, 161);
+  overflow: hidden;
+
+  .navbarContainer {
+    border-bottom: 2px solid var(--black);
+  }
+}
+
+.appContainslaygrouund {
+  height: 100vh;
+}
+
+.playGroundPage {
+  height: 100%;
+}
+
+/* 
+.appContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-color: rgb(219, 224, 240);
+  position: relative;
+  overflow: hidden;
+} */
