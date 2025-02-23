@@ -2,11 +2,16 @@
   width: 100%;
 
   position: relative;
-  background-color: rgb(225, 161, 161);
+  background-color: rgb(218, 194, 194);
   overflow: hidden;
 
   .navbarContainer {
     border-bottom: 2px solid var(--black);
+    @include center_dynamic_child;
+  }
+
+  .pageContainer {
+    @include center_dynamic_child;
   }
 }
 

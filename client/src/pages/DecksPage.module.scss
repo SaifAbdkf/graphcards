@@ -1,0 +1,20 @@
+.decksPageContainer {
+  margin: 3rem 0rem;
+  padding: 0rem 1rem;
+  @include centered_child_container;
+
+  .decksList {
+    margin: 1rem 0rem;
+    display: flex;
+    gap: 4rem;
+    flex-wrap: wrap;
+
+    .deckRepresentation {
+      box-sizing: border-box;
+      border: 1px solid var(--black);
+      width: 18rem;
+      aspect-ratio: 5/3;
+      padding: 2rem;
+    }
+  }
+}

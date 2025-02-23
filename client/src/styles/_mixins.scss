@@ -1,3 +1,12 @@
 @mixin shadow_box {
   box-shadow: 1px 1px 0 0px var(--black);
 }
+
+@mixin center_dynamic_child {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin centered_child_container {
+  flex-basis: 1000px;
+}

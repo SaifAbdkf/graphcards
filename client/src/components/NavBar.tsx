@@ -5,7 +5,7 @@ export default function NavBar() {
   const location = useLocation().pathname;
   console.log(location);
   return (
-    <div className={styles.navBar}>
+    <div className={`${styles.navBar} ${styles.centeredChildContainer}`}>
       <div>
         <Link to="/" className={styles.logo}>
           <div> GraphCards </div>
