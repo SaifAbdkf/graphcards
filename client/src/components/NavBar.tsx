@@ -14,7 +14,9 @@ export default function NavBar() {
       <div className={styles.navLinks}>
         <Link
           to="/decks"
-          className={`${styles.link} ${location === "/decks" && styles.active}`}
+          className={`${styles.link} ${
+            location.includes("/decks") && styles.active
+          }`}
         >
           <span key={"deck"}> Deck </span>
         </Link>

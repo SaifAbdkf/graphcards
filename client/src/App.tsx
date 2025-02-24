@@ -7,12 +7,12 @@ import styles from "./App.module.scss";
 import NavBar from "./components/NavBar";
 
 export default function App() {
-  const location = useLocation();
+  const location = useLocation().pathname;
   console.log("location", location);
   return (
     <div
       className={`${styles.appContainer} ${
-        location.pathname === "/playground" && styles.appContainslaygrouund
+        location === "/playground" && styles.appContainslaygrouund
       }`}
     >
       <div className={styles.navbarContainer}>
@@ -21,12 +21,14 @@ export default function App() {
 
       <div
         className={`${styles.pageContainer} ${
-          location.pathname === "/playground" && styles.playGroundPage
+          location === "/playground" && styles.playGroundPage
         }`}
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/decks" element={<DecksPage />} />
+          <Route path="/decks" element={<DecksPage location={location} />}>
+            <Route path="create" element={<DecksPage location={location} />} />
+          </Route>
           <Route path="/playground" element={<PlaygroundPage />} />
         </Routes>
       </div>
