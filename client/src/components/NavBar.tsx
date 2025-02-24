@@ -18,7 +18,7 @@ export default function NavBar() {
             location.includes("/decks") && styles.active
           }`}
         >
-          <span key={"deck"}> Deck </span>
+          <span key={"deck"}> GraphDeck </span>
         </Link>
         <Link
           to="/playground"

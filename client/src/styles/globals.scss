@@ -1,0 +1,25 @@
+.bg-red {
+  background-color: var(--secondary-color);
+}
+
+.bg-green {
+  background-color: var(--primary-color);
+}
+
+.bg-neutral {
+  background-color: var(--neutral-color);
+  color: var(--black) !important;
+  // font-weight: bold;
+}
+
+.small-font-size {
+  font-size: var(--small-font-size);
+}
+
+.normal-font-size {
+  font-size: var(--normal-font-size);
+}
+
+.big-font-size {
+  font-size: var(--big-font-size);
+}

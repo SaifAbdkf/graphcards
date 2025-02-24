@@ -1,3 +1,5 @@
+// export type Size= "small"
+
 export enum TunisianCardTypes {
   noun = "إسم",
   verb = "فعل",

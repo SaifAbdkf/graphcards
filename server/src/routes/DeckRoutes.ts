@@ -7,7 +7,7 @@ import {
   getDeck,
   updateDeck,
 } from "../controllers/DeckControllers";
-import { cardRoutes } from "./card";
+import { cardRoutes } from "./CardRoutes";
 
 export const deckRoutes = express.Router();
 
@@ -15,5 +15,4 @@ deckRoutes.post("/", createDeck);
 deckRoutes.get("/:deckId", getDeck);
 deckRoutes.patch("/:deckId", updateDeck);
 deckRoutes.delete("/:deckId", deleteDeck);
-
 deckRoutes.use("/:deckId/card", cardRoutes);

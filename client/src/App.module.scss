@@ -6,6 +6,9 @@
   overflow: hidden;
 
   .navbarContainer {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
     border-bottom: 2px solid var(--black);
     @include center_dynamic_child;
   }

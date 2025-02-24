@@ -1,5 +1,5 @@
-@mixin shadow_box {
-  box-shadow: 1px 1px 0 0px var(--black);
+@mixin shadow_box($x: 1px, $y: 1px) {
+  box-shadow: $x $y 0 0px var(--black);
 }
 
 @mixin center_dynamic_child {
@@ -9,4 +9,12 @@
 
 @mixin centered_child_container {
   flex-basis: 1000px;
+}
+
+@mixin input_text_textarea {
+  box-sizing: border-box;
+  padding: 0.225em;
+  border: 2px solid var(--black);
+  border-radius: 0.225rem;
+  font-size: 1rem;
 }

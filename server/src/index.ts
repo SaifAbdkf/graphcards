@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import { cardRoutes } from "./routes/card";
+import { cardRoutes } from "./routes/CardRoutes";
 import mongoose from "mongoose";
 import { deckRoutes } from "./routes/deck";
 import cors from "cors";

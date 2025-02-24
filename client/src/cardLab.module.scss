@@ -1,8 +1,8 @@
 .cardLabContainer {
   aspect-ratio: 5/3;
   overflow: scroll;
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and older Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   background: #fcfcfc;
   position: absolute;
   top: 50%;

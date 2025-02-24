@@ -12,9 +12,9 @@
     .deckRepresentation {
       box-sizing: border-box;
       border: 2px solid var(--black);
-      width: 18rem;
+      width: 24rem;
       aspect-ratio: 5/3;
-      padding: 2rem;
+      // padding: 2rem;
       border-radius: 0.375rem;
       position: relative;
       box-shadow: 1px 1px 0px 1px var(--black);
@@ -25,22 +25,28 @@
     }
     .addDeck {
       box-shadow: none;
-      border: 2px dashed var(--black);
+      border: 3px dashed var(--black);
     }
+    // text-decoration: none;
 
-    .createDeckLink {
-      // text-decoration: none;
+    .addDeck {
+      background-color: var(--primary-color-very-light);
+      border-color: var(--primary-color);
       color: var(--black);
+      span {
+        background-color: var(--primary-color-very-light);
+      }
+      cursor: pointer;
       &:hover {
         color: var(--primary-color);
+      }
+    }
 
-        .addDeck {
-          background-color: var(--primary-hover);
-          border-color: var(--primary-color);
-          span {
-            background-color: var(--primary-hover);
-          }
-        }
+    .addDeckNoHover {
+      cursor: default;
+
+      &:hover {
+        color: var(--black);
       }
     }
   }
@@ -48,7 +54,6 @@
 
 .jumpAnimation {
   animation: jump 0.2s ease-in-out forwards; /* Apply jump animation for 3 seconds */
-  background-color: red;
 }
 
 @keyframes jump {
@@ -66,6 +71,38 @@
 }
 
 .formContainer {
-  margin-top: 2rem;
-  border: 1px solid black;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  overflow: scroll;
+  scrollbar-width: none;
+  background-color: var(--primary-color-very-light);
+
+  .deckName {
+    @include input_text_textarea;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .deckDescription {
+    @include input_text_textarea;
+    width: 90% !important;
+    height: 4rem;
+    text-align: center;
+  }
+
+  .buttonsContainer {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.325rem;
+    align-items: center;
+  }
+  .generateButtonContainer {
+    flex: 1;
+  }
+  .scratchButtonContainer {
+    flex: 1;
+  }
 }
