@@ -2,37 +2,81 @@ import { Request, Response } from "express";
 import { Card } from "../models/CardModel";
 import mongoose from "mongoose";
 import { Edge } from "../models/EdgeModel";
+import { Deck } from "../models/DeckModel";
 
 export async function createCard(request: Request, response: Response) {
-  const { cardType, front, back, groups, links } = request.body;
+  const { deckId, front, back, links } = request.body;
+  //TODO find a way to create a card where its linkedCards are not already created, but needs to be created
+  //introduce new linkcards arr  as a 5th element of the body
+  // newLinkedCards = [{front: string, label: string}]
 
   try {
-    const card = await Card.create({
-      cardType,
+    // validate
+    console.log("hello");
+
+    const deck = await Deck.findById(deckId);
+    if (!deck) {
+      return response.status(404).json({ error: "deck not found" });
+    }
+    const validatedDeckId = new mongoose.Types.ObjectId(deckId);
+    console.log("Hey I am here 😎 links: ", links);
+
+    //validate linked
+    const definedLinks = links || [];
+    const linkedCardsIds = definedLinks.map(
+      (link: { linkedCardId: string; label: string }) => link.linkedCardId
+    );
+
+    const foundLinkedCards = await Card.find({ _id: { $in: linkedCardsIds } });
+
+    if (linkedCardsIds.length !== foundLinkedCards.length) {
+      return response.status(404).json({
+        error:
+          "One or more of the supposedly existing linked cards could not be found",
+      });
+    }
+
+    const validatedLinks = definedLinks.map(
+      async (link: { linkedCardId: string; label: string }) => ({
+        link: new mongoose.Types.ObjectId(link.linkedCardId),
+        label: link.label,
+      })
+    );
+
+    //create card
+    const newCard = new Card({
+      decks: [validatedDeckId],
       front,
       back,
-      groups,
-      links,
+      links: validatedLinks,
     });
 
-    if (card && card.links) {
-      for (const linkedCard of card.links) {
-        try {
-          await Edge.create({
-            from: card._id,
-            to: linkedCard.linkedCardId,
-            label: linkedCard.label,
-          });
-        } catch (error) {
-          console.log(error);
-          return response.status(400).json("edge could not be created");
-        }
+    await newCard.save();
+
+    deck.cards.push(newCard._id);
+    await deck.save();
+
+    // create edges
+    for (const linkedCard of validatedLinks) {
+      try {
+        const newEdge = new Edge({
+          from: newCard._id,
+          to: linkedCard.linkedCardId,
+          label: linkedCard.label,
+        });
+        await newEdge.save();
+      } catch (error) {
+        console.log(error);
+        return response
+          .status(400)
+          .json({ error: error, admMessage: "problem with creating an edge" });
       }
     }
-    return response.status(200).json(card);
+    return response.status(200).json(newCard);
   } catch (error) {
-    console.log(error);
-    return response.status(400).json(error);
+    return response
+      .status(500)
+      .json({ error: error, admMessage: "7solt w te7cheeeelek" });
   }
 }
 

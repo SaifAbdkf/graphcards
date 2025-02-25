@@ -13,6 +13,7 @@ import {
 // to allow the cards router to access the parent routers params
 export const cardRoutes = express.Router();
 
+//TODO change the routes and the functions names
 cardRoutes.post("/", createCard);
 cardRoutes.get("/", getCards);
 cardRoutes.get("/:cardId", getCard);

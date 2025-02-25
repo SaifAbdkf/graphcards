@@ -2,9 +2,11 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { cardRoutes } from "./routes/CardRoutes";
 import mongoose from "mongoose";
-import { deckRoutes } from "./routes/deck";
 import cors from "cors";
-import { Card } from "./models/CardModel";
+import "fs";
+import "path";
+import { run_eval_round } from "./ai_prompting";
+import { deckRoutes } from "./routes/DeckRoutes";
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,7 @@ app.use(cors());
 
 // ROUTES
 app.use("/api/card", cardRoutes);
+app.use("/api/Deck", deckRoutes);
 
 //CONNECT TO DB
 if (process.env.MONGO_URI) {

@@ -4,26 +4,21 @@ const Schema = mongoose.Schema;
 
 const cardSchema = new Schema(
   {
-    // deck: { type: mongoose.Types.ObjectId, ref: "Deck", required: true },
-    // languageFrom: { type: String, required: true },
-    cardType: { type: String, required: true },
-    front: {
-      value: { type: String, required: true },
-    },
+    decks: [{ type: Schema.Types.ObjectId, ref: "Deck" }],
+    front: { type: String, required: true },
     back: {
-      value: { type: String, required: true },
-      example: { type: String, required: true },
-      notes: { type: String, required: false },
+      type: String,
+      required: false,
+      // false in case AI or user creates a link card to be filled later or maybe if it is a group Card?
     },
-    groups: { type: [String], required: false },
     links: {
       type: [{ linkedCardId: mongoose.Types.ObjectId, label: String }],
       ref: "Card",
       required: false,
     },
-    // difficulty: { type: Number, required: false },
+    metadata: { type: Map, of: String },
   },
-  { strict: false }
+  { timesstamps: true, strict: false }
 );
 
 export const Card = mongoose.model("Card", cardSchema);

@@ -6,10 +6,10 @@ export async function createDeck(
   request: Request,
   response: Response
 ): Promise<Response> {
-  const { name, languageFrom, languageTo } = request.body;
+  const { name, description } = request.body;
 
   try {
-    const deck = await Deck.create({ name, languageFrom, languageTo });
+    const deck = await Deck.create({ name, description });
     return response.status(200).json(deck);
   } catch (error) {
     console.log(error);
