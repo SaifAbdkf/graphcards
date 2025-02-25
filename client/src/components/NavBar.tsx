@@ -3,7 +3,6 @@ import styles from "./NavBar.module.scss";
 
 export default function NavBar() {
   const location = useLocation().pathname;
-  console.log(location);
   return (
     <div className={`${styles.navBar} ${styles.centeredChildContainer}`}>
       <div>

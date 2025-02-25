@@ -17,21 +17,21 @@ export async function createDeck(
   }
 }
 
-export async function getDeck(
+export async function getDecksInfo(
   request: Request,
   response: Response
 ): Promise<Response> {
-  const { deckId } = request.params;
-
-  if (!mongoose.Types.ObjectId.isValid(deckId)) {
-    return response.status(404).json({ error: "no such deck" });
+  try {
+    const decks = await Deck.find({}, "-cards");
+    if (!decks) {
+      return response.status(404).json({ error: "no decks" });
+    }
+    return response.status(200).json(decks);
+  } catch (error) {
+    return response
+      .status(500)
+      .json({ error: error, admMsg: "error fetching decks" });
   }
-
-  const deck = await Deck.findById(deckId);
-  if (!deck) {
-    return response.status(404).json({ error: "no such deck" });
-  }
-  return response.status(200).json(deck);
 }
 
 export async function updateDeck(

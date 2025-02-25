@@ -3,8 +3,7 @@ import { Edge, Network } from "vis-network";
 import { Card, CardApiData } from "../Types/types";
 import CardLab from "../CardLab";
 import styles from "./PlaygroundPage.module.scss";
-
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { get } from "../services/apiService";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -14,7 +13,7 @@ export default function PlaygroundPage() {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   useEffect(() => {
-    console.log("TEST RENDER");
+    console.log("TEST RENDER PLAYGROUND");
   }, [Network]);
 
   const nodes: Node[] = useMemo(
@@ -80,16 +79,14 @@ export default function PlaygroundPage() {
 
   useEffect(() => {
     const fetchCards = async () => {
-      if (BACKEND_URL) {
-        const response = await fetch(`${BACKEND_URL}/api/card/`);
-        const data: CardApiData[] = await response.json();
-        const formattedCards: Card[] = data.map((card) => ({
-          ...card,
-          id: card._id,
-          _id: undefined,
-        }));
-        setCards(formattedCards);
-      }
+      const data: CardApiData[] = await get("/card/all");
+
+      const formattedCards: Card[] = data.map((card) => ({
+        ...card,
+        id: card._id,
+        _id: undefined,
+      }));
+      setCards(formattedCards);
     };
 
     fetchCards();
@@ -147,9 +144,14 @@ export default function PlaygroundPage() {
   }, [network, cards]);
 
   return (
-    <>
-      <div ref={containerRef} className={styles.canvasContainer}></div>
-      {showCardLab && <CardLab selectedCard={selectedCard} />}
-    </>
+    <div className={styles.playGroundContainer}>
+      <div className={`${styles.cardToolBar}`}></div>
+      <div className={`${styles.deckToolBarAndCanvasContainer}`}>
+        <div className={`${styles.deckToolBar}`}></div>
+
+        <div ref={containerRef} className={styles.canvasContainer}></div>
+        {showCardLab && <CardLab selectedCard={selectedCard} />}
+      </div>
+    </div>
   );
 }

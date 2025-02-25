@@ -1,6 +1,39 @@
-.canvasContainer {
-  flex: 1;
-  box-sizing: border-box;
+// .playGroundContainer {
+//   background-color: red !important;
+//   display: flex;
+//   .cardToolBar {
+//     background-color: blue;
+//     height: 100%;
+//     width: 30px;
+//   }
+// }
+
+.playGroundContainer {
+  background-color: antiquewhite;
   height: 100%;
-  transition: flex 0.4s ease-in-out;
+  width: 100%;
+  display: flex;
+  .cardToolBar {
+    box-sizing: border-box;
+    background-color: var(--neutral-color);
+    height: 100%;
+    width: 2.5rem;
+    border-right: 2px solid var(--black);
+  }
+  .deckToolBarAndCanvasContainer {
+    .deckToolBar {
+      box-sizing: border-box;
+      background-color: var(--neutral-color);
+      border-bottom: 2px solid var(--black);
+      height: 2.5rem;
+      width: 100%;
+    }
+
+    .canvasContainer {
+      flex-grow: 1;
+      box-sizing: border-box;
+      height: 100%;
+      transition: flex 0.4s ease-in-out;
+    }
+  }
 }

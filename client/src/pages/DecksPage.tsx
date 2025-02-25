@@ -2,7 +2,7 @@ import Button from "../components/Button";
 import styles from "./DecksPage.module.scss";
 import { useState } from "react";
 
-export default function DecksPage({ location }: { location: string }) {
+export default function DecksPage() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
   const decks = [
     { name: "tunisian", numCards: 500 },
@@ -10,7 +10,6 @@ export default function DecksPage({ location }: { location: string }) {
     { name: "computer science", numCards: 1 },
     { name: "Philosophy", numCards: 10 },
   ];
-  console.log("location is: ", location);
 
   return (
     <div className={styles.decksPageContainer}>

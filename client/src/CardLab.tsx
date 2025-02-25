@@ -11,7 +11,7 @@ import {
   getCardFromCardInformation,
   getCardInformationFromCard,
 } from "./utils/cardUtils";
-import { BACKEND_URL } from "./pages/PlaygroundPage";
+import { BACKEND_URL } from "./services/apiService";
 
 export default function CardLab({
   selectedCard,

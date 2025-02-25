@@ -14,24 +14,14 @@
   }
 
   .pageContainer {
+    box-sizing: border-box;
+    padding-top: 2.5rem;
+    // border: solid 7px red;
     @include center_dynamic_child;
   }
-}
 
-.appContainslaygrouund {
-  height: 100vh;
+  .playgroundPageContainer {
+    background-color: green;
+    height: 100vh;
+  }
 }
-
-.playGroundPage {
-  height: 100%;
-}
-
-/* 
-.appContainer {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  background-color: rgb(219, 224, 240);
-  position: relative;
-  overflow: hidden;
-} */
