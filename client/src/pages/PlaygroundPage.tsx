@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Edge, Network } from "vis-network";
-import { Card, CardApiData } from "../Types/types";
-import CardLab from "../CardLab";
+import { Card } from "../Types/types";
+import CardLab from "../components/CardLab";
 import styles from "./PlaygroundPage.module.scss";
-import { get } from "../services/apiService";
+import { get } from "../services/api/apiRequestMethods";
+import Button from "../components/Button";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -145,13 +146,16 @@ export default function PlaygroundPage() {
 
   return (
     <div className={styles.playGroundContainer}>
-      <div className={`${styles.cardToolBar}`}></div>
-      <div className={`${styles.deckToolBarAndCanvasContainer}`}>
-        <div className={`${styles.deckToolBar}`}></div>
-
-        <div ref={containerRef} className={styles.canvasContainer}></div>
-        {showCardLab && <CardLab selectedCard={selectedCard} />}
+      <div ref={containerRef} className={styles.canvasContainer}></div>
+      <div className={`${styles.deckToolBar}`}></div>
+      <div className={`${styles.cardToolBar}`}>
+        <Button bgColorClass="bg-green" onClick={() => setShowCardLab(true)}>
+          +
+        </Button>
       </div>
+      {showCardLab && (
+        <CardLab cardToEdit={selectedCard} setShowCardLab={setShowCardLab} />
+      )}
     </div>
   );
 }

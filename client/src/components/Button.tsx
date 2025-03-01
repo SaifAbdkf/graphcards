@@ -9,16 +9,21 @@ export type FontSizeClass =
   | "big-font-size";
 export default function Button({
   children,
-  bgColorClass,
-  fontSizeClass,
+  onClick,
+  bgColorClass = "bg-neutral",
+  fontSizeClass = "small-font-size",
 }: {
   children: ReactNode;
-  bgColorClass: BgColorClass;
-  fontSizeClass: FontSizeClass;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  bgColorClass?: BgColorClass;
+  fontSizeClass?: FontSizeClass;
 }) {
   return (
-    <div className={`${styles.theButton} ${bgColorClass} ${fontSizeClass}`}>
+    <button
+      onClick={onClick}
+      className={`${styles.theButton} ${bgColorClass} ${fontSizeClass}`}
+    >
       {children}
-    </div>
+    </button>
   );
 }

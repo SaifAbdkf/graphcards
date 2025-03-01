@@ -30,7 +30,26 @@ export async function getDecksInfo(
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, admMsg: "error fetching decks" });
+      .json({ error: error, admMsg: "error fetching decks info" });
+  }
+}
+
+export async function getDeck(
+  request: Request,
+  response: Response
+): Promise<Response> {
+  const { deckId } = request.params;
+
+  try {
+    const deck = await Deck.findById(deckId);
+    if (!deck) {
+      return response.status(404).json({ error: "no deck" });
+    }
+    return response.status(200).json(deck);
+  } catch (error) {
+    return response
+      .status(500)
+      .json({ error: error, admMsg: "error fetching the deck" });
   }
 }
 

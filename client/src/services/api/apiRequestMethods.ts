@@ -6,12 +6,15 @@ export async function get<T>(endpoint: string): Promise<T[]> {
     const data: T[] = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("GET: Error fetching data:", error);
     throw error;
   }
 }
 
-export async function post<T>(endpoint: string, data: T): Promise<T> {
+export async function post<T>(
+  endpoint: string,
+  data: T
+): Promise<T & { _id: string }> {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: "POST",
@@ -20,10 +23,10 @@ export async function post<T>(endpoint: string, data: T): Promise<T> {
       },
       body: JSON.stringify(data),
     });
-    const formattedResponse: T = await response.json();
+    const formattedResponse: T & { _id: string } = await response.json();
     return formattedResponse;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("POST: Error fetching data:", error);
     throw error;
   }
 }

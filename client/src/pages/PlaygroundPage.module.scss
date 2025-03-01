@@ -9,31 +9,36 @@
 // }
 
 .playGroundContainer {
-  background-color: antiquewhite;
+  background-color: rgb(227, 143, 34);
   height: 100%;
   width: 100%;
-  display: flex;
+  // display: flex;
   .cardToolBar {
+    position: absolute;
     box-sizing: border-box;
     background-color: var(--neutral-color);
-    height: 100%;
-    width: 2.5rem;
-    border-right: 2px solid var(--black);
+    height: 280px;
+    width: var(--navbar-height);
+    top: calc(var(--navbar-height) + 1rem);
+    left: 1rem;
+    @include input_text_textarea;
+    // @include shadow_box;
   }
-  .deckToolBarAndCanvasContainer {
-    .deckToolBar {
-      box-sizing: border-box;
-      background-color: var(--neutral-color);
-      border-bottom: 2px solid var(--black);
-      height: 2.5rem;
-      width: 100%;
-    }
 
-    .canvasContainer {
-      flex-grow: 1;
-      box-sizing: border-box;
-      height: 100%;
-      transition: flex 0.4s ease-in-out;
-    }
+  .deckToolBar {
+    @include input_text_textarea;
+    position: absolute;
+    top: calc(var(--navbar-height) + 1rem);
+    left: calc(var(--navbar-height) + 1rem + 1rem);
+    background-color: var(--neutral-color);
+    border-bottom: 2px solid var(--black);
+    height: 2.5rem;
+    width: 280px;
+  }
+
+  .canvasContainer {
+    box-sizing: border-box;
+    height: 100%;
+    transition: flex 0.4s ease-in-out;
   }
 }
