@@ -12,6 +12,7 @@ import {
 } from "../store/selectors/deckSelector";
 import { setDecksInfo } from "../store/slices/deckSlice";
 import { getDecksInfo } from "../services/api/decksApi";
+import { Link } from "react-router-dom";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -152,7 +153,11 @@ export default function PlaygroundPage() {
   }, [network, cards]);
 
   if (!currentDeck) {
-    return <div>create deck or select deck</div>;
+    return (
+      <div>
+        <Link to="/graphsdecks">create deck</Link> or select deck
+      </div>
+    );
   }
 
   return (

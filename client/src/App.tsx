@@ -1,10 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/HomePage";
-import DecksPage from "./pages/DecksPage";
+
 import PlaygroundPage from "./pages/PlaygroundPage";
 
 import styles from "./App.module.scss";
 import NavBar from "./components/NavBar";
+import GraphDecksPage from "./pages/GraphDecksPage";
 
 export default function App() {
   const location = useLocation().pathname;
@@ -21,7 +22,7 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/decks" element={<DecksPage />}></Route>
+          <Route path="/graphdecks" element={<GraphDecksPage />}></Route>
           <Route path="/playground" element={<PlaygroundPage />} />
         </Routes>
       </div>

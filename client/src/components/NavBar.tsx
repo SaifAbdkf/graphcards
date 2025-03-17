@@ -12,9 +12,9 @@ export default function NavBar() {
       </div>
       <div className={styles.navLinks}>
         <Link
-          to="/decks"
+          to="/graphdecks"
           className={`${styles.link} ${
-            location.includes("/decks") && styles.active
+            location.includes("/graphdecks") && styles.active
           }`}
         >
           <span key={"deck"}> GraphDeck </span>

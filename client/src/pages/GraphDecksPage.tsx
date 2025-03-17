@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
-import styles from "./DecksPage.module.scss";
+import styles from "./GraphDecksPage.module.scss";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { createDeck, getDeck, getDecksInfo } from "../services/api/decksApi";
 import { setCurrentDeck, setDecksInfo } from "../store/slices/deckSlice";
@@ -12,7 +12,7 @@ import {
   selectDecksInfo,
 } from "../store/selectors/deckSelector";
 
-export default function DecksPage() {
+export default function GraphDecksPage() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
   const [deckFields, setDeckFields] = useState<DeckFields>(emptyDeckFields);
   const navigate = useNavigate();
