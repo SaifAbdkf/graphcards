@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Edge, Network } from "vis-network";
 import { Card } from "../Types/types";
 import CardLab from "../components/CardLab";
@@ -10,9 +10,9 @@ import {
   selectCurrentDeck,
   selectDecksInfo,
 } from "../store/selectors/deckSelector";
-import { setDecksInfo } from "../store/slices/deckSlice";
-import { getDecksInfo } from "../services/api/decksApi";
-import { Link } from "react-router-dom";
+import { setCurrentDeck, setDecksInfo } from "../store/slices/deckSlice";
+import { getDeck, getDecksInfo } from "../services/api/decksApi";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -25,6 +25,7 @@ export default function PlaygroundPage() {
   const currentDeck = useSelector(selectCurrentDeck);
   console.log("playground current deck is", currentDeck);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDecksInfo = async () => {
@@ -101,6 +102,19 @@ export default function PlaygroundPage() {
     fetchCards();
   }, []);
 
+  const handleDeckSelection = useCallback(
+    (deckId: string) => {
+      const fetchAndSelectDeck = async () => {
+        const selectedDeck = await getDeck(deckId);
+        console.log("selectedDeck is, ", selectedDeck);
+        dispatch(setCurrentDeck(selectedDeck));
+        navigate("/playground");
+      };
+      fetchAndSelectDeck();
+    },
+    [dispatch, navigate]
+  );
+
   useEffect(() => {
     const edges: Edge[] = [];
 
@@ -155,7 +169,17 @@ export default function PlaygroundPage() {
   if (!currentDeck) {
     return (
       <div>
-        <Link to="/graphsdecks">create deck</Link> or select deck
+        <Link to="/graphdecks">create deck</Link>
+        <span> or </span>
+        <label>Select a GraphDeck</label>
+        <select onChange={(e) => handleDeckSelection(e.target.value)}>
+          <option value="" disabled selected>
+            select a deck
+          </option>
+          {decksInfo?.map((deckInfo) => (
+            <option value={deckInfo._id}>{deckInfo.name}</option>
+          ))}
+        </select>
       </div>
     );
   }
@@ -165,13 +189,11 @@ export default function PlaygroundPage() {
       <div ref={containerRef} className={styles.canvasContainer}></div>
       <div className={`${styles.deckToolBar}`}>
         <div>
-          <label>(graphDeck icon)</label>
+          <label>selected graphDeck: </label>
           <span>{currentDeck?.name}</span>
         </div>
-      </div>
-      <div className={`${styles.cardToolBar}`}>
         <Button bgColorClass="bg-green" onClick={() => setShowCardLab(true)}>
-          +
+          add card
         </Button>
       </div>
       {showCardLab && (

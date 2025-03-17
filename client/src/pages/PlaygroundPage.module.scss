@@ -33,7 +33,9 @@
     background-color: var(--neutral-color);
     border-bottom: 2px solid var(--black);
     height: 2.5rem;
-    width: 280px;
+    display: flex;
+    gap: 1rem;
+    // width: 280px;
   }
 
   .canvasContainer {
