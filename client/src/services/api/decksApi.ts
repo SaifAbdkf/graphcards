@@ -1,12 +1,17 @@
-import { Deck, DeckInfo } from "../../Types/types";
-import { get, post } from "./apiRequestMethods";
+import { Deck, DeckFields, DeckInfo } from "../../Types/types";
+import { getMultiple, getOne, post } from "./apiRequestMethods";
 
 export async function getDecksInfo(): Promise<DeckInfo[]> {
-  const fetchedDecksInfo: DeckInfo[] = await get("/deck/all");
+  const fetchedDecksInfo: DeckInfo[] = await getMultiple("/deck/all");
   return fetchedDecksInfo;
 }
 
-export async function createDeck(newDeckFields: NewDeckFields) {
-  const deck: Deck = await post<NewDeckFields>("/deck/", newDeckFields);
+export async function createDeck(newDeckFields: DeckFields) {
+  const deck: Deck = await post<DeckFields>("/deck/", newDeckFields);
+  return deck;
+}
+
+export async function getDeck(deckId: string) {
+  const deck: Deck = await getOne<DeckFields>(`/deck/${deckId}`);
   return deck;
 }

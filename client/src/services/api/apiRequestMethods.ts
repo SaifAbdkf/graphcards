@@ -1,9 +1,24 @@
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export async function get<T>(endpoint: string): Promise<T[]> {
+export async function getMultiple<T>(
+  endpoint: string
+): Promise<T & { _id: string }[]> {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`);
-    const data: T[] = await response.json();
+    const data: T & { _id: string }[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("GET: Error fetching data:", error);
+    throw error;
+  }
+}
+
+export async function getOne<T>(
+  endpoint: string
+): Promise<T & { _id: string }> {
+  try {
+    const response = await fetch(`${BACKEND_URL}${endpoint}`);
+    const data: T & { _id: string } = await response.json();
     return data;
   } catch (error) {
     console.error("GET: Error fetching data:", error);

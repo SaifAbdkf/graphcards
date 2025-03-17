@@ -3,8 +3,15 @@ import { Edge, Network } from "vis-network";
 import { Card } from "../Types/types";
 import CardLab from "../components/CardLab";
 import styles from "./PlaygroundPage.module.scss";
-import { get } from "../services/api/apiRequestMethods";
+import { getMultiple } from "../services/api/apiRequestMethods";
 import Button from "../components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectCurrentDeck,
+  selectDecksInfo,
+} from "../store/selectors/deckSelector";
+import { setDecksInfo } from "../store/slices/deckSlice";
+import { getDecksInfo } from "../services/api/decksApi";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -13,9 +20,22 @@ export default function PlaygroundPage() {
   const [cards, setCards] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
+  const decksInfo = useSelector(selectDecksInfo);
+  const currentDeck = useSelector(selectCurrentDeck);
+  console.log("playground current deck is", currentDeck);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    console.log("TEST RENDER PLAYGROUND");
-  }, [Network]);
+    const fetchDecksInfo = async () => {
+      console.log("fetching decks!!!!!!");
+      const fetchedDecksInfo = await getDecksInfo();
+      dispatch(setDecksInfo(fetchedDecksInfo));
+    };
+
+    if (decksInfo === null) {
+      fetchDecksInfo();
+    }
+  }, [decksInfo, dispatch]);
 
   const nodes: Node[] = useMemo(
     () =>
@@ -65,22 +85,9 @@ export default function PlaygroundPage() {
     [cards]
   );
 
-  // useEffect(() => {
-  //   if (containerRef.current) {
-  //     const canvas = containerRef.current.getElementsByTagName("canvas")[0];
-  //     console.log(canvas);
-  //     const c = canvas.getContext("2d");
-  //     // c?.fillRect(50, 60, 15, 10);
-  //     c?.moveTo(50, 50);
-
-  //     c?.lineTo(400, 300);
-  //     c?.stroke();
-  //   }
-  // }, [containerRef]);
-
   useEffect(() => {
     const fetchCards = async () => {
-      const data: CardApiData[] = await get("/card/all");
+      const data: CardApiData[] = await getMultiple("/card/all");
 
       const formattedCards: Card[] = data.map((card) => ({
         ...card,
@@ -144,10 +151,19 @@ export default function PlaygroundPage() {
     return () => network.off("selectNode", handleGraphClick);
   }, [network, cards]);
 
+  if (!currentDeck) {
+    return <div>create deck or select deck</div>;
+  }
+
   return (
     <div className={styles.playGroundContainer}>
       <div ref={containerRef} className={styles.canvasContainer}></div>
-      <div className={`${styles.deckToolBar}`}></div>
+      <div className={`${styles.deckToolBar}`}>
+        <div>
+          <label>(graphDeck icon)</label>
+          <span>{currentDeck?.name}</span>
+        </div>
+      </div>
       <div className={`${styles.cardToolBar}`}>
         <Button bgColorClass="bg-green" onClick={() => setShowCardLab(true)}>
           +

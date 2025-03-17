@@ -2,13 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
 import styles from "./DecksPage.module.scss";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { RootState } from "../store/index";
-import { createDeck, getDecksInfo } from "../services/api/decksApi";
+import { createDeck, getDeck, getDecksInfo } from "../services/api/decksApi";
 import { setCurrentDeck, setDecksInfo } from "../store/slices/deckSlice";
 import { dummy } from "../utils/utils";
 import { DeckFields, emptyDeckFields } from "../Types/types";
 import { useNavigate } from "react-router-dom";
-import _ from "lodash";
+import {
+  selectCurrentDeck,
+  selectDecksInfo,
+} from "../store/selectors/deckSelector";
 
 export default function DecksPage() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
@@ -16,10 +18,8 @@ export default function DecksPage() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const decksInfo = useSelector((state: RootState) => state.decks.decksInfo);
-  const currentDeck = useSelector(
-    (state: RootState) => state.decks.currentDeck
-  );
+  const decksInfo = useSelector(selectDecksInfo);
+  const currentDeck = useSelector(selectCurrentDeck);
   console.log("decks info!!", decksInfo, "currDeck", currentDeck);
 
   useEffect(() => {
@@ -65,9 +65,23 @@ export default function DecksPage() {
     triggerCreateDeck();
   };
 
+  const handleDeckClick = useCallback(
+    (deckId: string) => {
+      const fetchDeck = async () => {
+        const selectedDeck = await getDeck(deckId);
+        console.log("selectedDeck is, ", selectedDeck);
+        dispatch(setCurrentDeck(selectedDeck));
+        navigate("/playground");
+      };
+      fetchDeck();
+    },
+    [navigate]
+  );
+
   return (
     <div className={styles.decksPageContainer}>
       <h1>My GraphDecks</h1>
+
       <div className={styles.decksList}>
         {!createDeckMode ? (
           <div
@@ -123,9 +137,13 @@ export default function DecksPage() {
             </div>
           </div>
         )}
-        {decksInfo.map((deckInfo) => (
+        {decksInfo?.map((deckInfo) => (
           <>
-            <div key={deckInfo.name} className={styles.deckRepresentation}>
+            <div
+              key={deckInfo.name}
+              className={styles.deckRepresentation}
+              onClick={() => handleDeckClick(deckInfo._id)}
+            >
               <span>{deckInfo.name}</span>
             </div>
           </>

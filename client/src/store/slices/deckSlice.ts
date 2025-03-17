@@ -2,15 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Deck, DeckInfo } from "../../Types/types";
 
 interface DeckStoreState {
-  deckStoreRefresh: boolean;
   currentDeck: Deck | null;
-  decksInfo: DeckInfo[];
+  decksInfo: DeckInfo[] | null;
 }
 
 const initialState: DeckStoreState = {
-  deckStoreRefresh: true,
-  decksInfo: [],
   currentDeck: null,
+  decksInfo: null,
 };
 
 const deckSlice = createSlice({
