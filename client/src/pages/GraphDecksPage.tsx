@@ -144,7 +144,8 @@ export default function GraphDecksPage() {
               className={styles.deckRepresentation}
               onClick={() => handleDeckClick(deckInfo._id)}
             >
-              <span>{deckInfo.name}</span>
+              <div>{deckInfo.name}</div>
+              <div>{deckInfo.description}</div>
             </div>
           </>
         ))}

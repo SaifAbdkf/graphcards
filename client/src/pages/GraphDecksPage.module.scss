@@ -23,6 +23,10 @@
       justify-content: center;
       align-items: center;
       font-size: 1.225rem;
+
+      div {
+        flex-basis: 100%;
+      }
     }
     // .deckRepresentation::after {
     //   content: "";
