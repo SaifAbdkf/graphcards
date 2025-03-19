@@ -1,46 +1,30 @@
-// .playGroundContainer {
-//   background-color: red !important;
-//   display: flex;
-//   .cardToolBar {
-//     background-color: blue;
-//     height: 100%;
-//     width: 30px;
-//   }
-// }
-
 .playGroundContainer {
   background-color: rgb(227, 143, 34);
   height: 100%;
   width: 100%;
-  // display: flex;
-  .cardToolBar {
-    position: absolute;
-    box-sizing: border-box;
-    background-color: var(--neutral-color);
-    height: 280px;
-    width: var(--navbar-height);
-    top: calc(var(--navbar-height) + 1rem);
-    left: 1rem;
-    @include input_text_textarea;
-    // @include shadow_box;
+  display: flex;
+  .graphViewerContainer {
+    flex-basis: 80%;
+    flex-grow: 1;
+    .graphViewerBar {
+      border-bottom: 2px solid var(--black);
+      display: flex;
+      height: var(--navbar-height);
+    }
+    .canvasContainer {
+      box-sizing: border-box;
+      height: 100%;
+      transition: flex 0.4s ease-in-out;
+      background-color: rgb(205, 165, 165);
+    }
   }
+  .cardLabContainer {
+    flex-basis: 420px;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-left: 0.125rem solid var(--black);
 
-  .deckToolBar {
-    @include input_text_textarea;
-    position: absolute;
-    top: calc(var(--navbar-height) + 1rem);
-    left: calc(var(--navbar-height) + 1rem + 1rem);
-    background-color: var(--neutral-color);
-    border-bottom: 2px solid var(--black);
-    height: 2.5rem;
     display: flex;
-    gap: 1rem;
-    // width: 280px;
-  }
-
-  .canvasContainer {
-    box-sizing: border-box;
-    height: 100%;
-    transition: flex 0.4s ease-in-out;
+    justify-content: center;
   }
 }

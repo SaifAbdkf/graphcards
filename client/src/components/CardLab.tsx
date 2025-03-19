@@ -98,55 +98,54 @@ export default function CardLab({
   );
 
   return (
-    <div className={`${styles.cardLabContainer} ${styles.jumpAnimation}`}>
-      <div className={styles.formContainer}>
-        <form>
-          <div className={styles.fieldContainer}>
-            <label htmlFor="word">Word</label>
-            <input
-              type="text"
-              id="word"
-              name="word"
-              placeholder="word"
-              onChange={handleFieldChange}
-              value={cardFields.front}
-              className={styles.rtl}
-            ></input>
-          </div>
-          <div className={styles.fieldContainer}>
-            <label htmlFor="back">Back</label>
-            <input
-              type="text"
-              id="back"
-              name="back"
-              placeholder="back"
-              onChange={handleFieldChange}
-              value={cardFields.back}
-              // className={styles.rtl}
-            ></input>
-          </div>
-          <div className={styles.fieldContainer}>
-            <label htmlFor="linkedCards">Linked Cards</label>
+    <div className={styles.formContainer}>
+      <form>
+        <div className={styles.fieldContainer}>
+          <label htmlFor="word">Word</label>
+          <input
+            type="text"
+            id="word"
+            name="word"
+            placeholder="word"
+            onChange={handleFieldChange}
+            value={cardFields.front}
+            className={styles.rtl}
+          ></input>
+        </div>
+        <div className={styles.fieldContainer}>
+          <label htmlFor="back">Back</label>
+          <input
+            type="text"
+            id="back"
+            name="back"
+            placeholder="back"
+            onChange={handleFieldChange}
+            value={cardFields.back}
+            // className={styles.rtl}
+          ></input>
+        </div>
+        <div className={styles.fieldContainer}>
+          <label htmlFor="linkedCards">Linked Cards</label>
 
-            <select name="linkedCards">
-              <option value="option1">option1</option>
-              <option value="option2">option2</option>
-              <option value="option3">option3</option>
-            </select>
-          </div>
-          <div className={`${styles.fieldContainer} ${styles.boxContainer} `}>
-            <label htmlFor="linkedCards"></label>
-            <div className={styles.linkedCardsBox}></div>
-          </div>
-
-          <>
-            <button onClick={handleSubmit}>
-              {cardToEdit ? "Save Card" : "Create card"}
-            </button>
-            {cardToEdit && <button onClick={dummy}>Delete Card </button>}
-          </>
-        </form>
-      </div>
+          <select name="linkedCards">
+            <option value="option1">option1</option>
+            <option value="option2">option2</option>
+            <option value="option3">option3</option>
+          </select>
+        </div>
+        <div
+          className={`${styles.fieldContainer} ${styles.linkedCardsFieldContainer} `}
+        >
+          <label htmlFor="linkedCards"></label>
+          <div className={styles.linkedCardsBox}></div>
+        </div>
+        <div className={`${styles.formButtonsContainer}`}>
+          <button onClick={handleSubmit}>
+            {cardToEdit ? "Save Card" : "Create card"}
+          </button>
+          {cardToEdit && <button onClick={dummy}>Delete Card </button>}
+        </div>
+      </form>
     </div>
   );
 }

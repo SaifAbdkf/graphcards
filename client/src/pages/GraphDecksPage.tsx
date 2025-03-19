@@ -130,7 +130,7 @@ export default function GraphDecksPage() {
                     fontSizeClass="small-font-size"
                     onClick={handleBuildGraph}
                   >
-                    Build Graph from scratch
+                    add card
                   </Button>
                 </div>
               </div>
