@@ -5,12 +5,11 @@ import {
   DeckFields,
   emptyDeckBasicFields,
 } from "../Types/types";
-import Button from "./Button";
 import { useDispatch } from "react-redux";
 import { createDeck } from "../services/api/decksApi";
 import { setActiveDeck } from "../store/slices/deckSlice";
 import { useNavigate } from "react-router-dom";
-import { dummy } from "../utils/utils";
+import Button from "../components/Button";
 
 export default function CreateDeckForm() {
   const [deckBasicFields, setDeckBasicFields] =
@@ -80,7 +79,7 @@ export default function CreateDeckForm() {
       </div>
       <div className={styles.buttonsContainer}>
         <div className={styles.scratchButtonContainer}>
-          <button onClick={handleBuildGraph}>Create GraphDeck</button>
+          <Button onClick={handleBuildGraph}>Create GraphDeck</Button>
         </div>
       </div>
     </div>

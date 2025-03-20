@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import { getMultiple } from "../services/api/apiRequestMethods";
@@ -12,13 +12,11 @@ import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
 import { getDeck, getDecksInfo } from "../services/api/decksApi";
 import { Link, useNavigate } from "react-router-dom";
 import { PanelRight } from "lucide-react";
-import CardPanel from "../components/CardPanel";
-import DeckPanel from "../components/DeckPanel";
+import CardPanel from "../constituants/CardPanel";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
-  const [showDeckPanel, setShowDeckPanel] = useState<boolean>(false);
   const [cards, setCards] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
@@ -90,15 +88,6 @@ export default function PlaygroundPage() {
 
   return (
     <div className={styles.playGroundContainer}>
-      {showDeckPanel && (
-        <div className={`${styles.cardLabContainer}`}>
-          <DeckPanel
-            activeDeck={activeDeck}
-            setShowDeckPanel={setShowDeckPanel}
-          />
-        </div>
-      )}
-
       <div className={`${styles.graphViewerContainer} `}>
         <div className={`${styles.graphViewerBar}`}>
           <div

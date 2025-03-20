@@ -4,7 +4,7 @@ import Home from "./pages/HomePage";
 import PlaygroundPage from "./pages/PlaygroundPage";
 
 import styles from "./App.module.scss";
-import NavBar from "./components/NavBar";
+import NavBar from "./constituants/NavBar";
 import GraphDecksPage from "./pages/GraphDecksPage";
 
 export default function App() {

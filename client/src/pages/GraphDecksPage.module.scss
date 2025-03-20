@@ -7,7 +7,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4rem;
-
+    .deckSpace {
+      position: relative;
+    }
     .deckRepresentation {
       align-self: flex-start;
       box-sizing: border-box;
@@ -21,6 +23,10 @@
       border: 2px solid var(--black);
       border-radius: 1px;
       font-size: 1.225rem;
+      &:hover {
+        cursor: pointer;
+        background-color: var(--white-hover);
+      }
       .scrollableDeckContent {
         box-sizing: border-box;
         padding: 1rem;
@@ -37,6 +43,18 @@
       }
     }
 
+    .deckEllipsisContainer {
+      position: absolute;
+      padding: 0.275rem;
+      padding-top: 0.575rem;
+      top: 0;
+      right: 0px;
+      color: var(--dark-gray);
+      &:hover {
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+    }
     .addDeck {
       box-shadow: none;
       border: 3px dashed var(--black);
@@ -53,9 +71,24 @@
       cursor: default;
       &:hover {
         border-color: var(--black) !important;
-
         color: var(--black);
       }
     }
   }
+}
+@keyframes szh-menu-show {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes szh-menu-hide {
+  to {
+    opacity: 0;
+  }
+}
+
+.itemDiv {
+  display: flex;
+  gap: 0.375rem;
 }
