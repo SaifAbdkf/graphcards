@@ -21,7 +21,7 @@ export default function Button({
   return (
     <button
       onClick={onClick}
-      className={`${styles.theButton} ${bgColorClass} ${fontSizeClass}`}
+      // className={`${styles.theButton} ${bgColorClass} ${fontSizeClass}`}
     >
       {children}
     </button>

@@ -1,15 +1,16 @@
 .formContainer {
   box-sizing: border-box;
-  width: 100%;
-  padding: 1rem;
   text-align: center;
   scrollbar-width: none;
-  background-color: var(--primary-color-very-light);
 
   .deckName {
     @include input_text_textarea;
     margin-bottom: 0.75rem;
     text-align: center;
+    width: 100%;
+    &:focus {
+      border: none;
+    }
   }
 
   .deckDescription {
@@ -17,6 +18,7 @@
     width: 90% !important;
     height: 4rem;
     text-align: center;
+    font-size: var(--small-font-size);
   }
 
   .buttonsContainer {
@@ -24,6 +26,9 @@
     display: flex;
     gap: 0.325rem;
     align-items: center;
+    .or {
+      font-size: var(--small-font-size);
+    }
   }
   .generateButtonContainer {
     flex: 1;

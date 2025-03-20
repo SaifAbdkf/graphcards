@@ -1,5 +1,4 @@
 .playGroundContainer {
-  background-color: rgb(227, 143, 34);
   height: 100%;
   width: 100%;
   display: flex;
@@ -21,17 +20,12 @@
         text-decoration: underline;
         display: flex;
         align-items: baseline;
-        // border-radius: 0.175rem;
-        // border: 1px solid var(--gray);
-        // padding: 0.3745rem;
-        // background-color: rgb(227, 227, 227);
       }
     }
     .canvasContainer {
       box-sizing: border-box;
       height: 100%;
       transition: flex 0.4s ease-in-out;
-      background-color: rgb(205, 165, 165);
     }
   }
   .cardLabContainer {
