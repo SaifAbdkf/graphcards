@@ -9,7 +9,23 @@
     .graphViewerBar {
       border-bottom: 2px solid var(--black);
       display: flex;
+      gap: 2rem;
       height: var(--navbar-height);
+      align-items: center;
+      .selectedDeckName {
+        .rightPanelIcon {
+          transform: translateY(3px);
+        }
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: underline;
+        display: flex;
+        align-items: baseline;
+        // border-radius: 0.175rem;
+        // border: 1px solid var(--gray);
+        // padding: 0.3745rem;
+        // background-color: rgb(227, 227, 227);
+      }
     }
     .canvasContainer {
       box-sizing: border-box;

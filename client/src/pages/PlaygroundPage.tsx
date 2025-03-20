@@ -1,26 +1,29 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "../Types/types";
-import CardLab from "../components/CardLab";
 import styles from "./PlaygroundPage.module.scss";
 import { getMultiple } from "../services/api/apiRequestMethods";
 import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  selectCurrentDeck,
+  selectActiveDeck,
   selectDecksInfo,
 } from "../store/selectors/deckSelector";
-import { setCurrentDeck, setDecksInfo } from "../store/slices/deckSlice";
+import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
 import { getDeck, getDecksInfo } from "../services/api/decksApi";
 import { Link, useNavigate } from "react-router-dom";
+import { PanelRight } from "lucide-react";
+import CardPanel from "../components/CardPanel";
+import DeckPanel from "../components/DeckPanel";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [showCardLab, setShowCardLab] = useState<boolean>(false);
+  const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
+  const [showDeckPanel, setShowDeckPanel] = useState<boolean>(false);
   const [cards, setCards] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const decksInfo = useSelector(selectDecksInfo);
-  const currentDeck = useSelector(selectCurrentDeck);
+  const activeDeck = useSelector(selectActiveDeck);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -54,7 +57,7 @@ export default function PlaygroundPage() {
     (deckId: string) => {
       const fetchAndSelectDeck = async () => {
         const selectedDeck = await getDeck(deckId);
-        dispatch(setCurrentDeck(selectedDeck));
+        dispatch(setActiveDeck(selectedDeck));
         navigate("/playground");
       };
       fetchAndSelectDeck();
@@ -62,7 +65,7 @@ export default function PlaygroundPage() {
     [dispatch, navigate]
   );
 
-  if (!currentDeck) {
+  if (!activeDeck) {
     return (
       <div>
         <Link to="/graphdecks">create deck</Link>
@@ -76,7 +79,9 @@ export default function PlaygroundPage() {
             select a deck
           </option>
           {decksInfo?.map((deckInfo) => (
-            <option value={deckInfo._id}>{deckInfo.name}</option>
+            <option key={deckInfo._id} value={deckInfo._id}>
+              {deckInfo.name}
+            </option>
           ))}
         </select>
       </div>
@@ -85,26 +90,40 @@ export default function PlaygroundPage() {
 
   return (
     <div className={styles.playGroundContainer}>
+      {showDeckPanel && (
+        <div className={`${styles.cardLabContainer}`}>
+          <DeckPanel
+            activeDeck={activeDeck}
+            setShowDeckPanel={setShowDeckPanel}
+          />
+        </div>
+      )}
+
       <div className={`${styles.graphViewerContainer} `}>
         <div className={`${styles.graphViewerBar}`}>
-          <div>
-            <span>{currentDeck?.name}</span>
+          <div
+            className={`${styles.selectedDeckName}`}
+            // onClick={setShowCardDeck}
+          >
+            <PanelRight size={18} className={`${styles.rightPanelIcon}`} />
+            {activeDeck?.name}
           </div>
           <Button
             bgColorClass="bg-green"
-            onClick={() => setShowCardLab(!showCardLab)}
+            onClick={() => setShowCardPanel(!showCardPanel)}
           >
             add card
           </Button>
         </div>
-        <div ref={containerRef} className={styles.canvasContainer}>
-          {/* simple clean black borderline separation */}
-        </div>
+        <div ref={containerRef} className={styles.canvasContainer}></div>
       </div>
 
-      {showCardLab && (
+      {showCardPanel && (
         <div className={`${styles.cardLabContainer}`}>
-          <CardLab cardToEdit={selectedCard} setShowCardLab={setShowCardLab} />
+          <CardPanel
+            selectedCard={selectedCard}
+            setShowCardPanel={setShowCardPanel}
+          />
         </div>
       )}
     </div>

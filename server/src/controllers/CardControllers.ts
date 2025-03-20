@@ -12,14 +12,11 @@ export async function createCard(request: Request, response: Response) {
 
   try {
     // validate
-    console.log("hello");
-
     const deck = await Deck.findById(deckId);
     if (!deck) {
       return response.status(404).json({ error: "deck not found" });
     }
     const validatedDeckId = new mongoose.Types.ObjectId(deckId);
-    console.log("Hey I am here 😎 links: ", links);
 
     //validate linked
     const definedLinks = links || [];

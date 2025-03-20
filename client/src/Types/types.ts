@@ -19,11 +19,10 @@ export type Deck = {
   cards: Card[];
 };
 
-export type DeckInfo = Omit<Deck, "cards">;
-
-export type DeckFields = Omit<Deck, "_id">;
-export const emptyDeckFields: DeckFields = {
+export type DeckInfo = Omit<Deck, "cards">; // in the future will contain stats
+export type DeckFields = Omit<Deck, "_id">; // fields is anything changeable through a form, here it is title and desscription
+export type DeckBasicFields = Omit<Deck, "_id" | "cards">; // fields is anything changeable through a form, here it is title and desscription
+export const emptyDeckBasicFields: DeckBasicFields = {
   name: "",
   description: "",
-  cards: [],
 };

@@ -16,7 +16,7 @@ const cardSchema = new Schema(
       ref: "Card",
       required: false,
     },
-    metadata: { type: Map, of: String },
+    metadata: { type: Map, of: Schema.Types.Mixed },
   },
   { timesstamps: true, strict: false }
 );

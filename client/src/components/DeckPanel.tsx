@@ -1,35 +1,27 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Card, CardFields, emptyCardFields } from "../Types/types";
-import { deepCopy } from "../utils/deepCopy";
-import styles from "./cardLab.module.scss";
+import { CardFields, Deck, DeckBasicFields, DeckFields } from "../Types/types";
 import { BACKEND_URL } from "../services/api/apiRequestMethods";
-import { dummy } from "../utils/utils";
+import { deckBasicFieldsFromDeck } from "../utils/utils";
 
-export default function CardLab({
-  cardToEdit,
-  setShowCardLab,
+export default function DeckPanel({
+  activeDeck,
+  setShowDeckPanel,
 }: {
-  cardToEdit: Card | null;
-  setShowCardLab: React.Dispatch<React.SetStateAction<boolean>>;
+  activeDeck: Deck;
+  setShowCardPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [cardFields, setCardFields] = useState<CardFields>(
-    deepCopy<CardFields>(emptyCardFields)
+  const [deckBasicFields, setDeckBasicFields] = useState<DeckBasicFields>(
+    deckBasicFieldsFromDeck(activeDeck)
   );
+  const activeDeckId = activeDeck._id;
 
-  let cardToEditId: string | null = null;
-  if (cardToEdit) {
-    const { _id, ...cardToEditFields } = cardToEdit;
-    cardToEditId = _id;
-    setCardFields(cardToEditFields);
-  }
-
-  const updateCard = async (id: string, cardFields: CardFields) => {
+  const updateDeck = async (id: string, deckFields: DeckFields) => {
     const response = await fetch(`${BACKEND_URL}/api/card/${id}`, {
       method: "PUT",
       headers: {
         "content-Type": "application/json",
       },
-      body: JSON.stringify(cardFields),
+      body: JSON.stringify(deckFields),
     });
 
     if (!response.ok) {
@@ -37,32 +29,18 @@ export default function CardLab({
     }
   };
 
-  const createCard = async (cardFields: CardFields) => {
-    const response = await fetch(`${BACKEND_URL}/card`, {
-      method: "POST",
+  const deleteDeck = async (id: string) => {
+    const response = await fetch(`${BACKEND_URL}/api/deck/${id}`, {
+      method: "DELETE",
       headers: {
         "content-Type": "application/json",
       },
-      body: JSON.stringify(cardFields),
     });
 
     if (!response.ok) {
-      throw new Error("could not create card");
+      throw new Error("could not delete card");
     }
   };
-
-  // const deleteCard = async (id: string) => {
-  //   const response = await fetch(`${BACKEND_URL}/api/card/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "content-Type": "application/json",
-  //     },
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error("could not delete card");
-  //   }
-  // };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -72,7 +50,7 @@ export default function CardLab({
     } else {
       createCard(cardFields);
     }
-    setShowCardLab(false);
+    setShowCardPanel(false);
   };
 
   const handleFieldChange = useCallback(

@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Deck, DeckInfo } from "../../Types/types";
 
 interface DeckStoreState {
-  currentDeck: Deck | null;
+  activeDeck: Deck | null;
   decksInfo: DeckInfo[] | null;
 }
 
 const initialState: DeckStoreState = {
-  currentDeck: null,
+  activeDeck: null,
   decksInfo: null,
 };
 
@@ -15,8 +15,8 @@ const deckSlice = createSlice({
   name: "deckStore",
   initialState,
   reducers: {
-    setCurrentDeck: (state, action: PayloadAction<Deck>) => {
-      state.currentDeck = action.payload;
+    setActiveDeck: (state, action: PayloadAction<Deck>) => {
+      state.activeDeck = action.payload;
     },
     setDecksInfo: (state, action: PayloadAction<DeckInfo[]>) => {
       state.decksInfo = action.payload;
@@ -24,6 +24,6 @@ const deckSlice = createSlice({
   },
 });
 
-export const { setCurrentDeck, setDecksInfo } = deckSlice.actions;
+export const { setActiveDeck, setDecksInfo } = deckSlice.actions;
 
 export default deckSlice.reducer;
