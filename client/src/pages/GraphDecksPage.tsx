@@ -94,30 +94,26 @@ export default function GraphDecksPage() {
         {!createDeckMode ? (
           <div
             onClick={() => setCreateDeckMode(true)}
+            key="add-decks"
             className={`${styles.deckRepresentation} ${styles.addDeck}`}
           >
-            <div>Create</div>
-            <div>a New</div>
+            <div>Create </div>
             <div>GraphDeck</div>
           </div>
         ) : (
           <CreateDeckForm />
         )}
         {decksInfo?.map((deckInfo) => (
-          <>
-            <div
-              key={deckInfo.name}
-              className={styles.deckRepresentation}
-              onClick={() => handleDeckClick(deckInfo._id)}
-            >
-              <div className={`${styles.deckInfoContainer}`}>
-                {deckInfo.name}
-              </div>
-              <div className={`${styles.deckDecriptionContainer}`}>
-                {deckInfo.description}
-              </div>
+          <div
+            key={deckInfo.name}
+            className={styles.deckRepresentation}
+            onClick={() => handleDeckClick(deckInfo._id)}
+          >
+            <div className={`${styles.deckInfoContainer}`}>{deckInfo.name}</div>
+            <div className={`${styles.deckDecriptionContainer}`}>
+              {deckInfo.description}
             </div>
-          </>
+          </div>
         ))}
       </div>
     </div>
