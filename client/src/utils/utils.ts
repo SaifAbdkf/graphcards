@@ -39,3 +39,10 @@ export function deckInfoFromDeck(deck: Deck): DeckInfo {
     description: deck.description,
   };
 }
+
+export function deckFormFieldsFromDeckInfo(deck: DeckInfo): DeckFormFields {
+  return {
+    name: deck.name,
+    description: deck.description,
+  };
+}

@@ -1,14 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Deck, DeckInfo } from "../../Types/types";
+import { Deck, DeckFormFields, DeckInfo } from "../../Types/types";
+import { deepCopy } from "../../utils/utils";
 
 interface DeckStoreState {
   activeDeck: Deck | null;
   decksInfo: DeckInfo[];
+  rollbackDeckInfo: DeckInfo | null; //optimistic UI on edi deck => i have to store edited deck just i case db update fails and i have to roll back
 }
 
 const initialState: DeckStoreState = {
   activeDeck: null,
   decksInfo: [],
+  rollbackDeckInfo: null,
+};
+
+type UpdateDeck = {
+  deckId: string;
+  newDeckFormFields: DeckFormFields;
+  oldDeckFormFields: DeckFormFields;
 };
 
 const deckSlice = createSlice({
@@ -30,10 +39,51 @@ const deckSlice = createSlice({
         (deckInfo) => deckInfo._id !== action.payload
       );
     },
+    updateDeckInfo: (state, action: PayloadAction<UpdateDeck>) => {
+      console.log("Hey I am here 😎");
+      state.rollbackDeckInfo = deepCopy({
+        _id: action.payload.deckId,
+        ...action.payload.oldDeckFormFields,
+      });
+      state.decksInfo = state.decksInfo.map((deckInfo) =>
+        deckInfo._id === action.payload.deckId
+          ? {
+              _id: action.payload.deckId,
+              ...action.payload.newDeckFormFields,
+            }
+          : deckInfo
+      );
+    },
+    rollbackDeckInfo: (state) => {
+      //TODO: assert not null ,Question: why do i sillhave to use "?" line 63
+      if (state.rollbackDeckInfo !== null)
+        throw new Error("state.rollbackDeckInfo should be defined");
+
+      state.decksInfo = state.decksInfo.map((deckInfo) => {
+        if (
+          state.rollbackDeckInfo !== null &&
+          deckInfo._id !== state.rollbackDeckInfo?._id
+        ) {
+          return {
+            ...state.rollbackDeckInfo,
+          };
+        } else {
+          return deckInfo;
+        }
+      });
+
+      state.rollbackDeckInfo = null;
+    },
   },
 });
 
-export const { setActiveDeck, setDecksInfo, addDeckInfo, removeDeckInfo } =
-  deckSlice.actions;
+export const {
+  setActiveDeck,
+  setDecksInfo,
+  addDeckInfo,
+  removeDeckInfo,
+  updateDeckInfo,
+  rollbackDeckInfo,
+} = deckSlice.actions;
 
 export default deckSlice.reducer;

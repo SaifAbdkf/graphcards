@@ -53,7 +53,7 @@ export async function getDeck(
   }
 }
 
-export async function updateDeck(
+export async function patchDeck(
   request: Request,
   response: Response
 ): Promise<Response> {

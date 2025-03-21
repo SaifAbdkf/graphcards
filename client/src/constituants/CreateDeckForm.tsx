@@ -18,13 +18,19 @@ export default function CreateDeckForm({
 }: {
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [deckFormFields, setDeckFormFields] =
-    useState<DeckFormFields>(emptyDeckFormFields);
+  const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
+    deepCopy(emptyDeckFormFields)
+  );
   const [isCreating, setIsCreating] = useState(false);
 
   const dispatch = useDispatch();
+  const handleCancelCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setDeckFormFields(deepCopy(emptyDeckFormFields));
+    setCreateDeckMode(false);
+  };
 
-  const handleBuildGraph = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // Validate form fields
@@ -95,11 +101,12 @@ export default function CreateDeckForm({
       />
 
       <div className={styles.buttonsContainer}>
-        <div className={styles.scratchButtonContainer}>
-          <Button onClick={handleBuildGraph} disabled={isCreating}>
-            {isCreating ? "Creating..." : "Create GraphDeck"}
-          </Button>
-        </div>
+        <Button onClick={handleCancelCreateDeck} disabled={isCreating}>
+          cancel
+        </Button>
+        <Button onClick={handleCreateDeck} disabled={isCreating}>
+          {isCreating ? "Creating..." : "Create"}
+        </Button>
       </div>
     </div>
   );

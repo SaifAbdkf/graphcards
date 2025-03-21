@@ -18,22 +18,24 @@ export default function AddDeck() {
   return (
     <div
       onClick={handleContainerClick}
-      // onClick={!createDeckMode ? handleContainerClick : undefined}
       key="add-decks"
       className={`${styles.deckRepresentation} ${styles.addDeck} ${
         createDeckMode ? styles.addDeckNoHover : ""
       }`}
     >
-      <div className={`${styles.scrollableDeckContent}`}>
-        {!createDeckMode ? (
-          <>
-            <div>Create </div>
-            <div>GraphDeck</div>
-          </>
-        ) : (
+      {!createDeckMode ? (
+        <div
+          className={`${styles.scrollableDeckContent}`}
+          onClick={() => !createDeckMode && setCreateDeckMode(true)}
+        >
+          <div>Create </div>
+          <div>GraphDeck</div>
+        </div>
+      ) : (
+        <div className={`${styles.scrollableDeckContent}`}>
           <CreateDeckForm setCreateDeckMode={setCreateDeckMode} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

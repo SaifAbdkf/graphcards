@@ -59,3 +59,26 @@ export async function deleteRequest(endpoint: string): Promise<boolean> {
     return false;
   }
 }
+
+export async function patchRequest<T>(
+  endpoint: string,
+  data: T
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+      method: "PATCH",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      console.error(`PATCH: Failed with status ${response.status}`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("PATCH failed", error);
+    return false;
+  }
+}

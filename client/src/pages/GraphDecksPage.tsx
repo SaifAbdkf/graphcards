@@ -17,6 +17,7 @@ import {
   getDecksInfoRequest,
 } from "../services/api/decksApi";
 import AddDeck from "../constituants/AddDeck";
+import EditDeckForm from "../constituants/EditDeckForm";
 
 export default function GraphDecksPage() {
   console.log("GraphDecksPage rendering");
@@ -38,17 +39,16 @@ export default function GraphDecksPage() {
     fetchDecksInfo();
   }, [dispatch]);
 
-  const handleDeckClick = useCallback(
-    (deckId: string) => {
-      const fetchDeck = async () => {
-        const selectedDeck = await getDeckRequest(deckId);
-        dispatch(setActiveDeck(selectedDeck));
-        navigate("/playground");
-      };
+  const handleDeckClick = (deckId: string) => (e: React.MouseEvent) => {
+    const fetchDeck = async () => {
+      const selectedDeck = await getDeckRequest(deckId);
+      dispatch(setActiveDeck(selectedDeck));
+      navigate("/playground");
+    };
+    if (e.target === e.currentTarget) {
       fetchDeck();
-    },
-    [navigate]
-  );
+    }
+  };
 
   const handleDeckEditIConClick = useCallback((deckId: string) => {
     setEditingDeck(deckId);
@@ -83,11 +83,14 @@ export default function GraphDecksPage() {
           <div key={deckInfo._id} className={`${styles.deckSpace}`}>
             <div
               className={`${styles.deckRepresentation} ${styles.deckInfoContainer}`}
-              onClick={() => handleDeckClick(deckInfo._id)}
+              onClick={handleDeckClick(deckInfo._id)}
             >
               <div className={`${styles.scrollableDeckContent}`}>
                 {editingDeck !== null && editingDeck === deckInfo._id ? (
-                  <h2>dummy</h2>
+                  <EditDeckForm
+                    deckInfo={deckInfo}
+                    setEditDeckMode={setEditingDeck}
+                  />
                 ) : (
                   // <DeckForm deckId={editingDeck} />
                   <>
