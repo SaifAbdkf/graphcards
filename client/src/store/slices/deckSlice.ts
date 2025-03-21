@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Deck, DeckFormFields, DeckInfo } from "../../Types/types";
 import { deepCopy } from "../../utils/utils";
+import { Satellite } from "lucide-react";
 
 interface DeckStoreState {
   activeDeck: Deck | null;
@@ -40,7 +41,6 @@ const deckSlice = createSlice({
       );
     },
     updateDeckInfo: (state, action: PayloadAction<UpdateDeck>) => {
-      console.log("Hey I am here 😎");
       state.rollbackDeckInfo = deepCopy({
         _id: action.payload.deckId,
         ...action.payload.oldDeckFormFields,
@@ -52,6 +52,16 @@ const deckSlice = createSlice({
               ...action.payload.newDeckFormFields,
             }
           : deckInfo
+      );
+    },
+    deleteDeckInfo: (state, action: PayloadAction<DeckInfo>) => {
+      if (state.rollbackDeckInfo !== null)
+        throw new Error(
+          "trying to delete deck, state.rollbackDeckInfo should be null"
+        );
+      state.rollbackDeckInfo = deepCopy(action.payload);
+      state.decksInfo = state.decksInfo.filter(
+        (deckInfo) => deckInfo._id !== action.payload._id
       );
     },
     rollbackDeckInfo: (state) => {
@@ -81,8 +91,9 @@ export const {
   setActiveDeck,
   setDecksInfo,
   addDeckInfo,
-  removeDeckInfo,
   updateDeckInfo,
+  deleteDeckInfo,
+  removeDeckInfo,
   rollbackDeckInfo,
 } = deckSlice.actions;
 

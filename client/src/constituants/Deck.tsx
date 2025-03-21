@@ -2,7 +2,11 @@ import { useCallback, useState } from "react";
 import { DeckInfo } from "../Types/types";
 import styles from "./Deck.module.scss";
 import { deleteDeckRequest, getDeckRequest } from "../services/api/decksApi";
-import { setActiveDeck } from "../store/slices/deckSlice";
+import {
+  deleteDeckInfo,
+  rollbackDeckInfo,
+  setActiveDeck,
+} from "../store/slices/deckSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EditDeckForm from "./EditDeckForm";
@@ -32,23 +36,28 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
     setEditingDeck(deckId);
   }, []);
 
-  //   const handleDeleteDeck = useCallback(
-  //     async (deckId: string) => {
-  //       const isdeleted = await deleteDeckRequest(deckId);
-  //       // Refresh store state before DB
-  //       if (isdeleted) {
-  //         if (decksInfo == null) {
-  //           throw new Error("decksinfo isnull ");
-  //         }
-  //         const newDecksInfo = decksInfo.filter(
-  //           (deckInfo) => deckInfo._id !== deckId
-  //         );
+  const handleDeleteDeck = useCallback(
+    async (deckId: string) => {
+      try {
+        dispatch(deleteDeckInfo(deckInfo));
 
-  //         dispatch(setDecksInfo(newDecksInfo));
-  //       }
-  //     },
-  //     [decksInfo, dispatch]
-  //   );
+        const isdeleted = await deleteDeckRequest(deckId);
+        // Refresh store state before DB
+        if (isdeleted) {
+          console.log("deck deleted all good");
+          //good
+        } else {
+          dispatch(rollbackDeckInfo());
+          alert("error deleting deck. Please try again");
+        }
+      } catch (error) {
+        console.error("error deleting deck: ", error);
+        dispatch(rollbackDeckInfo());
+        alert("An error occurred while editing the deck");
+      }
+    },
+    [deckInfo, dispatch]
+  );
 
   return (
     <div key={deckInfo._id} className={`${styles.deckSpace}`}>
@@ -89,12 +98,12 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
                 <div>Edit</div>
               </div>
             </MenuItem>
-            {/* <MenuItem onClick={() => handleDeleteDeck(deckInfo._id)}>
-            <div className={`${styles.itemDiv}`}>
-              <Trash className={`${styles.deckTrashIcon}`} size={14} />
-              <div>Delete</div>
-            </div>
-          </MenuItem> */}
+            <MenuItem onClick={() => handleDeleteDeck(deckInfo._id)}>
+              <div className={`${styles.itemDiv}`}>
+                <Trash className={`${styles.deckTrashIcon}`} size={14} />
+                <div>Delete</div>
+              </div>
+            </MenuItem>
           </Menu>
         </div>
       )}
