@@ -8,6 +8,8 @@
     margin-bottom: 0.75rem;
     text-align: center;
     width: 100%;
+    font-size: var(--smallish-font-size);
+
     &:focus {
       border: none;
     }
@@ -26,9 +28,6 @@
     display: flex;
     gap: 0.325rem;
     align-items: center;
-    .or {
-      font-size: var(--small-font-size);
-    }
   }
   .generateButtonContainer {
     flex: 1;

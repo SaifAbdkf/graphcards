@@ -1,17 +1,22 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import styles from "./CreateDeckForm.module.scss";
+import styles from "./DeckForm.module.scss";
 import {
   DeckBasicFields,
   DeckFields,
   emptyDeckBasicFields,
 } from "../Types/types";
 import { useDispatch } from "react-redux";
-import { createDeck } from "../services/api/decksApi";
 import { setActiveDeck } from "../store/slices/deckSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import { createDeckRequest } from "../services/api/decksApi";
 
-export default function CreateDeckForm() {
+export default function DeckForm({
+  deckId = null,
+}: {
+  deckId?: string | null;
+}) {
+  console.log("deckid from DeckForm is ", deckId);
   const [deckBasicFields, setDeckBasicFields] =
     useState<DeckBasicFields>(emptyDeckBasicFields);
 
@@ -20,7 +25,6 @@ export default function CreateDeckForm() {
 
   const handleFieldChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      console.log("a");
       const { name, value } = e.target;
       const newDeckFieldsBasic = { ...deckBasicFields };
       switch (name) {
@@ -44,11 +48,12 @@ export default function CreateDeckForm() {
 
     e.preventDefault();
     const triggerCreateDeck = async () => {
+      console.log("Hey I am here 😎");
       const deckFields: DeckFields = {
         ...deckBasicFields,
         cards: [],
       };
-      const createdDeck = await createDeck(deckFields);
+      const createdDeck = await createDeckRequest(deckFields);
       if (createdDeck) {
         dispatch(setActiveDeck(createdDeck));
         navigate("/playground");

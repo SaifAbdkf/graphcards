@@ -4,7 +4,8 @@
   justify-content: space-between;
   align-items: center;
   height: var(--navbar-height);
-  @include centered_child_container; //has flex basis 1000px
+  width: 80%;
+  // @include centered_child_container; //has flex basis 1000px
   padding: 0.325rem 1rem;
   .logo {
     font-size: 1.5rem;

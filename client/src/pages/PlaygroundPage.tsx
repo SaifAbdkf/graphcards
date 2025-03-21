@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
-import { getMultiple } from "../services/api/apiRequestMethods";
 import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,10 +8,11 @@ import {
   selectDecksInfo,
 } from "../store/selectors/deckSelector";
 import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
-import { getDeck, getDecksInfo } from "../services/api/decksApi";
 import { Link, useNavigate } from "react-router-dom";
 import { PanelRight } from "lucide-react";
 import CardPanel from "../constituants/CardPanel";
+import { getMultipleRequest } from "../services/api/apiRequestMethods";
+import { getDeckRequest, getDecksInfoRequest } from "../services/api/decksApi";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -27,7 +27,7 @@ export default function PlaygroundPage() {
 
   useEffect(() => {
     const fetchDecksInfo = async () => {
-      const fetchedDecksInfo = await getDecksInfo();
+      const fetchedDecksInfo = await getDecksInfoRequest();
       dispatch(setDecksInfo(fetchedDecksInfo));
     };
 
@@ -38,7 +38,7 @@ export default function PlaygroundPage() {
 
   useEffect(() => {
     const fetchCards = async () => {
-      const data: CardApiData[] = await getMultiple("/card/all");
+      const data: CardApiData[] = await getMultipleRequest("/card/all");
 
       const formattedCards: Card[] = data.map((card) => ({
         ...card,
@@ -54,7 +54,7 @@ export default function PlaygroundPage() {
   const handleDeckSelection = useCallback(
     (deckId: string) => {
       const fetchAndSelectDeck = async () => {
-        const selectedDeck = await getDeck(deckId);
+        const selectedDeck = await getDeckRequest(deckId);
         dispatch(setActiveDeck(selectedDeck));
         navigate("/playground");
       };

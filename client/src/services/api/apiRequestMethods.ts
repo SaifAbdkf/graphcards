@@ -1,11 +1,9 @@
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export async function getMultiple<T>(
-  endpoint: string
-): Promise<T & { _id: string }[]> {
+export async function getMultipleRequest<T>(endpoint: string): Promise<T[]> {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`);
-    const data: T & { _id: string }[] = await response.json();
+    const data: T[] = await response.json();
     return data;
   } catch (error) {
     console.error("GET: Error fetching data:", error);
@@ -13,7 +11,7 @@ export async function getMultiple<T>(
   }
 }
 
-export async function getOne<T>(
+export async function getOneRequest<T>(
   endpoint: string
 ): Promise<T & { _id: string }> {
   try {
@@ -26,7 +24,7 @@ export async function getOne<T>(
   }
 }
 
-export async function post<T>(
+export async function postRequest<T>(
   endpoint: string,
   data: T
 ): Promise<T & { _id: string }> {
@@ -43,5 +41,21 @@ export async function post<T>(
   } catch (error) {
     console.error("POST: Error fetching data:", error);
     throw error;
+  }
+}
+
+export async function deleteRequest(endpoint: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      console.error(`DELETE: Failed with status ${response.status}`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("POST failed", error);
+    return false;
   }
 }

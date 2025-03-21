@@ -1,9 +1,8 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { Card, CardFields, emptyCardFields } from "../Types/types";
-import { deepCopy } from "../utils/deepCopy";
 import styles from "./CardPanel.module.scss";
 import { BACKEND_URL } from "../services/api/apiRequestMethods";
-import { dummy } from "../utils/utils";
+import { deepCopy, dummy } from "../utils/utils";
 
 export default function CardPanel({
   selectedCard,

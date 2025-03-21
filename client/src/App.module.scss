@@ -17,8 +17,6 @@
   .pageContainer {
     box-sizing: border-box;
     padding-top: 2.5rem;
-    // border: solid 7px red;
-    @include center_dynamic_child;
   }
 
   .playgroundPageContainer {

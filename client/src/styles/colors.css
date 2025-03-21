@@ -1,12 +1,8 @@
 :root {
   --black: #1f1f1f;
   --dark-gray: #5b5b5b;
-
   --gray: #868686;
-  --primary-color: rgb(0, 21, 255);
-  /* --primary-color: #00ad9e; */
-  --neutral-color: #ced2e3;
-  /* --neutral-color: #d1e3df; */
+  --white-hover: #f8f8f8;
   --white: #fafafa;
-  --white-hover: #f0f0f0;
+  --primary-color: rgb(0, 21, 255);
 }
