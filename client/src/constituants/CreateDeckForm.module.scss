@@ -1,0 +1,18 @@
+.formContainer {
+  box-sizing: border-box;
+  text-align: center;
+  scrollbar-width: none;
+
+  .buttonsContainer {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.325rem;
+    align-items: center;
+  }
+  .generateButtonContainer {
+    flex: 1;
+  }
+  .scratchButtonContainer {
+    flex: 1;
+  }
+}

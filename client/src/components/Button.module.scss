@@ -1,16 +1,9 @@
 .theButton {
-  box-sizing: border-box;
-  padding: 0.775em;
-  border: 2px solid var(--primary-color);
-  border-radius: 0.6rem;
-  color: white;
-  font-weight: 600;
-  @include shadow_box(1px, 1px);
-
-  &:hover {
-    @include shadow_box(0px, 0px);
-    cursor: pointer;
-    transform: translateY(1px);
-    transform: translateX(1px);
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #cccccc;
+    border-color: #aaaaaa;
+    color: #666666;
   }
 }

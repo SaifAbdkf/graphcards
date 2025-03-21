@@ -10,18 +10,19 @@ export type FontSizeClass =
 export default function Button({
   children,
   onClick,
-  bgColorClass = "bg-neutral",
-  fontSizeClass = "small-font-size",
+  disabled = false,
 }: {
   children: ReactNode;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
   bgColorClass?: BgColorClass;
   fontSizeClass?: FontSizeClass;
 }) {
   return (
     <button
       onClick={onClick}
-      // className={`${styles.theButton} ${bgColorClass} ${fontSizeClass}`}
+      disabled={disabled}
+      className={`${styles.theButton} ${disabled ? styles.disabled : ""}`}
     >
       {children}
     </button>

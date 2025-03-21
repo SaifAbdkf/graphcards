@@ -3,12 +3,12 @@ import { Deck, DeckInfo } from "../../Types/types";
 
 interface DeckStoreState {
   activeDeck: Deck | null;
-  decksInfo: DeckInfo[] | null;
+  decksInfo: DeckInfo[];
 }
 
 const initialState: DeckStoreState = {
   activeDeck: null,
-  decksInfo: null,
+  decksInfo: [],
 };
 
 const deckSlice = createSlice({
@@ -21,9 +21,19 @@ const deckSlice = createSlice({
     setDecksInfo: (state, action: PayloadAction<DeckInfo[]>) => {
       state.decksInfo = action.payload;
     },
+    addDeckInfo: (state, action: PayloadAction<DeckInfo>) => {
+      const newDecksInfo = [...state.decksInfo, action.payload];
+      state.decksInfo = newDecksInfo;
+    },
+    removeDeckInfo: (state, action: PayloadAction<string>) => {
+      state.decksInfo = state.decksInfo.filter(
+        (deckInfo) => deckInfo._id !== action.payload
+      );
+    },
   },
 });
 
-export const { setActiveDeck, setDecksInfo } = deckSlice.actions;
+export const { setActiveDeck, setDecksInfo, addDeckInfo, removeDeckInfo } =
+  deckSlice.actions;
 
 export default deckSlice.reducer;

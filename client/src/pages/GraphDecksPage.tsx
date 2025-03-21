@@ -5,7 +5,7 @@ import styles from "./GraphDecksPage.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
 // import "@szhsin/react-menu/dist/index.css";
-import "../components/menu.scss";
+import "../constituants/DeckMenu.scss";
 
 import { useNavigate } from "react-router-dom";
 import { selectDecksInfo } from "../store/selectors/deckSelector";
@@ -16,10 +16,10 @@ import {
   getDeckRequest,
   getDecksInfoRequest,
 } from "../services/api/decksApi";
-import DeckForm from "../constituants/DeckForm";
+import AddDeck from "../constituants/AddDeck";
 
 export default function GraphDecksPage() {
-  const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
+  console.log("GraphDecksPage rendering");
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -77,24 +77,7 @@ export default function GraphDecksPage() {
       <h1>My GraphDecks</h1>
 
       <div className={styles.decksList}>
-        <div
-          onClick={() => setCreateDeckMode(true)}
-          key="add-decks"
-          className={`${styles.deckRepresentation} ${styles.addDeck} ${
-            createDeckMode && styles.addDeckNoHover
-          }`}
-        >
-          <div className={`${styles.scrollableDeckContent}`}>
-            {!createDeckMode ? (
-              <>
-                <div>Create </div>
-                <div>GraphDeck</div>
-              </>
-            ) : (
-              <DeckForm />
-            )}
-          </div>
-        </div>
+        <AddDeck />
 
         {decksInfo?.map((deckInfo) => (
           <div key={deckInfo._id} className={`${styles.deckSpace}`}>
@@ -104,8 +87,9 @@ export default function GraphDecksPage() {
             >
               <div className={`${styles.scrollableDeckContent}`}>
                 {editingDeck !== null && editingDeck === deckInfo._id ? (
-                  <DeckForm deckId={editingDeck} />
+                  <h2>dummy</h2>
                 ) : (
+                  // <DeckForm deckId={editingDeck} />
                   <>
                     <div className={`${styles.deckInfoContainer}`}>
                       {deckInfo.name}
