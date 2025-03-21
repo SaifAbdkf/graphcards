@@ -102,7 +102,7 @@ export default function EditDeckForm({
           cancel
         </Button>
         <Button onClick={handleEditDeck} disabled={isEditing}>
-          {isEditing ? "Editing..." : "Edit"}
+          {isEditing ? "Saving..." : "Save"}
         </Button>
       </div>
     </div>

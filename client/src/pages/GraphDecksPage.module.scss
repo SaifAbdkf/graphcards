@@ -45,11 +45,11 @@
 
     .deckEllipsisContainer {
       position: absolute;
-      padding: 0.275rem;
+      padding: 0.375rem;
       padding-top: 0.575rem;
       top: 0;
       right: 0px;
-      color: var(--dark-gray);
+      color: var(--gray);
       &:hover {
         color: var(--primary-color);
         cursor: pointer;

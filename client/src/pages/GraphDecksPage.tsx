@@ -4,7 +4,6 @@ import "@szhsin/react-menu/dist/core.css";
 import styles from "./GraphDecksPage.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
-// import "@szhsin/react-menu/dist/index.css";
 import "../constituants/DeckMenu.scss";
 
 import { useNavigate } from "react-router-dom";
@@ -39,13 +38,13 @@ export default function GraphDecksPage() {
     fetchDecksInfo();
   }, [dispatch]);
 
-  const handleDeckClick = (deckId: string) => (e: React.MouseEvent) => {
+  const handleDeckClick = (deckId: string) => {
     const fetchDeck = async () => {
       const selectedDeck = await getDeckRequest(deckId);
       dispatch(setActiveDeck(selectedDeck));
       navigate("/playground");
     };
-    if (e.target === e.currentTarget) {
+    if (!editingDeck) {
       fetchDeck();
     }
   };
@@ -83,7 +82,7 @@ export default function GraphDecksPage() {
           <div key={deckInfo._id} className={`${styles.deckSpace}`}>
             <div
               className={`${styles.deckRepresentation} ${styles.deckInfoContainer}`}
-              onClick={handleDeckClick(deckInfo._id)}
+              onClick={() => handleDeckClick(deckInfo._id)}
             >
               <div className={`${styles.scrollableDeckContent}`}>
                 {editingDeck !== null && editingDeck === deckInfo._id ? (
@@ -92,9 +91,8 @@ export default function GraphDecksPage() {
                     setEditDeckMode={setEditingDeck}
                   />
                 ) : (
-                  // <DeckForm deckId={editingDeck} />
                   <>
-                    <div className={`${styles.deckInfoContainer}`}>
+                    <div className={`${styles.deckNameContainer}`}>
                       {deckInfo.name}
                     </div>
                     <div className={`${styles.deckDecriptionContainer}`}>
