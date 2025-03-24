@@ -100,12 +100,11 @@ export default function CardPanel({
     <div className={styles.formContainer}>
       <form>
         <div className={styles.fieldContainer}>
-          <label htmlFor="word">Word</label>
+          <label htmlFor="word">Front</label>
           <input
             type="text"
             id="word"
             name="word"
-            placeholder="word"
             onChange={handleFieldChange}
             value={cardFields.front}
             className={styles.rtl}
@@ -113,18 +112,16 @@ export default function CardPanel({
         </div>
         <div className={styles.fieldContainer}>
           <label htmlFor="back">Back</label>
-          <input
-            type="text"
+          <textarea
             id="back"
             name="back"
-            placeholder="back"
             onChange={handleFieldChange}
             value={cardFields.back}
             // className={styles.rtl}
-          ></input>
+          ></textarea>
         </div>
         <div className={styles.fieldContainer}>
-          <label htmlFor="linkedCards">Linked Cards</label>
+          <label htmlFor="linkedCards">Related Cards</label>
 
           <select name="linkedCards">
             <option value="option1">option1</option>

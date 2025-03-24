@@ -3,6 +3,7 @@
 }
 
 .formContainer {
+  margin-top: 2rem;
   width: 100%;
 
   .fieldContainer {
@@ -13,7 +14,7 @@
     width: 100%;
 
     label {
-      font-weight: 700;
+      font-weight: 600;
       flex-basis: 6rem;
       text-align: right;
       font-size: small;
@@ -28,14 +29,9 @@
     select,
     textarea,
     input {
-      box-sizing: border-box;
+      @include input_text_textarea;
       width: 100%;
-      padding: 0.375em;
-      border: 2px solid var(--black);
-      border-radius: 0.225rem;
-      &:focus {
-        outline: none;
-      }
+      font-size: var(--smallish-font-size);
     }
     .linkedCardsBox {
       width: 100%;

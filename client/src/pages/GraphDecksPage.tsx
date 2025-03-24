@@ -35,7 +35,7 @@ export default function GraphDecksPage() {
       <div className={styles.decksList}>
         <AddDeck />
         {decksInfo?.map((deckInfo) => (
-          <Deck deckInfo={deckInfo} />
+          <Deck key={deckInfo._id} deckInfo={deckInfo} />
         ))}
       </div>
     </div>

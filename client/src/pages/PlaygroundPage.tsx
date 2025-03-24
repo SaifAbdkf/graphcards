@@ -9,10 +9,11 @@ import {
 } from "../store/selectors/deckSelector";
 import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { PanelRight } from "lucide-react";
 import CardPanel from "../constituants/CardPanel";
 import { getMultipleRequest } from "../services/api/apiRequestMethods";
 import { getDeckRequest, getDecksInfoRequest } from "../services/api/decksApi";
+
+import Graph3 from "../constituants/Graph3";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,7 +32,7 @@ export default function PlaygroundPage() {
       dispatch(setDecksInfo(fetchedDecksInfo));
     };
 
-    if (decksInfo === null) {
+    if (decksInfo.length === 0) {
       fetchDecksInfo();
     }
   }, [decksInfo, dispatch]);
@@ -90,13 +91,7 @@ export default function PlaygroundPage() {
     <div className={styles.playGroundContainer}>
       <div className={`${styles.graphViewerContainer} `}>
         <div className={`${styles.graphViewerBar}`}>
-          <div
-            className={`${styles.selectedDeckName}`}
-            // onClick={setShowCardDeck}
-          >
-            <PanelRight size={18} className={`${styles.rightPanelIcon}`} />
-            {activeDeck?.name}
-          </div>
+          <div className={`${styles.selectedDeckName}`}>{activeDeck?.name}</div>
           <Button
             bgColorClass="bg-green"
             onClick={() => setShowCardPanel(!showCardPanel)}
@@ -104,11 +99,13 @@ export default function PlaygroundPage() {
             add card
           </Button>
         </div>
-        <div ref={containerRef} className={styles.canvasContainer}></div>
+        <div ref={containerRef} className={styles.canvasContainer}>
+          <Graph3 />
+        </div>
       </div>
 
       {showCardPanel && (
-        <div className={`${styles.cardLabContainer}`}>
+        <div className={`${styles.cardPanelContainer}`}>
           <CardPanel
             selectedCard={selectedCard}
             setShowCardPanel={setShowCardPanel}
