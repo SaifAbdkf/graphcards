@@ -33,19 +33,6 @@
       width: 100%;
       font-size: var(--smallish-font-size);
     }
-    .linkedCardsBox {
-      width: 100%;
-      box-sizing: border-box;
-      height: 4rem;
-      border: 2px solid var(--black);
-      border-radius: 0.225rem;
-      // TODO disgusting fix because somehow div s not aligned
-      transform: translateX(-1Ypx);
-    }
-  }
-
-  .linkedCardsFieldContainer {
-    padding-top: 0px !important;
   }
 
   .formButtonsContainer {

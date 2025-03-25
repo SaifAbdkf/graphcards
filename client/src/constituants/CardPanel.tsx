@@ -2,7 +2,8 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { Card, CardFields, emptyCardFields } from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { BACKEND_URL } from "../services/api/apiRequestMethods";
-import { deepCopy, dummy } from "../utils/utils";
+import { deepCopy } from "../utils/utils";
+import SelectRelatedCards from "../components/SelectRelatedCards";
 
 export default function CardPanel({
   selectedCard,
@@ -14,6 +15,8 @@ export default function CardPanel({
   const [cardFields, setCardFields] = useState<CardFields>(
     deepCopy<CardFields>(emptyCardFields)
   );
+
+  const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
 
   let selectedCardId: string | null = null;
   if (selectedCard) {
@@ -98,50 +101,35 @@ export default function CardPanel({
 
   return (
     <div className={styles.formContainer}>
-      <form>
-        <div className={styles.fieldContainer}>
-          <label htmlFor="word">Front</label>
-          <input
-            type="text"
-            id="word"
-            name="word"
-            onChange={handleFieldChange}
-            value={cardFields.front}
-            className={styles.rtl}
-          ></input>
-        </div>
-        <div className={styles.fieldContainer}>
-          <label htmlFor="back">Back</label>
-          <textarea
-            id="back"
-            name="back"
-            onChange={handleFieldChange}
-            value={cardFields.back}
-            // className={styles.rtl}
-          ></textarea>
-        </div>
-        <div className={styles.fieldContainer}>
-          <label htmlFor="linkedCards">Related Cards</label>
+      <div className={styles.fieldContainer}>
+        <label htmlFor="word">Front</label>
+        <input
+          type="text"
+          id="word"
+          name="word"
+          onChange={handleFieldChange}
+          value={cardFields.front}
+          className={styles.rtl}
+        ></input>
+      </div>
+      <div className={styles.fieldContainer}>
+        <label htmlFor="back">Back</label>
+        <textarea
+          id="back"
+          name="back"
+          onChange={handleFieldChange}
+          value={cardFields.back}
+        ></textarea>
+      </div>
+      <div className={styles.fieldContainer}>
+        <label htmlFor="linkedCards">Related Cards</label>
 
-          <select name="linkedCards">
-            <option value="option1">option1</option>
-            <option value="option2">option2</option>
-            <option value="option3">option3</option>
-          </select>
-        </div>
-        <div
-          className={`${styles.fieldContainer} ${styles.linkedCardsFieldContainer} `}
-        >
-          <label htmlFor="linkedCards"></label>
-          <div className={styles.linkedCardsBox}></div>
-        </div>
-        <div className={`${styles.formButtonsContainer}`}>
-          <button onClick={handleSubmit}>
-            {selectedCard ? "Save Card" : "Create card"}
-          </button>
-          {selectedCard && <button onClick={dummy}>Delete Card </button>}
-        </div>
-      </form>
+        <SelectRelatedCards />
+      </div>
+
+      <div className={`${styles.formButtonsContainer}`}>
+        <button onClick={handleSubmit}>Create card</button>
+      </div>
     </div>
   );
 }
