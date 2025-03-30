@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const cardSchema = new Schema(
   {
-    decks: [{ type: Schema.Types.ObjectId, ref: "Deck" }],
+    deckId: { type: Schema.Types.ObjectId, ref: "Deck", required: true },
     front: { type: String, required: true },
     back: {
       type: String,
-      required: false,
+      required: true,
       // false in case AI or user creates a link card to be filled later or maybe if it is a group Card?
     },
     links: {

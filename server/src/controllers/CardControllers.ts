@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Card } from "../models/CardModel";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { Edge } from "../models/EdgeModel";
 import { Deck } from "../models/DeckModel";
 
@@ -42,26 +42,35 @@ export async function createCard(request: Request, response: Response) {
 
     //create card
     const newCard = new Card({
-      decks: [validatedDeckId],
+      deckId: validatedDeckId,
       front,
       back,
       links: validatedLinks,
     });
 
     await newCard.save();
+    deck.cardIds.push(newCard._id);
 
-    deck.cards.push(newCard._id);
-    await deck.save();
-
+    let edgeIds: ObjectId[] = [];
     // create edges
     for (const linkedCard of validatedLinks) {
       try {
         const newEdge = new Edge({
+          deckId: validatedDeckId,
           from: newCard._id,
           to: linkedCard.linkedCardId,
           label: linkedCard.label,
         });
         await newEdge.save();
+
+        //create link in the associated card
+        await Card.findByIdAndUpdate(linkedCard.linkedCardId, {
+          $push: {
+            links: { linkedCardId: newCard._id, label: linkedCard.label },
+          },
+        });
+
+        deck.edgeIds.push(newEdge._id);
       } catch (error) {
         console.log(error);
         return response
@@ -69,11 +78,14 @@ export async function createCard(request: Request, response: Response) {
           .json({ error: error, admMessage: "problem with creating an edge" });
       }
     }
+
+    await deck.save();
+
     return response.status(200).json(newCard);
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, admMessage: "7solt w te7cheeeelek" });
+      .json({ error: error, admMessage: "Server Error. Cannot create card." });
   }
 }
 
@@ -96,12 +108,6 @@ export async function getCard(request: Request, response: Response) {
 }
 
 export async function getCards(request: Request, response: Response) {
-  // const { deckId } = request.params;
-
-  // if (!mongoose.Types.ObjectId.isValid(deckId)) {
-  //   return response.status(404).json({ error: "Deck Id not valid" });
-  // }
-
   const cards = await Card.find();
 
   if (!cards) {
@@ -148,11 +154,29 @@ export async function deleteCard(
     return response.status(404).json({ error: "Card Id not valid" });
   }
 
-  const card = await Card.findOneAndDelete({ _id: cardId });
+  try {
+    const card = await Card.findOneAndDelete({ _id: cardId });
 
-  if (!card) {
-    return response.status(404).json({ error: "no such card" });
+    if (!card) {
+      return response.status(404).json({ error: "no such card" });
+    } else {
+      //delete cardid  from deck
+      const updateDeck = Deck.findByIdAndUpdate(
+        card.deckId,
+        {
+          $pull: { cardIds: cardId },
+        },
+        { new: true }
+      );
+
+      if (!updateDeck) {
+        return response.status(404).json({ error: "no such deck" });
+      }
+
+      return response.status(200).json(card);
+    }
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: "Server error" });
   }
-
-  return response.status(200).json(card);
 }

@@ -4,5 +4,12 @@
   --gray: #868686;
   --white-hover: #f6f6fa;
   --white: #fafafa;
-  --primary-color: rgb(0, 21, 255);
+  /* --primary-color: #ff597a; */
+  /* --primary-color: #993af9; */
+  /* --primary-color: #3f4a77; */
+
+  --primary-color: #3dc5ff;
+  --primary-color-rgb: 61, 197, 255;
+  /* TODO */
+  --creamy-white: #f9f7f7;
 }

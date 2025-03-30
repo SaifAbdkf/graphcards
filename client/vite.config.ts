@@ -7,7 +7,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
+        // api: "modern-compiler",
         additionalData: `@use "src/styles/mixins" as *;`,
+        silenceDeprecations: ["legacy-js-api"],
+        //TODO https://github.com/vitejs/vite/discussions/18388 did not work see if there is something else new
       },
     },
   },

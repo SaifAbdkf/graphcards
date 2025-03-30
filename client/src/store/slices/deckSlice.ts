@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Deck, DeckFormFields, DeckInfo } from "../../Types/types";
 import { deepCopy } from "../../utils/utils";
-import { Satellite } from "lucide-react";
 
 interface DeckStoreState {
   activeDeck: Deck | null;
@@ -65,7 +64,7 @@ const deckSlice = createSlice({
       );
     },
     rollbackDeckInfo: (state) => {
-      //TODO: assert not null ,Question: why do i sillhave to use "?" line 63
+      //TODO: assert not null ,Question: why do i sill have to use "?" line 63
       if (state.rollbackDeckInfo !== null)
         throw new Error("state.rollbackDeckInfo should be defined");
 
@@ -84,6 +83,9 @@ const deckSlice = createSlice({
 
       state.rollbackDeckInfo = null;
     },
+    resetRollbackDeckInfo: (state) => {
+      state.rollbackDeckInfo = null;
+    },
   },
 });
 
@@ -95,6 +97,7 @@ export const {
   deleteDeckInfo,
   removeDeckInfo,
   rollbackDeckInfo,
+  resetRollbackDeckInfo,
 } = deckSlice.actions;
 
 export default deckSlice.reducer;

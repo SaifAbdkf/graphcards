@@ -6,8 +6,8 @@ const deckSchema = new Schema(
   {
     name: { type: String, required: true },
     description: String,
-    cards: [{ type: Schema.Types.ObjectId, ref: "Card" }],
-    edges: [{ type: Schema.Types.ObjectId, ref: "Edgez" }],
+    cardIds: [{ type: Schema.Types.ObjectId, ref: "Card" }],
+    edgeIds: [{ type: Schema.Types.ObjectId, ref: "Edge" }],
     metadata: { type: Map, of: Schema.Types.Mixed },
   },
   { timestamps: true, strict: false }

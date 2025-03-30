@@ -4,6 +4,7 @@ import styles from "./Deck.module.scss";
 import { deleteDeckRequest, getDeckRequest } from "../services/api/decksApi";
 import {
   deleteDeckInfo,
+  resetRollbackDeckInfo,
   rollbackDeckInfo,
   setActiveDeck,
 } from "../store/slices/deckSlice";
@@ -45,6 +46,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
         // Refresh store state before DB
         if (isdeleted) {
           console.log("deck deleted all good");
+          dispatch(resetRollbackDeckInfo());
           //good
         } else {
           dispatch(rollbackDeckInfo());

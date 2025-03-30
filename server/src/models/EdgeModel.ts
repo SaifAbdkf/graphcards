@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const edgeSchema = new Schema(
   {
+    deckId: { type: mongoose.Types.ObjectId, ref: "Deck" },
     from: { type: mongoose.Types.ObjectId, ref: "Card", required: true },
     to: { type: mongoose.Types.ObjectId, ref: "card", required: true },
     label: { type: String, required: false },

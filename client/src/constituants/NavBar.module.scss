@@ -5,15 +5,43 @@
   align-items: center;
   height: var(--navbar-height);
   width: 80%;
-  // @include centered_child_container; //has flex basis 1000px
-  padding: 0.325rem 1rem;
+  padding: 0.125rem 1rem;
   .logo {
+    position: relative;
     font-size: 1.5rem;
     font-weight: 700;
     text-decoration: none;
     color: var(--black);
   }
+  .underlineDiv {
+    position: absolute;
+    height: 8px;
+    width: 100%;
+    background-color: rgba(var(--primary-color-rgb), 0.4);
+    z-index: -1;
+    bottom: 11px;
+    // opacity: 0.5;
+  }
 
+  .underlineDivLogo {
+    position: absolute;
+    height: 12px;
+    width: 100%;
+    z-index: -1;
+    bottom: -2px;
+    background-color: rgba(var(--primary-color-rgb), 0.4);
+    // transform: scaleX(0); // Start with no width
+    transform-origin: left; // Start scaling from the left
+    animation: drawUnderline 0.1s ease-in-out;
+  }
+  @keyframes drawUnderline {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
   .navLinks {
     height: 100%;
     display: flex;
@@ -23,6 +51,7 @@
     height: 100%;
 
     .link {
+      position: relative;
       height: 100%;
       display: flex;
       align-items: center;
@@ -30,14 +59,6 @@
       transition: color 0.15s ease-in-out;
       color: var(--black);
       font-weight: 600;
-
-      &:hover {
-        color: var(--primary-color);
-      }
-    }
-
-    .active {
-      color: var(--primary-color);
     }
   }
 }

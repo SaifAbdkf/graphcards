@@ -18,11 +18,11 @@ import Graph3 from "../constituants/Graph3";
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
-  const [cards, setCards] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const decksInfo = useSelector(selectDecksInfo);
   const activeDeck = useSelector(selectActiveDeck);
+  const cards = activeDeck ? activeDeck.cards : null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -55,9 +55,9 @@ export default function PlaygroundPage() {
   const handleDeckSelection = useCallback(
     (deckId: string) => {
       const fetchAndSelectDeck = async () => {
-        const selectedDeck = await getDeckRequest(deckId);
-        dispatch(setActiveDeck(selectedDeck));
-        navigate("/playground");
+        const fetchedDeck = await getDeckRequest(deckId);
+        console.log(fetchedDeck);
+        dispatch(setActiveDeck(fetchedDeck));
       };
       fetchAndSelectDeck();
     },

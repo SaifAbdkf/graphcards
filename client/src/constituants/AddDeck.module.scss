@@ -13,7 +13,7 @@
   font-size: 1.225rem;
   &:hover {
     cursor: pointer;
-    background-color: var(--white-hover);
+    background-color: rgba(var(--primary-color-rgb), 0.08);
   }
   &.addDeckNoHover {
     &:hover {
@@ -44,8 +44,8 @@
 
   cursor: pointer;
   &:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    // border-color: var(--primary-color);
+    // color: var(--primary-color);
   }
 }
 

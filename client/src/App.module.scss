@@ -5,7 +5,7 @@
   overflow: hidden;
 
   .navbarContainer {
-    z-index: 1;
+    z-index: 12s;
     position: fixed;
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
 
   .pageContainer {
     box-sizing: border-box;
-    padding-top: 2.5rem;
+    padding-top: var(--navbar-height);
   }
 
   .playgroundPageContainer {
