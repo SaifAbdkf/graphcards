@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Deck } from "../models/DeckModel";
 import mongoose from "mongoose";
 import { Card } from "../models/CardModel";
+import { Edge } from "../models/EdgeModel";
 
 export async function createDeck(
   request: Request,
@@ -49,13 +50,16 @@ export async function getDeck(
     }
 
     const deckCards = await Card.find({ _id: { $in: deck.cardIds } });
+    const deckEdges = await Edge.find({ _id: { $in: deck.edgeIds } });
 
     const returnedDeck = {
       _id: deck._id,
       name: deck.name,
       description: deck.description,
       cards: deckCards,
+      edges: deckEdges,
     };
+
     return response.status(200).json(returnedDeck);
   } catch (error) {
     return response

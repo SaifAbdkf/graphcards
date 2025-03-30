@@ -15,7 +15,7 @@ export const cardRoutes = express.Router();
 
 //TODO change the routes and the functions names
 cardRoutes.post("/", createCard);
-cardRoutes.get("/all", getCards);
+cardRoutes.get("/all", getCards); //is it really needed?
 cardRoutes.get("/:cardId", getCard);
 cardRoutes.delete("/:cardId", deleteCard);
 cardRoutes.put("/:cardId", updateCard);

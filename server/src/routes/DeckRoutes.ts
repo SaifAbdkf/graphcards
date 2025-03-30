@@ -16,4 +16,3 @@ deckRoutes.get("/all", getDecksInfo); //match before /:deckId
 deckRoutes.get("/:deckId", getDeck);
 deckRoutes.patch("/:deckId", patchDeck);
 deckRoutes.delete("/:deckId", deleteDeck);
-deckRoutes.use("/:deckId/card", cardRoutes);

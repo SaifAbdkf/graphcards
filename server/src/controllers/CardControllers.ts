@@ -34,7 +34,7 @@ export async function createCard(request: Request, response: Response) {
     }
 
     const validatedLinks = definedLinks.map(
-      async (link: { linkedCardId: string; label: string }) => ({
+      (link: { linkedCardId: string; label: string }) => ({
         link: new mongoose.Types.ObjectId(link.linkedCardId),
         label: link.label,
       })
@@ -90,16 +90,13 @@ export async function createCard(request: Request, response: Response) {
 }
 
 export async function getCard(request: Request, response: Response) {
-  const { deckId, cardId } = request.params;
+  const { cardId } = request.params;
 
-  if (!mongoose.Types.ObjectId.isValid(deckId)) {
-    return response.status(404).json({ error: "Deck Id not valid" });
-  }
   if (!mongoose.Types.ObjectId.isValid(cardId)) {
     return response.status(404).json({ error: "Card Id not valid" });
   }
 
-  const card = await Card.findOne({ _id: cardId, deck: deckId });
+  const card = await Card.findById(cardId);
 
   if (!card) {
     return response.status(404).json({ error: "no such card" });
