@@ -20,7 +20,6 @@
     background-color: rgba(var(--primary-color-rgb), 0.4);
     z-index: -1;
     bottom: 11px;
-    // opacity: 0.5;
   }
 
   .underlineDivLogo {
@@ -30,7 +29,6 @@
     z-index: -1;
     bottom: -2px;
     background-color: rgba(var(--primary-color-rgb), 0.4);
-    // transform: scaleX(0); // Start with no width
     transform-origin: left; // Start scaling from the left
     animation: drawUnderline 0.1s ease-in-out;
   }

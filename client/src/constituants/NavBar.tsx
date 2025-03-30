@@ -5,19 +5,16 @@ import { useCallback, useState } from "react";
 export default function NavBar() {
   const location = useLocation().pathname;
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  console.log(location);
 
   const handleMouseEnter = useCallback(
     (page: string): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        console.log("enter");
         setHoveredLink(page);
       },
     []
   );
 
   const handleMouseLeave = useCallback(() => {
-    console.log("leave");
     setHoveredLink(null);
   }, []);
 
