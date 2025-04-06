@@ -11,12 +11,18 @@
     align-items: center;
     aspect-ratio: 3/5;
     height: 24rem;
-    border: 2px solid var(--black);
+    border: 2px solid $black;
     border-radius: 1px;
     font-size: 1.225rem;
     &:hover {
       cursor: pointer;
-      background-color: var(--white-hover);
+      background-color: $primary-color-hover;
+    }
+    &.editDeckNoHover {
+      &:hover {
+        cursor: default;
+        background-color: $white; //TODO: for some reason $white dont work
+      }
     }
     .scrollableDeckContent {
       box-sizing: border-box;
@@ -30,7 +36,7 @@
 
     .deckDecriptionContainer {
       margin-top: 1rem;
-      font-size: var(--small-font-size);
+      font-size: $small-font-size;
     }
   }
 
@@ -40,9 +46,9 @@
     padding-top: 0.575rem;
     top: 0;
     right: 0;
-    color: var(--dark-gray);
+    color: $dark-gray;
     &:hover {
-      color: var(--black);
+      color: $black;
       cursor: pointer;
     }
 

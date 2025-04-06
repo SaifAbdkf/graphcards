@@ -37,6 +37,7 @@ export default function DeckForm({
           className={styles.deckName}
           value={deckFormFields.name}
           onChange={handleFieldChange}
+          autoComplete="off"
         ></input>
       </div>
       <div>
@@ -46,6 +47,7 @@ export default function DeckForm({
           className={styles.deckDescription}
           value={deckFormFields.description}
           onChange={handleFieldChange}
+          autoComplete="off"
         ></textarea>
       </div>
     </div>

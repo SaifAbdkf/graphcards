@@ -6,10 +6,10 @@
     flex-basis: 80%;
     flex-grow: 1;
     .graphViewerBar {
-      border-bottom: 2px solid var(--black);
+      border-bottom: 2px solid $black;
       display: flex;
       gap: 2rem;
-      height: var(--navbar-height);
+      height: $navbar-height;
       align-items: center;
       .selectedDeckName {
         .rightPanelIcon {
@@ -32,7 +32,7 @@
     flex-basis: 420px;
     box-sizing: border-box;
     padding: 1rem;
-    border-left: 0.125rem solid var(--black);
+    border-left: 0.125rem solid $black;
 
     display: flex;
     justify-content: center;

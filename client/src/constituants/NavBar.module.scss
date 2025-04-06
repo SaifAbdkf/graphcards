@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: var(--navbar-height);
+  height: $navbar-height;
   width: 80%;
   padding: 0.125rem 1rem;
   .logo {
@@ -11,13 +11,13 @@
     font-size: 1.5rem;
     font-weight: 700;
     text-decoration: none;
-    color: var(--black);
+    color: $black;
   }
   .underlineDiv {
     position: absolute;
     height: 8px;
     width: 100%;
-    background-color: rgba(var(--primary-color-rgb), 0.4);
+    background-color: $primary-color-underline;
     z-index: -1;
     bottom: 11px;
   }
@@ -28,7 +28,7 @@
     width: 100%;
     z-index: -1;
     bottom: -2px;
-    background-color: rgba(var(--primary-color-rgb), 0.4);
+    background-color: $primary-color-underline;
     transform-origin: left; // Start scaling from the left
     animation: drawUnderline 0.1s ease-in-out;
   }
@@ -55,7 +55,7 @@
       align-items: center;
       text-decoration: none;
       transition: color 0.15s ease-in-out;
-      color: var(--black);
+      color: $black;
       font-weight: 600;
     }
   }

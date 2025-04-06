@@ -31,7 +31,7 @@
     input {
       @include input_text_textarea;
       width: 100%;
-      font-size: var(--smallish-font-size);
+      font-size: $smallish-font-size;
     }
   }
 

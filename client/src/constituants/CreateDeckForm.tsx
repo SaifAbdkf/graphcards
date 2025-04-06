@@ -69,7 +69,10 @@ export default function CreateDeckForm({
         <Button onClick={handleCancelCreateDeck} disabled={isCreating}>
           cancel
         </Button>
-        <Button onClick={handleCreateDeck} disabled={isCreating}>
+        <Button
+          onClick={handleCreateDeck}
+          disabled={isCreating || deckFormFields.name === ""}
+        >
           {isCreating ? "Creating..." : "Create"}
         </Button>
       </div>

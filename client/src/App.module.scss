@@ -10,13 +10,13 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    background-color: var(--white);
-    border-bottom: 2px solid var(--black);
+    background-color: $white;
+    border-bottom: 2px solid $black;
   }
 
   .pageContainer {
     box-sizing: border-box;
-    padding-top: var(--navbar-height);
+    padding-top: $navbar-height;
   }
 
   .playgroundPageContainer {

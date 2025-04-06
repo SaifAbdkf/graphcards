@@ -63,7 +63,9 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   return (
     <div key={deckInfo._id} className={`${styles.deckSpace}`}>
       <div
-        className={`${styles.deckRepresentation} ${styles.deckInfoContainer}`}
+        className={`${styles.deckRepresentation} ${styles.deckInfoContainer} ${
+          editingDeck ? styles.editDeckNoHover : ""
+        }`}
         onClick={() => handleDeckClick(deckInfo._id)}
       >
         <div className={`${styles.scrollableDeckContent}`}>

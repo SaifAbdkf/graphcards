@@ -8,17 +8,17 @@
   align-items: center;
   aspect-ratio: 3/5;
   height: 24rem;
-  border: 2px solid var(--black);
+  border: 2px solid $black;
   border-radius: 1px;
   font-size: 1.225rem;
   &:hover {
     cursor: pointer;
-    background-color: rgba(var(--primary-color-rgb), 0.08);
+    background-color: $primary-color-hover;
   }
   &.addDeckNoHover {
     &:hover {
       cursor: default;
-      background-color: white;
+      background-color: $white;
     }
   }
   .scrollableDeckContent {
@@ -33,28 +33,15 @@
 
   .deckDecriptionContainer {
     margin-top: 1rem;
-    font-size: var(--small-font-size);
+    font-size: $small-font-size;
   }
 }
 
 .addDeck {
   box-shadow: none;
-  border: 3px dashed var(--black);
-  color: var(--black);
-
+  border: 3px dashed $black;
+  color: $black;
   cursor: pointer;
-  &:hover {
-    // border-color: var(--primary-color);
-    // color: var(--primary-color);
-  }
-}
-
-.addDeckNoHover {
-  cursor: default;
-  &:hover {
-    border-color: var(--black) !important;
-    color: var(--black);
-  }
 }
 
 .itemDiv {

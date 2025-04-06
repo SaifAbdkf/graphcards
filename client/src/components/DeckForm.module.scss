@@ -3,7 +3,7 @@
   margin-bottom: 0.75rem;
   text-align: center;
   width: 100%;
-  font-size: var(--smallish-font-size);
+  font-size: $smallish-font-size;
 
   &:focus {
     border: none;
@@ -15,5 +15,5 @@
   width: 90% !important;
   height: 4rem;
   text-align: center;
-  font-size: var(--small-font-size);
+  font-size: $small-font-size;
 }
