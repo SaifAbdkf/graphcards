@@ -7,9 +7,7 @@ import {
   postRequest,
 } from "./apiRequestMethods";
 
-export async function getDecksInfoRequest(): Promise<
-  DeckInfo[] | ErrorMessage
-> {
+export async function getDecksInfoRequest(): Promise<DeckInfo[]> {
   const fetchedDecksInfo: DeckInfo[] = await getMultipleRequest("/deck/all");
   return fetchedDecksInfo;
 }

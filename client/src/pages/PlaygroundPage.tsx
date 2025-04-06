@@ -1,70 +1,48 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectActiveDeck,
-  selectDecksInfo,
-} from "../store/selectors/deckSelector";
-import { setActiveDeck, setDecksInfo } from "../store/slices/deckSlice";
+import { selectActiveDeck } from "../store/selectors/deckSelector";
 import { Link, useNavigate } from "react-router-dom";
 import CardPanel from "../constituants/CardPanel";
-import { getMultipleRequest } from "../services/api/apiRequestMethods";
-import { getDeckRequest, getDecksInfoRequest } from "../services/api/decksApi";
 
-import Graph3 from "../constituants/Graph3";
+import { useDecksInfo } from "../hooks/useDecksInfo";
+import { useDeck } from "../hooks/useDeck";
+import Graph from "../constituants/Graph";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
-  const decksInfo = useSelector(selectDecksInfo);
   const activeDeck = useSelector(selectActiveDeck);
-  const cards = activeDeck ? activeDeck.cards : null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchDecksInfo = async () => {
-      const fetchedDecksInfo = await getDecksInfoRequest();
-      dispatch(setDecksInfo(fetchedDecksInfo));
-    };
+  const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null);
 
-    if (decksInfo.length === 0) {
-      fetchDecksInfo();
-    }
-  }, [decksInfo, dispatch]);
+  const {
+    data: decksInfo,
+    error: decksInfoError,
+    isLoading: isLoadingDecksInfo,
+  } = useDecksInfo();
+  const {
+    data: deck,
+    error: errorDeck,
+    isLoading: isLoadingDeck,
+  } = useDeck(selectedDeckId);
+  console.log(deck);
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      const data: CardApiData[] = await getMultipleRequest("/card/all");
-
-      const formattedCards: Card[] = data.map((card) => ({
-        ...card,
-        id: card._id,
-        _id: undefined,
-      }));
-      setCards(formattedCards);
-    };
-
-    fetchCards();
+  const handleDeckSelection = useCallback((deckId: string) => {
+    console.log(deckId);
+    setSelectedDeckId(deckId);
   }, []);
 
-  const handleDeckSelection = useCallback(
-    (deckId: string) => {
-      const fetchAndSelectDeck = async () => {
-        const fetchedDeck = await getDeckRequest(deckId);
-        console.log(fetchedDeck);
-        dispatch(setActiveDeck(fetchedDeck));
-      };
-      fetchAndSelectDeck();
-    },
-    [dispatch, navigate]
-  );
+  // TODO: loading UI
+  if (isLoadingDeck) return <h1>Loading deck</h1>;
 
-  if (!activeDeck) {
+  if (!selectedDeckId) {
     return (
       <div>
         <Link to="/graphdecks">create deck</Link>
@@ -100,7 +78,7 @@ export default function PlaygroundPage() {
           </Button>
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
-          <Graph3 />
+          <Graph selectedDeckId={selectedDeckId} />
         </div>
       </div>
 

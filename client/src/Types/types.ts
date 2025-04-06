@@ -1,15 +1,23 @@
 export type Card = {
   _id: string;
+  deckId: string;
   front: string;
   back: string;
-  linkedCards: string[];
 };
-export type CardFields = Omit<Card, "_id">;
+
+export type Edge = {
+  _id: string;
+  deckId: string;
+  from: string;
+  to: string;
+  label: string;
+};
+
+export type CardFields = Omit<Card, "_id" | "deckId">;
 
 export const emptyCardFields: CardFields = {
   front: "",
   back: "",
-  linkedCards: [],
 };
 
 export type Deck = {
@@ -17,6 +25,7 @@ export type Deck = {
   name: string;
   description: string;
   cards: Card[];
+  edges: Edge[];
 };
 
 export type DeckInfo = Omit<Deck, "cards">; // in the future will contain stats
