@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { DeckInfo } from "../Types/types";
 import styles from "./Deck.module.scss";
-import { deleteDeckRequest, getDeckRequest } from "../services/api/decksApi";
+import { deleteDeckRequest } from "../services/api/decksApi";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
-import { setSelectedDeck } from "../store/slices/deckSlice";
+import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
@@ -22,14 +22,8 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const navigate = useNavigate();
 
   const handleDeckClick = (deckId: string) => {
-    const fetchDeck = async () => {
-      const selectedDeck = await getDeckRequest(deckId);
-      dispatch(setSelectedDeck(selectedDeck));
-      navigate("/playground");
-    };
-    if (!editingDeck) {
-      fetchDeck();
-    }
+    dispatch(setSelectedDeckId(deckId));
+    navigate("/playground");
   };
 
   const handleDeckEditIConClick = useCallback((deckId: string) => {

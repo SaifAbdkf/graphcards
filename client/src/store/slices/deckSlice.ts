@@ -1,24 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Deck } from "../../Types/types";
 
 interface DeckStoreState {
-  selectedDeck: Deck | null;
+  selectedDeckId: string | null;
 }
 
 const initialState: DeckStoreState = {
-  selectedDeck: null,
+  selectedDeckId: null,
 };
 
 const deckSlice = createSlice({
   name: "deckStore",
   initialState,
   reducers: {
-    setSelectedDeck: (state, action: PayloadAction<Deck>) => {
-      state.selectedDeck = action.payload;
+    setSelectedDeckId: (state, action: PayloadAction<string>) => {
+      state.selectedDeckId = action.payload;
     },
   },
 });
 
-export const { setSelectedDeck } = deckSlice.actions;
+export const { setSelectedDeckId } = deckSlice.actions;
 
 export default deckSlice.reducer;

@@ -2,23 +2,25 @@ import { useCallback, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import Button from "../components/Button";
-import { useSelector } from "react-redux";
-import { selectActiveDeck } from "../store/selectors/deckSelector";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSelectedDeckId } from "../store/selectors/deckSelector";
 import { Link } from "react-router-dom";
 import CardPanel from "../constituants/CardPanel";
 
 import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
+import { setSelectedDeckId } from "../store/slices/deckSlice";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
-  const [selectedCardId, setSelectedCardId] = useState<Card | null>(null);
+  const selectedDeckId = useSelector(selectSelectedDeckId);
+  const { data: activeDeck } = useDeck(selectedDeckId);
 
-  const activeDeck = useSelector(selectActiveDeck);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
-  const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   const {
     data: decksInfo,
@@ -34,7 +36,7 @@ export default function PlaygroundPage() {
 
   const handleDeckSelection = useCallback((deckId: string) => {
     console.log(deckId);
-    setSelectedDeckId(deckId);
+    dispatch(setSelectedDeckId(deckId));
   }, []);
 
   // TODO: loading UI

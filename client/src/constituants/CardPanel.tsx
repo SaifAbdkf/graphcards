@@ -123,8 +123,6 @@ export default function CardPanel({
       </div>
       <div className={styles.fieldContainer}>
         <label htmlFor="linkedCards">Related Cards</label>
-
-        <SelectRelatedCards />
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>

@@ -6,7 +6,7 @@ import { useDeck } from "../hooks/useDeck";
 export default function Graph({ selectedDeckId }: { selectedDeckId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data: deck, error, isLoading } = useDeck(selectedDeckId);
+  const { data: deck } = useDeck(selectedDeckId);
 
   useEffect(() => {
     console.log("Hey I am here 😎");

@@ -10,7 +10,7 @@ import CreateDeck from "../constituants/CreateDeck";
 export default function GraphDecksPage() {
   console.log("GraphDecksPage rendering");
 
-  const { data: decksInfo, error, isLoading } = useDecksInfo();
+  const { data: decksInfo } = useDecksInfo();
 
   console.log("graphdeckspages", decksInfo);
   return (
