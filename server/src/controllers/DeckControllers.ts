@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
-import { Deck } from "../models/DeckModel";
+import { DeckInfo } from "../models/DeckModel";
 import mongoose from "mongoose";
 import { Card } from "../models/CardModel";
 import { Edge } from "../models/EdgeModel";
+import { failureResponseObject, successResponseObject } from "../utils/utils";
 
 export async function createDeck(
   request: Request,
   response: Response
 ): Promise<Response> {
   const { name, description } = request.body;
+  // TODO: in he future we are gonna have an array of cards and edges in the body maybe
 
   try {
-    const deck = await Deck.create({ name, description });
-    return response.status(200).json(deck);
+    const deckInfo = await DeckInfo.create({ name, description });
+    return response.status(200).json(successResponseObject(deckInfo));
   } catch (error) {
     console.log(error);
     return response.status(400).json(error);
@@ -24,16 +26,15 @@ export async function getDecksInfo(
   response: Response
 ): Promise<Response> {
   try {
-    console.log("Hey I am here 😎");
-    const decks = await Deck.find({}, "-cardIds ");
+    const decks = await DeckInfo.find();
     if (!decks) {
-      return response.status(404).json({ error: "no decks" });
+      return response.status(404).json(failureResponseObject("No decks found"));
     }
-    return response.status(200).json(decks);
+    return response.status(200).json(successResponseObject(decks));
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, admMsg: "error fetching decks info" });
+      .json(failureResponseObject("Server error. Could not get decks.", error));
   }
 }
 
@@ -44,41 +45,50 @@ export async function getDeck(
   const { deckId } = request.params;
 
   try {
-    const deck = await Deck.findById(deckId);
-    if (!deck) {
-      return response.status(404).json({ error: "no deck" });
+    const deckInfo = await DeckInfo.findById(deckId);
+    if (!deckInfo) {
+      return response
+        .status(404)
+        .json(failureResponseObject("deckInfo not found"));
     }
 
-    const deckCards = await Card.find({ _id: { $in: deck.cardIds } });
-    const deckEdges = await Edge.find({ _id: { $in: deck.edgeIds } });
+    const deckCards = await Card.find({ deckId: deckId });
+    const deckEdges = await Edge.find({ deckId: deckId });
 
-    const returnedDeck = {
-      _id: deck._id,
-      name: deck.name,
-      description: deck.description,
+    const deck = {
+      _id: deckInfo._id,
+      name: deckInfo.name,
+      description: deckInfo.description,
       cards: deckCards,
       edges: deckEdges,
     };
 
-    return response.status(200).json(returnedDeck);
+    return response.status(200).json(successResponseObject(deck));
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, gMessage: "error fetching the deck" });
+      .json(
+        failureResponseObject(
+          "error getting the deck and its nodes and edges",
+          error
+        )
+      );
   }
 }
 
-export async function patchDeck(
+export async function patchDeckInfo(
   request: Request,
   response: Response
 ): Promise<Response> {
   const deckId = request.params.deckId;
 
   if (!mongoose.Types.ObjectId.isValid(deckId)) {
-    return response.status(404).json({ error: "no such deck" });
+    return response
+      .status(404)
+      .json(failureResponseObject("deck Id not valid"));
   }
   try {
-    const deck = await Deck.findOneAndUpdate(
+    const updatedDeckInfo = await DeckInfo.findOneAndUpdate(
       {
         _id: deckId,
       },
@@ -86,15 +96,19 @@ export async function patchDeck(
       { new: true }
     );
 
-    if (!deck) {
-      return response.status(404).json({ error: "no such deck" });
+    if (!updatedDeckInfo) {
+      return response
+        .status(404)
+        .json(failureResponseObject("deckInfo not found. could not update"));
     }
 
-    return response.status(200).json(deck);
+    return response.status(200).json(successResponseObject(updatedDeckInfo));
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, gMessage: "Server Error" });
+      .json(
+        failureResponseObject("ssrver error. could not update deck.", error)
+      );
   }
 }
 
@@ -108,23 +122,29 @@ export async function deleteDeck(
     return response.status(404).json({ error: "no such deck" });
   }
 
+  const session = await mongoose.startSession();
+  await session.startTransaction();
+
   try {
-    const deck = await Deck.findOneAndDelete({
+    const deckInfo = await DeckInfo.findOneAndDelete({
       _id: deckId,
     });
 
-    if (!deck) {
-      return response.status(404).json({ error: "no such deck" });
-    } else {
-      //delete associatedCards
-      //Carefull we are not checking if cards are deleted properly or not here
-      await Card.deleteMany({ deckId: deckId });
+    if (!deckInfo) {
+      return response
+        .status(404)
+        .json(failureResponseObject("could not find deck to delete it "));
     }
 
-    return response.status(200).json(deck);
+    await await Card.deleteMany({ deckId: deckId });
+    await Edge.deleteMany({ deckId: deckId });
+
+    return response.status(200).json(successResponseObject(deckInfo));
   } catch (error) {
     return response
       .status(500)
-      .json({ error: error, gMessage: "server error" });
+      .json(
+        failureResponseObject("server error. could not delete deck.", error)
+      );
   }
 }

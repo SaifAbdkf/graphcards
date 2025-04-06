@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Card } from "../models/CardModel";
-import { Deck } from "../models/DeckModel";
 import mongoose from "mongoose";
 import { Edge } from "../models/EdgeModel";
 

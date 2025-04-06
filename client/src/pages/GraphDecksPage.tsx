@@ -17,13 +17,14 @@ export default function GraphDecksPage() {
   const dispatch = useDispatch();
 
   const decksInfo = useSelector(selectDecksInfo);
+  console.log(decksInfo);
   // TODO: special effect to selected deck
   // const activeDeck = useSelector(selectActiveDeck);
 
   useEffect(() => {
     const fetchDecksInfo = async () => {
-      const fetchedDecksInfo = await getDecksInfoRequest();
-      dispatch(setDecksInfo(fetchedDecksInfo));
+      const fetchDecksInfo = await getDecksInfoRequest();
+      if (fetchDecksInfo.status) dispatch(setDecksInfo(fetchedDecksInfo));
     };
 
     fetchDecksInfo();
@@ -34,9 +35,9 @@ export default function GraphDecksPage() {
       <h1>My GraphDecks</h1>
       <div className={styles.decksList}>
         <AddDeck />
-        {decksInfo?.map((deckInfo) => (
+        {/* {decksInfo.map((deckInfo) => (
           <Deck key={deckInfo._id} deckInfo={deckInfo} />
-        ))}
+        ))} */}
       </div>
     </div>
   );

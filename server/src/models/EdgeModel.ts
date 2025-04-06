@@ -14,3 +14,5 @@ const edgeSchema = new Schema(
 );
 
 export const Edge = mongoose.model("Edge", edgeSchema);
+
+export type EdgeType = mongoose.InferSchemaType<typeof edgeSchema>;

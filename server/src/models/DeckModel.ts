@@ -2,15 +2,13 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const deckSchema = new Schema(
+const deckInfoSchema = new Schema(
   {
     name: { type: String, required: true },
     description: String,
-    cardIds: [{ type: Schema.Types.ObjectId, ref: "Card" }],
-    edgeIds: [{ type: Schema.Types.ObjectId, ref: "Edge" }],
     metadata: { type: Map, of: Schema.Types.Mixed },
   },
   { timestamps: true, strict: false }
 );
 
-export const Deck = mongoose.model("Deck", deckSchema);
+export const DeckInfo = mongoose.model("DeckInfo", deckInfoSchema);
