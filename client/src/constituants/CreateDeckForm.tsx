@@ -12,7 +12,7 @@ export default function CreateDeckForm({
 }: {
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { data: decksInfo, error, isLoading, mutate } = useDecksInfo();
+  const { data: decksInfo, mutate } = useDecksInfo();
   const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
     deepCopy(emptyDeckFormFields)
   );

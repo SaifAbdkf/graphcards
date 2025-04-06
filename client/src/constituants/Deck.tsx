@@ -12,8 +12,11 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
 import { setSelectedDeck } from "../store/slices/deckSlice";
+import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
+  const { data: decksInfo, mutate } = useDecksInfo();
+
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,25 +38,26 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
 
   const handleDeleteDeck = useCallback(
     async (deckId: string) => {
-      try {
-        dispatch(deleteDeckInfo(deckInfo));
+      const optimisticDecksInfo = decksInfo.filter(
+        (deckInfoElement) => deckInfoElement._id !== deckId
+      );
 
-        const isdeleted = await deleteDeckRequest(deckId);
-        // Refresh store state before DB
-        if (isdeleted) {
-          dispatch(resetRollbackDeckInfo());
-          //good
-        } else {
-          dispatch(rollbackDeckInfo());
-          alert("error deleting deck. Please try again");
-        }
-      } catch (error) {
-        console.error("error deleting deck: ", error);
-        dispatch(rollbackDeckInfo());
-        alert("An error occurred while editing the deck");
-      }
+      const options = {
+        optimisticData: optimisticDecksInfo,
+        rollbackOnError: true,
+      };
+
+      mutate(
+        `/deck/all`,
+        async () => {
+          await deleteDeckRequest(deckId);
+          const updatedDecksInfo = await fetchDecksInfo();
+          return updatedDecksInfo;
+        },
+        options
+      );
     },
-    [deckInfo, dispatch]
+    [decksInfo, mutate]
   );
 
   return (
