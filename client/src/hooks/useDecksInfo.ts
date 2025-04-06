@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { DeckInfo } from "../Types/types";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -7,9 +7,10 @@ export function useDecksInfo() {
   const { data, error, isLoading } = useSWR(`/deck/all`, fetchDecksInfo);
 
   return {
-    data: data,
+    data: data || [],
     error: error,
     isLoading,
+    mutate,
   };
 }
 

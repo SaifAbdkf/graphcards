@@ -2,9 +2,9 @@ import { useCallback, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import Button from "../components/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectActiveDeck } from "../store/selectors/deckSelector";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CardPanel from "../constituants/CardPanel";
 
 import { useDecksInfo } from "../hooks/useDecksInfo";
@@ -14,11 +14,9 @@ import Graph from "../constituants/Graph";
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<Card | null>(null);
 
   const activeDeck = useSelector(selectActiveDeck);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null);
 

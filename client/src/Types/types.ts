@@ -28,9 +28,9 @@ export type Deck = {
   edges: Edge[];
 };
 
-export type DeckInfo = Omit<Deck, "cards">; // in the future will contain stats
+export type DeckInfo = Omit<Deck, "cards" | "edges">; // in the future will contain stats
 export type DeckFields = Omit<Deck, "_id">; // fields is anything changeable through a form, here it is title and desscription
-export type DeckFormFields = Omit<Deck, "_id" | "cards">; // fields is anything changeable through a form, here it is title and desscription
+export type DeckFormFields = Omit<Deck, "_id" | "cards" | "edges">; // fields is anything changeable through a form, here it is title and desscription
 export const emptyDeckFormFields: DeckFormFields = {
   name: "",
   description: "",

@@ -12,9 +12,12 @@ export async function getDecksInfoRequest(): Promise<DeckInfo[]> {
   return fetchedDecksInfo;
 }
 
-export async function createDeckRequest(newDeckFields: DeckFields) {
-  const deck: Deck = await postRequest<DeckFields>("/deck/", newDeckFields);
-  return deck;
+export async function createDeckInfoRequest(newDeckFields: DeckFormFields) {
+  const deckInfo: DeckInfo = await postRequest<DeckFormFields>(
+    "/deck/",
+    newDeckFields
+  );
+  return deckInfo;
 }
 
 export async function getDeckRequest(deckId: string): Promise<Deck> {

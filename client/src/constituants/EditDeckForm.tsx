@@ -1,12 +1,10 @@
 import { useState } from "react";
 import styles from "./EditDeckForm.module.scss";
 import { DeckFormFields, DeckInfo } from "../Types/types";
-import { useDispatch } from "react-redux";
-import { rollbackDeckInfo, updateDeckInfo } from "../store/slices/deckSlice";
 import Button from "../components/Button";
-import { editDeckFormFieldsRequest } from "../services/api/decksApi";
 import { deckFormFieldsFromDeckInfo, deepCopy } from "../utils/utils";
 import DeckForm from "../components/DeckForm";
+import { useDecksInfo } from "../hooks/useDecksInfo";
 
 export default function EditDeckForm({
   setEditDeckMode,
@@ -15,13 +13,13 @@ export default function EditDeckForm({
   setEditDeckMode: React.Dispatch<React.SetStateAction<string | null>>;
   deckInfo: DeckInfo;
 }) {
-  const originalDeckFormFields = deepCopy(deckFormFieldsFromDeckInfo(deckInfo));
+  const { data: decksInfo, error, isLoading, mutate } = useDecksInfo();
+
   const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
     deepCopy(deckFormFieldsFromDeckInfo(deckInfo))
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  const dispatch = useDispatch();
   const handleCancelEditDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setEditDeckMode(null);
@@ -40,54 +38,24 @@ export default function EditDeckForm({
     setIsEditing(true);
     setEditDeckMode(null);
 
-    // Create optimistic deck info for immediate UI update
-    const optimisticDeckInfo: DeckFormFields = {
-      name: deckFormFields.name,
-      description: deckFormFields.description,
+    const optimisticDecksInfo = [
+      ...decksInfo,
+      { _id: Date.now(), ...deckFormFields },
+    ];
+    const options = {
+      optimisticData: optimisticDecksInfo,
+      rollbackOnError: true,
     };
-    console.log("optimisticDeckInfo, ", optimisticDeckInfo);
-    // Update UI immediately
-    dispatch(
-      updateDeckInfo({
-        deckId: deckInfo._id,
-        newDeckFormFields: optimisticDeckInfo,
-        oldDeckFormFields: originalDeckFormFields,
-      })
+
+    mutate(
+      `/deck/all`,
+      async () => {
+        await createDeckInfoRequest(deckFormFields);
+        const updatedDecksInfo = await fetchDecksInfo();
+        return updatedDecksInfo;
+      },
+      options
     );
-
-    // Then make the actual API request
-    const triggerEditDeck = async () => {
-      try {
-        const newdeckFormFields: DeckFormFields = {
-          ...deckFormFields,
-        };
-
-        const editedDeck = await editDeckFormFieldsRequest(
-          deckInfo._id,
-          newdeckFormFields
-        );
-
-        if (editedDeck) {
-          // Careful here i am not putting the actual updated DB Deck in the store after success
-          // no need because it s just 3 fields and they are exactly the same
-          // Reset form state
-        } else {
-          // Handle error - remove the optimistic entry if the API call fails
-          dispatch(rollbackDeckInfo());
-          setEditDeckMode(deckInfo._id); // Reopen the form
-          alert("Failed to edit deck. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error editing deck:", error);
-        dispatch(rollbackDeckInfo());
-        setEditDeckMode(deckInfo._id);
-        alert("An error occurred while editing the deck");
-      } finally {
-        setIsEditing(false);
-      }
-    };
-
-    triggerEditDeck();
   };
 
   return (

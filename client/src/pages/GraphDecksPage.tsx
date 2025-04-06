@@ -12,6 +12,7 @@ export default function GraphDecksPage() {
 
   const { data: decksInfo, error, isLoading } = useDecksInfo();
 
+  console.log("graphdeckspages", decksInfo);
   return (
     <div className={styles.decksPageContainer}>
       <h1>My GraphDecks</h1>

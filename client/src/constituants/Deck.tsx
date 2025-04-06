@@ -2,12 +2,7 @@ import { useCallback, useState } from "react";
 import { DeckInfo } from "../Types/types";
 import styles from "./Deck.module.scss";
 import { deleteDeckRequest, getDeckRequest } from "../services/api/decksApi";
-import {
-  deleteDeckInfo,
-  resetRollbackDeckInfo,
-  rollbackDeckInfo,
-  setActiveDeck,
-} from "../store/slices/deckSlice";
+
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EditDeckForm from "./EditDeckForm";
@@ -45,7 +40,6 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
         const isdeleted = await deleteDeckRequest(deckId);
         // Refresh store state before DB
         if (isdeleted) {
-          console.log("deck deleted all good");
           dispatch(resetRollbackDeckInfo());
           //good
         } else {

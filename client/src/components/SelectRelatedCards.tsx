@@ -19,12 +19,10 @@ export default function SelectRelatedCards({
   }, []);
 
   const handleControlledMenuOnClose = useCallback(() => {
-    console.log("Hey I am here 😎");
     setOpen(false);
   }, []);
 
   const handleItemHover = useCallback(() => {
-    console.log("asbaa");
     if (cardSearchInput.current) {
       cardSearchInput.current.focus();
       setOpen(true);
@@ -32,7 +30,6 @@ export default function SelectRelatedCards({
   }, []);
 
   const handleItemClick = useCallback(() => {
-    console.log("CLICKKKKKK");
     setOpen(false);
     cardSearchInput.current?.blur();
   }, []);

@@ -1,29 +1,24 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import {
-  DeckFields,
-  DeckFormFields,
-  DeckInfo,
-  emptyDeckFormFields,
-} from "../Types/types";
-import { useDispatch } from "react-redux";
-import { addDeckInfo, removeDeckInfo } from "../store/slices/deckSlice";
+import { DeckFormFields, emptyDeckFormFields } from "../Types/types";
 import Button from "../components/Button";
-import { createDeckRequest } from "../services/api/decksApi";
-import { deckInfoFromDeck, deepCopy } from "../utils/utils";
+import { createDeckInfoRequest } from "../services/api/decksApi";
+import { deepCopy } from "../utils/utils";
 import DeckForm from "../components/DeckForm";
+import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
 }: {
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { data: decksInfo, error, isLoading, mutate } = useDecksInfo();
   const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
     deepCopy(emptyDeckFormFields)
   );
+
   const [isCreating, setIsCreating] = useState(false);
 
-  const dispatch = useDispatch();
   const handleCancelCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setDeckFormFields(deepCopy(emptyDeckFormFields));
@@ -39,58 +34,28 @@ export default function CreateDeckForm({
       return;
     }
 
-    // Set loading state and close form immediately for better UX
+    // Set loading state (isCreating) and close form immediately for better UX
     setIsCreating(true);
     setCreateDeckMode(false);
 
-    // Create optimistic deck info for immediate UI update
-    const tempId = `temp-${Date.now()}`;
-    const optimisticDeckInfo: DeckInfo = {
-      _id: tempId,
-      name: deckFormFields.name,
-      description: deckFormFields.description,
+    const optimisticDecksInfo = [
+      ...decksInfo,
+      { _id: Date.now(), ...deckFormFields },
+    ];
+    const options = {
+      optimisticData: optimisticDecksInfo,
+      rollbackOnError: true,
     };
 
-    // Update UI immediately
-    dispatch(addDeckInfo(optimisticDeckInfo));
-
-    // Then make the actual API request
-    const triggerCreateDeck = async () => {
-      try {
-        const deckFields: DeckFields = {
-          ...deckFormFields,
-          cards: [],
-        };
-
-        const createdDeck = await createDeckRequest(deckFields);
-
-        if (createdDeck) {
-          // Replace the optimistic deck with the real one
-          const newDeck: DeckInfo = deckInfoFromDeck(createdDeck);
-          // Remove the temporary deck
-          dispatch(removeDeckInfo(tempId));
-          // Add the real deck from the server
-          dispatch(addDeckInfo(newDeck));
-
-          // Reset form state
-          setDeckFormFields(deepCopy<DeckFormFields>(emptyDeckFormFields));
-        } else {
-          // Handle error - remove the optimistic entry if the API call fails
-          dispatch(removeDeckInfo(tempId));
-          setCreateDeckMode(true); // Reopen the form
-          alert("Failed to create deck. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error creating deck:", error);
-        dispatch(removeDeckInfo(tempId));
-        setCreateDeckMode(true);
-        alert("An error occurred while creating the deck");
-      } finally {
-        setIsCreating(false);
-      }
-    };
-
-    triggerCreateDeck();
+    mutate(
+      `/deck/all`,
+      async () => {
+        await createDeckInfoRequest(deckFormFields);
+        const updatedDecksInfo = await fetchDecksInfo();
+        return updatedDecksInfo;
+      },
+      options
+    );
   };
 
   return (
