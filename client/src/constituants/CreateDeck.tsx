@@ -1,8 +1,8 @@
 import { useState } from "react";
-import styles from "./AddDeck.module.scss";
+import styles from "./CreateDeck.module.scss";
 import CreateDeckForm from "./CreateDeckForm";
 
-export default function AddDeck() {
+export default function CreateDeck() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
 
   const handleContainerClick = (e: React.MouseEvent) => {

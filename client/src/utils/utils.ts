@@ -1,5 +1,3 @@
-import { Deck, DeckFormFields, DeckInfo } from "../Types/types";
-
 export function dummy() {
   console.log("I am a dummy function 🏖️");
 }
@@ -23,26 +21,4 @@ export function assertNotNull<T>(
   if (param == undefined) {
     throw new Error(message || "value cannot be undefined");
   }
-}
-
-export function deckFormFieldsFromDeck(deck: Deck): DeckFormFields {
-  return {
-    name: deck.name,
-    description: deck.description,
-  };
-}
-
-export function deckInfoFromDeck(deck: Deck): DeckInfo {
-  return {
-    _id: deck._id,
-    name: deck.name,
-    description: deck.description,
-  };
-}
-
-export function deckFormFieldsFromDeckInfo(deck: DeckInfo): DeckFormFields {
-  return {
-    name: deck.name,
-    description: deck.description,
-  };
 }

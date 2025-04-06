@@ -25,7 +25,7 @@ export async function getDeckRequest(deckId: string): Promise<Deck> {
   return deck;
 }
 
-export async function editDeckFormFieldsRequest(
+export async function editDeckInfoRequest(
   deckId: string,
   deckFormFields: DeckFormFields
 ) {

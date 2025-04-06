@@ -2,9 +2,9 @@ import { useState } from "react";
 import styles from "./EditDeckForm.module.scss";
 import { DeckFormFields, DeckInfo } from "../Types/types";
 import Button from "../components/Button";
-import { deckFormFieldsFromDeckInfo, deepCopy } from "../utils/utils";
 import DeckForm from "../components/DeckForm";
-import { useDecksInfo } from "../hooks/useDecksInfo";
+import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
+import { editDeckInfoRequest } from "../services/api/decksApi";
 
 export default function EditDeckForm({
   setEditDeckMode,
@@ -13,11 +13,12 @@ export default function EditDeckForm({
   setEditDeckMode: React.Dispatch<React.SetStateAction<string | null>>;
   deckInfo: DeckInfo;
 }) {
-  const { data: decksInfo, error, isLoading, mutate } = useDecksInfo();
+  const { data: decksInfo, mutate } = useDecksInfo();
 
-  const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
-    deepCopy(deckFormFieldsFromDeckInfo(deckInfo))
-  );
+  const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>({
+    name: deckInfo.name,
+    description: deckInfo.description,
+  });
   const [isEditing, setIsEditing] = useState(false);
 
   const handleCancelEditDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,10 +39,12 @@ export default function EditDeckForm({
     setIsEditing(true);
     setEditDeckMode(null);
 
-    const optimisticDecksInfo = [
-      ...decksInfo,
-      { _id: Date.now(), ...deckFormFields },
-    ];
+    const optimisticDecksInfo = decksInfo.map((deckInfoElement) =>
+      deckInfoElement._id !== deckInfo._id
+        ? deckInfoElement
+        : { _id: deckInfo._id, ...deckFormFields }
+    );
+
     const options = {
       optimisticData: optimisticDecksInfo,
       rollbackOnError: true,
@@ -50,7 +53,7 @@ export default function EditDeckForm({
     mutate(
       `/deck/all`,
       async () => {
-        await createDeckInfoRequest(deckFormFields);
+        await editDeckInfoRequest(deckInfo._id, deckFormFields);
         const updatedDecksInfo = await fetchDecksInfo();
         return updatedDecksInfo;
       },

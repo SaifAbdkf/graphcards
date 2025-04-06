@@ -3,9 +3,9 @@ import "../constituants/DeckMenu.scss";
 
 import styles from "./GraphDecksPage.module.scss";
 
-import AddDeck from "../constituants/AddDeck";
 import Deck from "../constituants/Deck";
 import { useDecksInfo } from "../hooks/useDecksInfo";
+import CreateDeck from "../constituants/CreateDeck";
 
 export default function GraphDecksPage() {
   console.log("GraphDecksPage rendering");
@@ -17,7 +17,7 @@ export default function GraphDecksPage() {
     <div className={styles.decksPageContainer}>
       <h1>My GraphDecks</h1>
       <div className={styles.decksList}>
-        <AddDeck />
+        <CreateDeck />
         {decksInfo?.map((deckInfo) => (
           <Deck key={deckInfo._id} deckInfo={deckInfo} />
         ))}

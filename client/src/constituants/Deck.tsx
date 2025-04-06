@@ -11,6 +11,7 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
+import { setSelectedDeck } from "../store/slices/deckSlice";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
@@ -20,7 +21,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const handleDeckClick = (deckId: string) => {
     const fetchDeck = async () => {
       const selectedDeck = await getDeckRequest(deckId);
-      dispatch(setActiveDeck(selectedDeck));
+      dispatch(setSelectedDeck(selectedDeck));
       navigate("/playground");
     };
     if (!editingDeck) {
