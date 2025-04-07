@@ -2,13 +2,14 @@ $black: #1f1f1f;
 // TODO: manually sync mixin black
 $dark-gray: #5b5b5b;
 $gray: #868686;
+$gray-light: rgba($gray, 0.1);
 $white: white;
 $white-hover: rgb(248, 248, 248);
 
 $primary-color: #3dc5ff;
-$primary-color-rgb: 61, 197, 255;
-$primary-color-hover: rgba($primary-color, 0.05);
 $primary-color-underline: rgba($primary-color, 0.4);
+$primary-color-background: rgba($primary-color, 0.1);
+$primary-color-hover: rgba($primary-color, 0.05);
 
 $small-font-size: 0.775rem;
 $smallish-font-size: 0.925rem;

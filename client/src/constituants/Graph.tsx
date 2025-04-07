@@ -9,15 +9,11 @@ export default function Graph({ selectedDeckId }: { selectedDeckId: string }) {
   const { data: deck } = useDeck(selectedDeckId);
 
   useEffect(() => {
-    console.log("Hey I am here 😎");
-    console.log(containerRef.current);
-    console.log(deck);
     if (!containerRef.current || !deck) return;
     const nodes: Node[] = deck.cards.map((card) => ({
       id: card._id,
       label: card.front,
     }));
-    console.log(deck.cards);
 
     const edges: Edge[] = deck.edges.map((edge) => ({
       id: edge._id,

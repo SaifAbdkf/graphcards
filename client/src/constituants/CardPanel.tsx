@@ -1,9 +1,10 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { Card, CardFields, Deck, emptyCardFields } from "../Types/types";
 import styles from "./CardPanel.module.scss";
-import { BACKEND_URL } from "../services/api/apiRequestMethods";
-import { deepCopy } from "../utils/utils";
+import { deepCopy, dummy } from "../utils/utils";
 import SelectRelatedCards from "../components/SelectRelatedCards";
+import Xarrow from "react-xarrows";
+import { X } from "lucide-react";
 
 export default function CardPanel({
   selectedDeck,
@@ -14,70 +15,25 @@ export default function CardPanel({
   selectedCard: Card | null;
   setShowCardPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const cards = selectedDeck.cards;
   const [cardFields, setCardFields] = useState<CardFields>(
     deepCopy<CardFields>(emptyCardFields)
   );
 
-  const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
+  const [relatedCards, setRelatedCards] = useState<Card[]>([]);
 
-  let selectedCardId: string | null = null;
-  if (selectedCard) {
-    const { _id, ...selectedCardFields } = selectedCard;
-    selectedCardId = _id;
-    setCardFields(selectedCardFields);
-  }
+  const handleSelectRelatedCard = useCallback(
+    (cardId: string) => {
+      const alreadyRelatedCard = relatedCards.find(
+        (card) => card._id === cardId
+      );
+      if (alreadyRelatedCard) return;
 
-  const updateCard = async (id: string, cardFields: CardFields) => {
-    const response = await fetch(`${BACKEND_URL}/api/card/${id}`, {
-      method: "PUT",
-      headers: {
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify(cardFields),
-    });
-
-    if (!response.ok) {
-      throw new Error("could not update card");
-    }
-  };
-
-  const createCard = async (cardFields: CardFields) => {
-    const response = await fetch(`${BACKEND_URL}/card`, {
-      method: "POST",
-      headers: {
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify(cardFields),
-    });
-
-    if (!response.ok) {
-      throw new Error("could not create card");
-    }
-  };
-
-  // const deleteCard = async (id: string) => {
-  //   const response = await fetch(`${BACKEND_URL}/api/card/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "content-Type": "application/json",
-  //     },
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error("could not delete card");
-  //   }
-  // };
-
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (selectedCardId) {
-      updateCard(selectedCardId, cardFields);
-    } else {
-      createCard(cardFields);
-    }
-    setShowCardPanel(false);
-  };
+      const newRelatedCard = cards.find((card) => card._id === cardId);
+      if (newRelatedCard) setRelatedCards([...relatedCards, newRelatedCard]);
+    },
+    [cards, relatedCards]
+  );
 
   const handleFieldChange = useCallback(
     (
@@ -101,10 +57,19 @@ export default function CardPanel({
     [cardFields]
   );
 
+  const handleUnselectRelatedCard = useCallback(
+    (cardId: string) => {
+      setRelatedCards(
+        relatedCards.filter((relatedCard) => relatedCard._id !== cardId)
+      );
+    },
+    [relatedCards]
+  );
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.fieldContainer}>
-        <label htmlFor="word">Front</label>
+        <label htmlFor="word">Title</label> <br />
         <input
           type="text"
           id="word"
@@ -115,7 +80,8 @@ export default function CardPanel({
         ></input>
       </div>
       <div className={styles.fieldContainer}>
-        <label htmlFor="back">Back</label>
+        <label htmlFor="back">Body</label>
+        <br />
         <textarea
           id="back"
           name="back"
@@ -125,17 +91,93 @@ export default function CardPanel({
         ></textarea>
       </div>
       <div className={styles.fieldContainer}>
-        <label htmlFor="linkedCards">Related Cards</label>
-
+        <label htmlFor="linkedCards">Related Cards</label> <br />
         <SelectRelatedCards
-          cards={selectedDeck.cards}
-          selectedCardIds={selectedCardIds}
-          setSelectedCardIds={setSelectedCardIds}
+          cards={cards}
+          handleSelectRelatedCard={handleSelectRelatedCard}
         />
+        <div className={`${styles.relatedCardsContainer}`}>
+          {relatedCards.map((relatedCard) => (
+            <div
+              key={relatedCard._id}
+              className={`${styles.relatedCardContainer}`}
+            >
+              <div className={`${styles.relationsContainer}`}>
+                <div className={`${styles.toRelation}`}>
+                  <div className={`${styles.toRelationBottom}`}>
+                    <input
+                      type="text"
+                      className={`${styles.arrowLabel}`}
+                    ></input>
+                    <div className={`${styles.toArrow}`}>
+                      <div
+                        id={`from-${relatedCard._id}`}
+                        className={`${styles.start}`}
+                      ></div>
+                      <div
+                        id={`to-${relatedCard._id}`}
+                        className={`${styles.end}`}
+                      ></div>
+                      <Xarrow
+                        start={`from-${relatedCard._id}`}
+                        end={`to-${relatedCard._id}`}
+                        strokeWidth={1}
+                        headSize={9}
+                        color="black"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className={`${styles.fromRelation}`}>
+                  <div className={`${styles.fromRelationTop}`}>
+                    <div className={`${styles.fromArrow}`}>
+                      <div
+                        id={`from2-${relatedCard._id}`}
+                        className={`${styles.start}`}
+                      ></div>
+                      <div
+                        id={`to2-${relatedCard._id}`}
+                        className={`${styles.end}`}
+                      ></div>
+                      <Xarrow
+                        start={`to2-${relatedCard._id}`}
+                        end={`from2-${relatedCard._id}`}
+                        strokeWidth={1}
+                        headSize={9}
+                        color="black"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="to relatonship"
+                      className={`${styles.arrowLabel}`}
+                    ></input>
+                  </div>
+                </div>
+              </div>
+              <div className={`${styles.cardContainer}`}>
+                <div className={`${styles.cardRepresentation}`}>
+                  <div
+                    className={`${styles.xIconContainer}`}
+                    onClick={() => handleUnselectRelatedCard(relatedCard._id)}
+                  >
+                    <X size={13} />
+                  </div>
+                  <div className={`${styles.cardFrontContainer}`}>
+                    {relatedCard.front}
+                  </div>
+                  <div className={`${styles.cardBackContainer}`}>
+                    {relatedCard.back}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>
-        <button onClick={handleSubmit}>Create card</button>
+        <button onClick={dummy}>Create card</button>
       </div>
     </div>
   );

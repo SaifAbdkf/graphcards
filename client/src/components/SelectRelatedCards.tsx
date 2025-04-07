@@ -5,12 +5,10 @@ import styles from "./SelectRelatedCards.module.scss";
 
 export default function SelectRelatedCards({
   cards,
-  selectedCardIds,
-  setSelectedCardIds,
+  handleSelectRelatedCard,
 }: {
   cards: Card[];
-  selectedCardIds: string[];
-  setSelectedCardIds: React.Dispatch<React.SetStateAction<string[]>>;
+  handleSelectRelatedCard: (cardId: string) => void;
 }) {
   const [isOpen, setOpen] = useState(false);
   const [searchableCards, setSearchableCards] = useState<Card[]>(cards);
@@ -32,10 +30,14 @@ export default function SelectRelatedCards({
     }
   }, []);
 
-  const handleItemClick = useCallback(() => {
-    setOpen(false);
-    cardSearchInput.current?.blur();
-  }, []);
+  const handleItemClick = useCallback(
+    (cardId: string) => {
+      setOpen(false);
+      cardSearchInput.current?.blur();
+      handleSelectRelatedCard(cardId);
+    },
+    [handleSelectRelatedCard]
+  );
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (e.relatedTarget) {
@@ -51,11 +53,9 @@ export default function SelectRelatedCards({
     const newSearchableCards = cards.filter((card) =>
       card.front.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    console.log(newSearchableCards);
     setSearchableCards(newSearchableCards);
   };
 
-  console.log(inputContainer.current?.offsetWidth);
   return (
     <div className={`${styles.inputContainer}`} ref={inputContainer}>
       {/* <button onClick={handleMenuEnter}>test</button> */}
@@ -80,7 +80,7 @@ export default function SelectRelatedCards({
           <MenuItem
             key={card._id}
             onFocus={handleItemHover}
-            onClick={handleItemClick}
+            onClick={() => handleItemClick(card._id)}
           >
             <div
               className={`${styles.item}`}

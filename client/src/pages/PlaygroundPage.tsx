@@ -32,12 +32,13 @@ export default function PlaygroundPage() {
     error: errorDeck,
     isLoading: isLoadingDeck,
   } = useDeck(selectedDeckId);
-  console.log(deck);
 
-  const handleDeckSelection = useCallback((deckId: string) => {
-    console.log(deckId);
-    dispatch(setSelectedDeckId(deckId));
-  }, []);
+  const handleDeckSelection = useCallback(
+    (deckId: string) => {
+      dispatch(setSelectedDeckId(deckId));
+    },
+    [dispatch]
+  );
 
   // TODO: loading UI
   if (isLoadingDeck) return <h1>Loading deck</h1>;

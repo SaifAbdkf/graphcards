@@ -1,14 +1,15 @@
 .rtl {
   direction: rtl;
 }
-
+textarea {
+  resize: none !important;
+  height: 100px;
+}
 .formContainer {
-  margin-top: 2rem;
+  // margin-top: 2rem;
   width: 100%;
 
   .fieldContainer {
-    display: flex;
-    gap: 1rem;
     padding: 0.5rem 0rem;
     align-items: center;
     width: 100%;
@@ -39,5 +40,90 @@
     margin-top: 2rem;
     display: flex;
     justify-content: center;
+  }
+}
+
+.relatedCardContainer {
+  // padding: 0.3rem;
+  display: flex;
+  height: 130px; //TODO remove fixed size
+  margin-bottom: 0.5rem;
+
+  .relationsContainer {
+    display: flex;
+    flex-direction: column;
+
+    .toRelation,
+    .fromRelation {
+      position: relative;
+
+      .start {
+        position: absolute;
+      }
+      .end {
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+
+  .cardContainer {
+    display: flex;
+    // align-items: center;
+    .cardRepresentation {
+      position: relative;
+      align-self: center;
+      width: 95%;
+      box-sizing: border-box;
+      border: 1px solid black;
+      box-shadow: 1px 1px 0px black;
+      border-radius: 0.125rem;
+      aspect-ratio: 5/3;
+      padding: 0.625rem;
+    }
+    .xIconContainer {
+      position: absolute;
+      padding: 0.125rem;
+      top: 0px;
+      right: 0px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .cardFrontContainer {
+      font-size: $small-font-size;
+      font-weight: 600;
+    }
+    .cardBackContainer {
+      margin-top: 0.125rem;
+      font-size: $small-font-size;
+    }
+  }
+}
+
+.toRelationBottom {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+}
+
+.fromRelationTop {
+  position: absolute;
+  top: 15px;
+  width: 100%;
+}
+
+.arrowLabel {
+  z-index: 10;
+  position: absolute;
+  width: 70% !important;
+  margin-left: 15%;
+  border: dashed $black 1px !important;
+  border-radius: 0px !important;
+  top: -11px;
+  font-size: $small-font-size !important;
+
+  &:focus {
+    outline: none;
   }
 }

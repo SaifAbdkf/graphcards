@@ -8,7 +8,6 @@ export function useDeck(deckId: string | null) {
     deckId ? `/deck/${deckId}` : null,
     () => fetchDeck(deckId)
   );
-  console.log("data is", data);
   //   if (!deckId)
   //     return { data: undefined, error: "no deck selected", isLoading: false };
   if (data) {
