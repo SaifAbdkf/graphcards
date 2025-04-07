@@ -17,6 +17,7 @@ export default function Graph({ selectedDeckId }: { selectedDeckId: string }) {
       id: card._id,
       label: card.front,
     }));
+    console.log(deck.cards);
 
     const edges: Edge[] = deck.edges.map((edge) => ({
       id: edge._id,

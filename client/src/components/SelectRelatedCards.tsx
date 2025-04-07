@@ -1,6 +1,7 @@
 import { ControlledMenu, MenuItem } from "@szhsin/react-menu";
 import { useCallback, useRef, useState } from "react";
 import { Card } from "../Types/types";
+import styles from "./SelectRelatedCards.module.scss";
 
 export default function SelectRelatedCards({
   cards,
@@ -12,7 +13,9 @@ export default function SelectRelatedCards({
   setSelectedCardIds: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const [isOpen, setOpen] = useState(false);
+  const [searchableCards, setSearchableCards] = useState<Card[]>(cards);
   const cardSearchInput = useRef<HTMLInputElement>(null);
+  const inputContainer = useRef<HTMLDivElement>(null);
 
   const handleSearchClick = useCallback(() => {
     setOpen(true);
@@ -44,14 +47,26 @@ export default function SelectRelatedCards({
     setOpen(false);
   };
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchableCards = cards.filter((card) =>
+      card.front.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    console.log(newSearchableCards);
+    setSearchableCards(newSearchableCards);
+  };
+
+  console.log(inputContainer.current?.offsetWidth);
   return (
-    <div>
+    <div className={`${styles.inputContainer}`} ref={inputContainer}>
       {/* <button onClick={handleMenuEnter}>test</button> */}
       <input
         ref={cardSearchInput}
         type="text"
         onClick={handleSearchClick}
         onBlur={handleInputBlur} // Track blur
+        onChange={handleSearchInputChange}
+        className={`${styles.searchInput}`}
+        autoComplete="off"
       ></input>
       <ControlledMenu
         captureFocus={false}
@@ -59,10 +74,24 @@ export default function SelectRelatedCards({
         state={isOpen ? "open" : "closed"}
         onClose={handleControlledMenuOnClose}
         autoFocus={false}
+        className={`${styles.menu}`}
       >
-        {cards.map((card) => (
-          <MenuItem onFocus={handleItemHover} onClick={handleItemClick}>
-            {card.front}
+        {searchableCards?.map((card) => (
+          <MenuItem
+            key={card._id}
+            onFocus={handleItemHover}
+            onClick={handleItemClick}
+          >
+            <div
+              className={`${styles.item}`}
+              style={{
+                width: inputContainer.current?.offsetWidth
+                  ? inputContainer.current?.offsetWidth - 2
+                  : 200,
+              }}
+            >
+              {card.front}
+            </div>
           </MenuItem>
         ))}
       </ControlledMenu>

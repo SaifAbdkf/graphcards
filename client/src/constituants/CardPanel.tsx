@@ -1,14 +1,16 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Card, CardFields, emptyCardFields } from "../Types/types";
+import { Card, CardFields, Deck, emptyCardFields } from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { BACKEND_URL } from "../services/api/apiRequestMethods";
 import { deepCopy } from "../utils/utils";
 import SelectRelatedCards from "../components/SelectRelatedCards";
 
 export default function CardPanel({
+  selectedDeck,
   selectedCard,
   setShowCardPanel,
 }: {
+  selectedDeck: Deck;
   selectedCard: Card | null;
   setShowCardPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -109,7 +111,7 @@ export default function CardPanel({
           name="word"
           onChange={handleFieldChange}
           value={cardFields.front}
-          className={styles.rtl}
+          autoComplete="off"
         ></input>
       </div>
       <div className={styles.fieldContainer}>
@@ -119,10 +121,17 @@ export default function CardPanel({
           name="back"
           onChange={handleFieldChange}
           value={cardFields.back}
+          autoComplete="off"
         ></textarea>
       </div>
       <div className={styles.fieldContainer}>
         <label htmlFor="linkedCards">Related Cards</label>
+
+        <SelectRelatedCards
+          cards={selectedDeck.cards}
+          selectedCardIds={selectedCardIds}
+          setSelectedCardIds={setSelectedCardIds}
+        />
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>

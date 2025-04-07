@@ -6,10 +6,15 @@
     flex-basis: 80%;
     flex-grow: 1;
     .graphViewerBar {
+      // z-index: 5;
+      // position: absolute;
+      // transform: translateX(10%);
+      // top: 70px;
+      // width: 80%;
       border-bottom: 2px solid $black;
       display: flex;
       gap: 2rem;
-      height: $navbar-height;
+      height: $navbar-height * 0.6;
       align-items: center;
       .selectedDeckName {
         .rightPanelIcon {

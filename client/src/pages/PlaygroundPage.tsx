@@ -14,10 +14,10 @@ import { setSelectedDeckId } from "../store/slices/deckSlice";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
   const selectedDeckId = useSelector(selectSelectedDeckId);
   const { data: activeDeck } = useDeck(selectedDeckId);
 
+  const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const dispatch = useDispatch();
@@ -82,9 +82,10 @@ export default function PlaygroundPage() {
         </div>
       </div>
 
-      {showCardPanel && (
+      {showCardPanel && deck && (
         <div className={`${styles.cardPanelContainer}`}>
           <CardPanel
+            selectedDeck={deck}
             selectedCard={selectedCard}
             setShowCardPanel={setShowCardPanel}
           />
