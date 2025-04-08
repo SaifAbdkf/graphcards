@@ -1,39 +1,35 @@
 .rtl {
   direction: rtl;
 }
-textarea {
-  resize: none !important;
-  height: 100px;
-}
+
 .formContainer {
-  // margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 
   .fieldContainer {
-    padding: 0.5rem 0rem;
-    align-items: center;
     width: 100%;
+    padding: 0.5rem 0rem;
 
-    label {
+    .formLabel {
       font-weight: 600;
-      flex-basis: 6rem;
-      text-align: right;
       font-size: small;
     }
 
-    div,
-    select,
-    textarea,
-    input {
-      flex-basis: 20rem;
-    }
-    select,
-    textarea,
-    input {
-      @include input_text_textarea;
+    .formTextArea,
+    .formInput {
       width: 100%;
+      @include input_text_textarea;
       font-size: $smallish-font-size;
     }
+
+    .formTextArea {
+      height: 100px;
+      max-width: 420px;
+    }
+  }
+  .relatedCardsFieldContainer {
+    padding-bottom: 0px;
   }
 
   .formButtonsContainer {
@@ -43,18 +39,27 @@ textarea {
   }
 }
 
+.relatedCardsContainer {
+  overflow: scroll;
+  scrollbar-width: none;
+}
 .relatedCardContainer {
-  // padding: 0.3rem;
   display: flex;
-  height: 130px; //TODO remove fixed size
-  margin-bottom: 0.5rem;
+  padding-top: 0.775rem;
+  padding-bottom: 0.325rem;
 
   .relationsContainer {
+    flex: 1;
     display: flex;
     flex-direction: column;
-
+    .edgesContainer {
+      flex-basis: 90%;
+      display: flex;
+      flex-direction: column;
+    }
     .toRelation,
     .fromRelation {
+      flex: 1;
       position: relative;
 
       .start {
@@ -64,23 +69,60 @@ textarea {
         position: absolute;
         right: 0;
       }
+      .toRelationBottom {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+      }
+
+      .fromRelationTop {
+        position: absolute;
+        top: 15px;
+        width: 100%;
+      }
+
+      .arrowLabel {
+        z-index: 10;
+        position: absolute;
+        width: 70% !important;
+        margin-left: 15%;
+        border: dashed $black 1px !important;
+        border-radius: 0px !important;
+        top: -11px;
+        font-size: $small-font-size !important;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    .checkboxContainer {
+      display: flex;
+      align-items: center;
+      .checkboxInput {
+        width: 11px;
+      }
+
+      .checkboxLabel {
+        font-size: $smallest-font-size;
+        margin-left: 0.325rem;
+        color: $gray;
+      }
     }
   }
-
   .cardContainer {
-    display: flex;
-    // align-items: center;
-    .cardRepresentation {
-      position: relative;
-      align-self: center;
-      width: 95%;
-      box-sizing: border-box;
-      border: 1px solid black;
-      box-shadow: 1px 1px 0px black;
-      border-radius: 0.125rem;
-      aspect-ratio: 5/3;
-      padding: 0.625rem;
-    }
+    flex: 1;
+    padding-right: 0.125rem;
+  }
+  .cardRepresentation {
+    position: relative;
+    box-sizing: border-box;
+    aspect-ratio: 5/3;
+    padding: 0.625rem;
+    border: 1px solid black;
+    border-radius: 0.125rem;
+    box-shadow: 1px 1px 0px black;
+
     .xIconContainer {
       position: absolute;
       padding: 0.125rem;
@@ -95,35 +137,8 @@ textarea {
       font-weight: 600;
     }
     .cardBackContainer {
-      margin-top: 0.125rem;
+      margin-top: 0.175rem;
       font-size: $small-font-size;
     }
-  }
-}
-
-.toRelationBottom {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-}
-
-.fromRelationTop {
-  position: absolute;
-  top: 15px;
-  width: 100%;
-}
-
-.arrowLabel {
-  z-index: 10;
-  position: absolute;
-  width: 70% !important;
-  margin-left: 15%;
-  border: dashed $black 1px !important;
-  border-radius: 0px !important;
-  top: -11px;
-  font-size: $small-font-size !important;
-
-  &:focus {
-    outline: none;
   }
 }

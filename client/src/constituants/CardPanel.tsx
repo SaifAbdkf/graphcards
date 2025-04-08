@@ -69,7 +69,10 @@ export default function CardPanel({
   return (
     <div className={styles.formContainer}>
       <div className={styles.fieldContainer}>
-        <label htmlFor="word">Title</label> <br />
+        <label htmlFor="word" className={`${styles.formLabel}`}>
+          Title (front)
+        </label>{" "}
+        <br />
         <input
           type="text"
           id="word"
@@ -77,10 +80,13 @@ export default function CardPanel({
           onChange={handleFieldChange}
           value={cardFields.front}
           autoComplete="off"
+          className={`${styles.formInput}`}
         ></input>
       </div>
       <div className={styles.fieldContainer}>
-        <label htmlFor="back">Body</label>
+        <label htmlFor="back" className={`${styles.formLabel}`}>
+          Body (back)
+        </label>
         <br />
         <textarea
           id="back"
@@ -88,92 +94,109 @@ export default function CardPanel({
           onChange={handleFieldChange}
           value={cardFields.back}
           autoComplete="off"
+          className={`${styles.formTextArea}`}
         ></textarea>
       </div>
-      <div className={styles.fieldContainer}>
-        <label htmlFor="linkedCards">Related Cards</label> <br />
+      <div
+        className={`${styles.fieldContainer} ${styles.relatedCardsFieldContainer}`}
+      >
+        <label htmlFor="linkedCards" className={`${styles.formLabel}`}>
+          Related Cards
+        </label>{" "}
+        <br />
         <SelectRelatedCards
           cards={cards}
           handleSelectRelatedCard={handleSelectRelatedCard}
         />
-        <div className={`${styles.relatedCardsContainer}`}>
-          {relatedCards.map((relatedCard) => (
-            <div
-              key={relatedCard._id}
-              className={`${styles.relatedCardContainer}`}
-            >
-              <div className={`${styles.relationsContainer}`}>
+      </div>
+      <div className={`${styles.relatedCardsContainer}`}>
+        {relatedCards.map((relatedCard) => (
+          <div
+            key={relatedCard._id}
+            className={`${styles.relatedCardContainer}`}
+          >
+            <div className={`${styles.relationsContainer}`}>
+              <div className={`${styles.edgesContainer}`}>
                 <div className={`${styles.toRelation}`}>
                   <div className={`${styles.toRelationBottom}`}>
                     <input
                       type="text"
                       className={`${styles.arrowLabel}`}
                     ></input>
-                    <div className={`${styles.toArrow}`}>
-                      <div
-                        id={`from-${relatedCard._id}`}
-                        className={`${styles.start}`}
-                      ></div>
-                      <div
-                        id={`to-${relatedCard._id}`}
-                        className={`${styles.end}`}
-                      ></div>
-                      <Xarrow
-                        start={`from-${relatedCard._id}`}
-                        end={`to-${relatedCard._id}`}
-                        strokeWidth={1}
-                        headSize={9}
-                        color="black"
-                      />
-                    </div>
+                    <div
+                      id={`from-${relatedCard._id}`}
+                      className={`${styles.start}`}
+                    ></div>
+                    <div
+                      id={`to-${relatedCard._id}`}
+                      className={`${styles.end}`}
+                    ></div>
+                    <Xarrow
+                      start={`from-${relatedCard._id}`}
+                      end={`to-${relatedCard._id}`}
+                      strokeWidth={1}
+                      headSize={9}
+                      color="black"
+                    />
                   </div>
                 </div>
                 <div className={`${styles.fromRelation}`}>
                   <div className={`${styles.fromRelationTop}`}>
-                    <div className={`${styles.fromArrow}`}>
-                      <div
-                        id={`from2-${relatedCard._id}`}
-                        className={`${styles.start}`}
-                      ></div>
-                      <div
-                        id={`to2-${relatedCard._id}`}
-                        className={`${styles.end}`}
-                      ></div>
-                      <Xarrow
-                        start={`to2-${relatedCard._id}`}
-                        end={`from2-${relatedCard._id}`}
-                        strokeWidth={1}
-                        headSize={9}
-                        color="black"
-                      />
-                    </div>
                     <input
                       type="text"
                       placeholder="to relatonship"
                       className={`${styles.arrowLabel}`}
                     ></input>
+                    <div
+                      id={`from2-${relatedCard._id}`}
+                      className={`${styles.start}`}
+                    ></div>
+                    <div
+                      id={`to2-${relatedCard._id}`}
+                      className={`${styles.end}`}
+                    ></div>
+                    <Xarrow
+                      start={`to2-${relatedCard._id}`}
+                      end={`from2-${relatedCard._id}`}
+                      strokeWidth={1}
+                      headSize={9}
+                      color="black"
+                    />
                   </div>
                 </div>
               </div>
-              <div className={`${styles.cardContainer}`}>
-                <div className={`${styles.cardRepresentation}`}>
-                  <div
-                    className={`${styles.xIconContainer}`}
-                    onClick={() => handleUnselectRelatedCard(relatedCard._id)}
-                  >
-                    <X size={13} />
-                  </div>
-                  <div className={`${styles.cardFrontContainer}`}>
-                    {relatedCard.front}
-                  </div>
-                  <div className={`${styles.cardBackContainer}`}>
-                    {relatedCard.back}
-                  </div>
+              <div className={`${styles.checkboxContainer}`}>
+                <input
+                  type="checkbox"
+                  className={`${styles.checkboxInput}`}
+                  id={`checkbox-${relatedCard._id}`}
+                />
+                <label
+                  className={`${styles.checkboxLabel}`}
+                  htmlFor={`checkbox-${relatedCard._id}`}
+                >
+                  directed edges
+                </label>
+              </div>
+            </div>
+            <div className={`${styles.cardContainer}`}>
+              <div className={`${styles.cardRepresentation}`}>
+                <div
+                  className={`${styles.xIconContainer}`}
+                  onClick={() => handleUnselectRelatedCard(relatedCard._id)}
+                >
+                  <X size={13} />
+                </div>
+                <div className={`${styles.cardFrontContainer}`}>
+                  {relatedCard.front}
+                </div>
+                <div className={`${styles.cardBackContainer}`}>
+                  {relatedCard.back}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>

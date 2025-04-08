@@ -1,7 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
-import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelectedDeckId } from "../store/selectors/deckSelector";
 import { Link } from "react-router-dom";
@@ -11,6 +10,8 @@ import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { setSelectedDeckId } from "../store/slices/deckSlice";
+import { Plus } from "lucide-react";
+import SelectRelatedCards from "../components/SelectRelatedCards";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -69,14 +70,20 @@ export default function PlaygroundPage() {
   return (
     <div className={styles.playGroundContainer}>
       <div className={`${styles.graphViewerContainer} `}>
-        <div className={`${styles.graphViewerBar}`}>
+        <div className={`${styles.toolBar}`}>
           <div className={`${styles.selectedDeckName}`}>{activeDeck?.name}</div>
-          <Button
-            bgColorClass="bg-green"
+          <SelectRelatedCards
+            cards={[]}
+            handleSelectRelatedCard={function (cardId: string): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+          <div
+            className={`${styles.addCardIconContainer}`}
             onClick={() => setShowCardPanel(!showCardPanel)}
           >
-            add card
-          </Button>
+            <Plus size={18} />
+          </div>
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
           <Graph selectedDeckId={selectedDeckId} />
