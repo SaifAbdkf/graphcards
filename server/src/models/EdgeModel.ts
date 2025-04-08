@@ -8,6 +8,7 @@ const edgeSchema = new Schema(
     from: { type: mongoose.Types.ObjectId, ref: "Card", required: true },
     to: { type: mongoose.Types.ObjectId, ref: "Card", required: true },
     label: { type: String, required: false },
+    isDirected: { type: Boolean, required: false },
     metadata: { type: Map, of: String },
   },
   { timestamps: true, strict: false }

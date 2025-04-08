@@ -48,57 +48,52 @@
   padding-top: 0.775rem;
   padding-bottom: 0.325rem;
 
-  .relationsContainer {
+  .edgesContainer {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    .edgesContainer {
-      flex-basis: 90%;
-      display: flex;
-      flex-direction: column;
-    }
+    justify-content: center;
+
     .toRelation,
     .fromRelation {
       flex: 1;
+      max-height: 1.7rem; // less space for when it is a sngl undirected edge -> keep the check box label closer
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       .start {
         position: absolute;
+        left: 0;
       }
       .end {
         position: absolute;
         right: 0;
       }
-      .toRelationBottom {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-      }
-
-      .fromRelationTop {
-        position: absolute;
-        top: 15px;
-        width: 100%;
-      }
 
       .arrowLabel {
         z-index: 10;
         position: absolute;
-        width: 70% !important;
-        margin-left: 15%;
-        border: dashed $black 1px !important;
-        border-radius: 0px !important;
-        top: -11px;
-        font-size: $small-font-size !important;
+        width: 70%;
+        border: dashed $black 1px;
+        border-radius: 0px;
+        font-size: $small-font-size;
 
         &:focus {
           outline: none;
         }
       }
     }
+
     .checkboxContainer {
+      flex: 1;
+      max-height: 1rem;
       display: flex;
-      align-items: center;
+      align-items: start;
+      justify-content: center;
       .checkboxInput {
         width: 11px;
       }
