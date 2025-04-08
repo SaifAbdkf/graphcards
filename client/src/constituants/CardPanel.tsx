@@ -96,25 +96,23 @@ export default function CardPanel({
   );
 
   const handleEdgeLabelChange = useCallback(
-    (
-      e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-    ) => {
+    (e: ChangeEvent<HTMLInputElement>, cardId: string) => {
       const { name, value } = e.target;
-      const newCardFields = { ...cardFields };
-      switch (name) {
-        case "word":
-          newCardFields.front = value;
-          setCardFields(newCardFields);
-          break;
-        case "back":
-          newCardFields.back = value;
-          setCardFields(newCardFields);
-          break;
-        default:
-          throw new Error(`Unhandled field name ${value}`);
-      }
+
+      const newRelatedCardsInfo = relatedCardsInfo.map((cardInfo) =>
+        cardInfo.card._id === cardId
+          ? {
+              ...cardInfo,
+              edgesLabels: {
+                ...cardInfo.edgesLabels,
+                [name]: value, //HOW TO DO THS
+              },
+            }
+          : cardInfo
+      );
+      setRelatedCardsInfo(newRelatedCardsInfo);
     },
-    [cardFields]
+    [relatedCardsInfo]
   );
 
   const handleCheckboxChange = useCallback(
@@ -125,8 +123,10 @@ export default function CardPanel({
           ? {
               ...cardInfo,
               edgesLabels: {
-                ...cardInfo.edgesLabels,
                 isDirected: !cardInfo.edgesLabels.isDirected,
+                selectedToRelatedLabel: null,
+                relatedToSelectedLabel: null,
+                undirectedLabel: null,
               },
             }
           : cardInfo
@@ -192,6 +192,13 @@ export default function CardPanel({
                     <input
                       type="text"
                       className={`${styles.arrowLabel}`}
+                      name="selectedToRelatedLabel"
+                      value={
+                        relatedCardInfo.edgesLabels.selectedToRelatedLabel || ""
+                      }
+                      onChange={(e) =>
+                        handleEdgeLabelChange(e, relatedCardInfo.card._id)
+                      }
                     ></input>
                     <div
                       id={`from-${relatedCardInfo.card._id}`}
@@ -214,6 +221,13 @@ export default function CardPanel({
                       type="text"
                       placeholder=""
                       className={`${styles.arrowLabel}`}
+                      name="relatedToSelectedLabel"
+                      value={
+                        relatedCardInfo.edgesLabels.relatedToSelectedLabel || ""
+                      }
+                      onChange={(e) =>
+                        handleEdgeLabelChange(e, relatedCardInfo.card._id)
+                      }
                     ></input>
                     <div
                       id={`from2-${relatedCardInfo.card._id}`}
@@ -234,7 +248,15 @@ export default function CardPanel({
                 </>
               ) : (
                 <div className={`${styles.fromRelation}`}>
-                  <input type="text" className={`${styles.arrowLabel}`}></input>
+                  <input
+                    type="text"
+                    className={`${styles.arrowLabel}`}
+                    name="undirectedLabel"
+                    value={relatedCardInfo.edgesLabels.undirectedLabel || ""}
+                    onChange={(e) =>
+                      handleEdgeLabelChange(e, relatedCardInfo.card._id)
+                    }
+                  ></input>
                   <div
                     id={`from2-${relatedCardInfo.card._id}`}
                     className={`${styles.start}`}
