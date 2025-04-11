@@ -8,8 +8,6 @@ export function useDeck(deckId: string | null) {
     deckId ? `/deck/${deckId}` : null,
     () => fetchDeck(deckId)
   );
-  console.log("Hey I am here 😎");
-  console.log(data);
 
   return {
     data: data,

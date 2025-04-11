@@ -15,9 +15,8 @@ export async function fetchDeck(deckId: string | null): Promise<Deck> {
     const errorData = await response.json();
     throw new Error(errorData?.message || `HTTP error!`);
   }
-  console.log("response is ", response);
+
   const json = await response.json();
-  console.log("json is ", json);
 
   if (json.status === "success") {
     return json.dataSingular;
