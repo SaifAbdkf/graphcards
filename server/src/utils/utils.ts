@@ -26,7 +26,9 @@ export type ApiResponse<T> = SuccessResponse<T> | FailureResponse;
 type SuccessResponse<T> = {
   status: "success";
   data: T[];
+  dataSingular?: T;
 };
+
 type FailureResponse = {
   status: "failure";
   message: string;
@@ -34,9 +36,12 @@ type FailureResponse = {
 };
 
 export function successResponseObject<T>(data: T | T[]): SuccessResponse<T> {
+  // if success object  is an array of objects (Case: getCardsInfo) the default), reurn it in data
+  // if success object is a single object (case, getCard getDeck)
   return {
     status: "success",
-    data: Array.isArray(data) ? data : [data],
+    data: Array.isArray(data) ? data : [],
+    dataSingular: Array.isArray(data) ? undefined : data,
   };
 }
 

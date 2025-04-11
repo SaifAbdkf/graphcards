@@ -1,22 +1,23 @@
 import { useCallback, useRef, useState } from "react";
-import { Card } from "../Types/types";
+import { Card } from "../../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSelectedDeckId } from "../store/selectors/deckSelector";
+import { selectSelectedDeckId } from "../../store/selectors/deckSelector";
 import { Link } from "react-router-dom";
-import CardPanel from "../constituants/CardPanel";
+import CardPanel from "../CardPanel";
 
-import { useDecksInfo } from "../hooks/useDecksInfo";
-import { useDeck } from "../hooks/useDeck";
-import Graph from "../constituants/Graph";
-import { setSelectedDeckId } from "../store/slices/deckSlice";
+import { useDecksInfo } from "../../hooks/useDecksInfo";
+import { useDeck } from "../../hooks/useDeck";
+import Graph from "../Graph";
+import { setSelectedDeckId } from "../../store/slices/deckSlice";
 import { Plus } from "lucide-react";
-import SelectRelatedCards from "../components/SelectRelatedCards";
+import SelectRelatedCards from "../../components/SelectRelatedCards";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const selectedDeckId = useSelector(selectSelectedDeckId);
   const { data: activeDeck } = useDeck(selectedDeckId);
+  console.log("hi", activeDeck);
 
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
@@ -32,6 +33,7 @@ export default function PlaygroundPage() {
     data: deck,
     error: errorDeck,
     isLoading: isLoadingDeck,
+    mutate,
   } = useDeck(selectedDeckId);
 
   const handleDeckSelection = useCallback(
@@ -94,6 +96,7 @@ export default function PlaygroundPage() {
         <div className={`${styles.cardPanelContainer}`}>
           <CardPanel
             selectedDeck={deck}
+            deckMutate={mutate}
             selectedCard={selectedCard}
             setShowCardPanel={setShowCardPanel}
           />

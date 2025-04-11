@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { CardType } from "./CardModel";
+import { EdgeType } from "./EdgeModel";
 
 const Schema = mongoose.Schema;
 

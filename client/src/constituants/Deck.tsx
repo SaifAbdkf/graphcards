@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { DeckInfo } from "../Types/types";
 import styles from "./Deck.module.scss";
-import { deleteDeckRequest } from "../services/api/decksApi";
+import { deleteDeckRequest } from "../services/api/deckRequests";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";

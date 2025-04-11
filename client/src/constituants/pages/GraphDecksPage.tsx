@@ -3,9 +3,9 @@ import "../constituants/DeckMenu.scss";
 
 import styles from "./GraphDecksPage.module.scss";
 
-import Deck from "../constituants/Deck";
-import { useDecksInfo } from "../hooks/useDecksInfo";
-import CreateDeck from "../constituants/CreateDeck";
+import Deck from "../Deck";
+import { useDecksInfo } from "../../hooks/useDecksInfo";
+import CreateDeck from "../CreateDeck";
 
 export default function GraphDecksPage() {
   console.log("GraphDecksPage rendering");

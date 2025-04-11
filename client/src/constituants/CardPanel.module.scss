@@ -21,6 +21,10 @@
       width: 100%;
       @include input_text_textarea;
       font-size: $smallish-font-size;
+      &:focus {
+        border-color: $primary-color;
+        outline-color: $primary-color;
+      }
     }
 
     .formTextArea {

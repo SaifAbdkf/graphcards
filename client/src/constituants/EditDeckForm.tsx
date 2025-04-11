@@ -4,7 +4,7 @@ import { DeckFormFields, DeckInfo } from "../Types/types";
 import Button from "../components/Button";
 import DeckForm from "../components/DeckForm";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
-import { editDeckInfoRequest } from "../services/api/decksApi";
+import { editDeckInfoRequest } from "../services/api/deckRequests";
 
 export default function EditDeckForm({
   setEditDeckMode,

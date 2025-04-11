@@ -1,11 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import Home from "./pages/HomePage";
+import Home from "./constituants/pages/HomePage";
 
-import PlaygroundPage from "./pages/PlaygroundPage";
+import PlaygroundPage from "./constituants/pages/PlaygroundPage";
 
 import styles from "./App.module.scss";
 import NavBar from "./constituants/NavBar";
-import GraphDecksPage from "./pages/GraphDecksPage";
+import GraphDecksPage from "./constituants/pages/GraphDecksPage";
 
 export default function App() {
   const location = useLocation().pathname;
