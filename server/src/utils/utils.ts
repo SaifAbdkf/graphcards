@@ -7,17 +7,17 @@ const EdgeDirection = z.enum(["undirected", "fromNewCard", "toNewCard"]);
 const ApiEdgeSchema = z.object({
   linkedCardId: z.string(),
   direction: EdgeDirection,
-  label: z.string(),
+  label: z.string().optional(),
 });
 
-export const ApiCardSchema = z.object({
+export const ApiConnectedCardSchema = z.object({
   deckId: z.string(),
   front: z.string(),
   back: z.string(),
   edges: z.array(ApiEdgeSchema),
 });
 
-export type ApiCard = z.infer<typeof ApiCardSchema>;
+export type ApiConnectedCard = z.infer<typeof ApiConnectedCardSchema>;
 export type ApiEdge = z.infer<typeof ApiEdgeSchema>;
 
 export type ApiResponse<T> = SuccessResponse<T> | FailureResponse;

@@ -34,6 +34,7 @@ export default function PlaygroundPage() {
     mutate: mutateDeck,
   } = useDeck(selectedDeckId);
 
+  console.log("selected deck ---", selectedDeck);
   const handleDeckSelection = useCallback(
     (deckId: string) => {
       dispatch(setSelectedDeckId(deckId));

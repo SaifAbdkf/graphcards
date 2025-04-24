@@ -89,6 +89,7 @@ export default function RelatedCardEdge({
             name="label"
             value={relatedCardInfo.edge.label || ""}
             onChange={(e) => handleEdgeLabelChange(e, relatedCardInfo.card._id)}
+            autoComplete="off"
           ></input>
           <div
             id={`left-${relatedCardInfo.card._id}`}
@@ -128,7 +129,7 @@ export default function RelatedCardEdge({
             className={`${styles.controlLabel} ${styles.directedEdgeLabel}`}
             htmlFor={`checkbox-${relatedCardInfo.card._id}`}
           >
-            directed edge
+            directed link
           </label>
         </div>
         {relatedCardInfo.edge.direction !== "undirected" && (

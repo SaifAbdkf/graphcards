@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { Edge } from "../models/EdgeModel";
 import { DeckInfo } from "../models/DeckModel";
 import {
-  ApiCardSchema,
+  ApiConnectedCardSchema,
   failureResponseObject,
   successResponseObject,
   validateEdges,
@@ -14,7 +14,9 @@ import assert from "assert";
 // Creates edges attached to the card too.
 // TODO maybe make function createCardAndEdges that is a transaction calling createCard and CreaeEdge
 export async function createCard(request: Request, response: Response) {
-  const { deckId, front, back, edges } = ApiCardSchema.parse(request.body);
+  const { deckId, front, back, edges } = ApiConnectedCardSchema.parse(
+    request.body
+  );
   // TODO find a way to create a card where its linkedCards are not already created, but needs to be created
 
   const session = await mongoose.startSession();
@@ -68,7 +70,7 @@ export async function createCard(request: Request, response: Response) {
 
     await session.commitTransaction();
     await session.endSession();
-
+    // throw new Error("takhrali fih");
     return response.status(200).json(successResponseObject(newCard));
   } catch (error) {
     await session.abortTransaction();

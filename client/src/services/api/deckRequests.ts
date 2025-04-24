@@ -1,8 +1,8 @@
-import { Deck, DeckFields, DeckFormFields, DeckInfo } from "../../Types/types";
+import { Deck, DeckFormFields, DeckInfo } from "../../Types/types";
 import {
   BACKEND_URL,
   deleteRequest,
-  getOneRequest,
+  getRequest,
   patchRequest,
   postRequest,
 } from "./apiRequestMethods";
@@ -33,7 +33,7 @@ export async function createDeckInfoRequest(newDeckFields: DeckFormFields) {
 }
 
 export async function getDeckRequest(deckId: string): Promise<Deck> {
-  const deck: Deck = await getOneRequest<DeckFields>(`/deck/${deckId}`);
+  const deck: Deck = await getRequest(`/deck/${deckId}`);
   return deck;
 }
 

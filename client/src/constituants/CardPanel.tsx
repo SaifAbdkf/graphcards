@@ -1,19 +1,21 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Card, CardFields, Deck, emptyCardFields } from "../Types/types";
+import {
+  Card,
+  CardFields,
+  Deck,
+  EdgeFields,
+  emptyCardFields,
+} from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { deepCopy } from "../utils/utils";
 import SelectRelatedCards from "../components/SelectRelatedCards";
-import Xarrow from "react-xarrows";
 import { X } from "lucide-react";
 import { KeyedMutator } from "swr";
 import RelatedCardEdge from "./RelatedCardEdge";
+import { createConnectedCardRequest } from "../services/api/cardRequests";
+import { fetchDeck } from "../services/api/deckRequests";
 
-type EdgeFields = {
-  direction: "undirected" | "fromNewCard" | "toNewCard";
-  label?: string;
-};
-
-export type RelatedCardInfo = {
+export type RelatedCardFields = {
   card: Card;
   edge: EdgeFields;
 };
@@ -33,25 +35,23 @@ export default function CardPanel({
     deepCopy<CardFields>(emptyCardFields)
   );
 
-  const [relatedCardsInfo, setRelatedCardsInfo] = useState<RelatedCardInfo[]>(
-    []
-  );
-
-  console.log(relatedCardsInfo);
+  const [relatedCardsFields, setRelatedCardsFields] = useState<
+    RelatedCardFields[]
+  >([]);
 
   const [isCreatingCard, setIsCreatingCard] = useState(false);
 
   const handleSelectRelatedCard = useCallback(
     (cardId: string) => {
-      const alreadyRelatedCard = relatedCardsInfo.find(
-        (relatedCardInfo) => relatedCardInfo.card._id === cardId
+      const alreadyRelatedCard = relatedCardsFields.find(
+        (relatedCardFields) => relatedCardFields.card._id === cardId
       );
       if (alreadyRelatedCard) return;
 
       const newRelatedCard = cards.find((card) => card._id === cardId);
       if (newRelatedCard)
-        setRelatedCardsInfo([
-          ...relatedCardsInfo,
+        setRelatedCardsFields([
+          ...relatedCardsFields,
           {
             card: newRelatedCard,
             edge: {
@@ -60,7 +60,7 @@ export default function CardPanel({
           },
         ]);
     },
-    [cards, relatedCardsInfo]
+    [cards, relatedCardsFields]
   );
 
   const handleFieldChange = useCallback(
@@ -87,16 +87,16 @@ export default function CardPanel({
 
   const handleUnselectRelatedCard = useCallback(
     (cardId: string) => {
-      setRelatedCardsInfo(
-        relatedCardsInfo.filter(
-          (relatedCardInfo) => relatedCardInfo.card._id !== cardId
+      setRelatedCardsFields(
+        relatedCardsFields.filter(
+          (relatedCardFields) => relatedCardFields.card._id !== cardId
         )
       );
     },
-    [relatedCardsInfo]
+    [relatedCardsFields]
   );
 
-  const handleCreateCard = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateCard = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // Validate form fields
     if (!cardFields.front.trim()) {
@@ -107,28 +107,40 @@ export default function CardPanel({
       alert("Please enter a body for your card");
       return;
     }
-    if (relatedCardsInfo.length === 0) {
-      alert("Please select at least one related card");
-      return;
-    }
+
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreatingCard(true);
-    setShowCardPanel(false);
+    // setShowCardPanel(false);
 
     const optimisticCard: Card = {
       ...cardFields,
       deckId: deck._id,
       _id: Date.now().toString(),
     };
-    const optimisticDeck = { ...deck, cards: [...deck.cards, optimisticCard] };
+
+    const optimisticEdges = relatedCardsFields.map((relatedCard) => ({
+      linkedCardId: relatedCard.card._id,
+      ...relatedCard.edge,
+    }));
+    const optimisticDeck = {
+      ...deck,
+      cards: [...deck.cards, optimisticCard],
+      edges: [...deck.edges, ...optimisticEdges],
+    };
     const options = {
       optimisticData: optimisticDeck,
       rollbackOnError: true,
     };
 
-    // mutateDeck(async () => {
-    //   await
-    // }, options);
+    mutateDeck(async () => {
+      await createConnectedCardRequest(
+        deck._id,
+        cardFields,
+        relatedCardsFields
+      );
+      const updatedDeck = await fetchDeck(deck._id);
+      return updatedDeck;
+    }, options);
   };
   return (
     <div className={styles.formContainer}>
@@ -174,15 +186,15 @@ export default function CardPanel({
         />
       </div>
       <div className={`${styles.relatedCardsContainer}`}>
-        {relatedCardsInfo.map((relatedCardInfo) => (
+        {relatedCardsFields.map((relatedCardFields) => (
           <div
-            key={relatedCardInfo.card._id}
+            key={relatedCardFields.card._id}
             className={`${styles.relatedCardContainer}`}
           >
             <RelatedCardEdge
-              relatedCardInfo={relatedCardInfo}
-              relatedCardsInfo={relatedCardsInfo}
-              setRelatedCardsInfo={setRelatedCardsInfo}
+              relatedCardFields={relatedCardFields}
+              relatedCardsFields={relatedCardsFields}
+              setRelatedCardsFields={setRelatedCardsFields}
             />
 
             <div className={`${styles.cardContainer}`}>
@@ -190,16 +202,16 @@ export default function CardPanel({
                 <div
                   className={`${styles.xIconContainer}`}
                   onClick={() =>
-                    handleUnselectRelatedCard(relatedCardInfo.card._id)
+                    handleUnselectRelatedCard(relatedCardFields.card._id)
                   }
                 >
                   <X size={13} />
                 </div>
                 <div className={`${styles.cardFrontContainer}`}>
-                  {relatedCardInfo.card.front}
+                  {relatedCardFields.card.front}
                 </div>
                 <div className={`${styles.cardBackContainer}`}>
-                  {relatedCardInfo.card.back}
+                  {relatedCardFields.card.back}
                 </div>
               </div>
             </div>
@@ -208,7 +220,9 @@ export default function CardPanel({
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>
-        <button onClick={handleCreateCard}>Create card</button>
+        <button onClick={handleCreateCard} disabled={isCreatingCard}>
+          Create card
+        </button>
       </div>
     </div>
   );

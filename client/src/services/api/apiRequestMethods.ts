@@ -1,9 +1,9 @@
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export async function getMultipleRequest<T>(endpoint: string): Promise<T[]> {
+export async function getRequest(endpoint: string) {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`);
-    const data: T[] = await response.json();
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("GET: Error fetching data:", error);
@@ -11,23 +11,7 @@ export async function getMultipleRequest<T>(endpoint: string): Promise<T[]> {
   }
 }
 
-export async function getOneRequest<T>(
-  endpoint: string
-): Promise<T & { _id: string }> {
-  try {
-    const response = await fetch(`${BACKEND_URL}${endpoint}`);
-    const data: T & { _id: string } = await response.json();
-    return data;
-  } catch (error) {
-    console.error("GET: Error fetching data:", error);
-    throw error;
-  }
-}
-
-export async function postRequest<T>(
-  endpoint: string,
-  data: T
-): Promise<T & { _id: string }> {
+export async function postRequest<T>(endpoint: string, data: T) {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: "POST",
@@ -36,7 +20,7 @@ export async function postRequest<T>(
       },
       body: JSON.stringify(data),
     });
-    const formattedResponse: T & { _id: string } = await response.json();
+    const formattedResponse = await response.json();
     return formattedResponse;
   } catch (error) {
     console.error("POST: Error fetching data:", error);
@@ -60,10 +44,7 @@ export async function deleteRequest(endpoint: string): Promise<boolean> {
   }
 }
 
-export async function patchRequest<T>(
-  endpoint: string,
-  data: T
-): Promise<boolean> {
+export async function patchRequest<T>(endpoint: string, data: T) {
   try {
     const response = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: "PATCH",
