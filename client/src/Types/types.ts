@@ -7,8 +7,8 @@ export type Deck = {
 };
 
 export type DeckInfo = Omit<Deck, "cards" | "edges">; // the metaDeck, deck - (edges and cards) //in the future will contain stats
-export type DeckFormFields = Omit<Deck, "_id" | "cards" | "edges">; // fields is anything changeable through a form, here it is title and desscription
-export const emptyDeckFormFields: DeckFormFields = {
+export type DeckFields = Omit<Deck, "_id" | "cards" | "edges">; // fields is anything changeable through a form, here it is title and desscription
+export const emptyDeckFields: DeckFields = {
   name: "",
   description: "",
 };
@@ -33,13 +33,21 @@ export type Edge = {
   to: string;
   label?: string;
 };
-// used when creting a card and its connection
+
+// 2 first cases used when creating a card and its connection
 // null referring to the id of the card in creation
+// last case will be used when creatng an edge between two existing cards
 export type EdgeFields =
   | {
       isDirected: boolean;
       from: string;
       to: null;
+      label?: string;
+    }
+  | {
+      isDirected: boolean;
+      from: null;
+      to: string;
       label?: string;
     }
   | {

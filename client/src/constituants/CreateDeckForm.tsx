@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import { DeckFormFields, DeckInfo, emptyDeckFormFields } from "../Types/types";
+import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/types";
 import Button from "../components/Button";
 import { createDeckInfoRequest } from "../services/api/deckRequests";
 import { deepCopy } from "../utils/utils";
@@ -13,15 +13,15 @@ export default function CreateDeckForm({
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: decksInfo, mutate } = useDecksInfo();
-  const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>(
-    deepCopy(emptyDeckFormFields)
+  const [deckFields, setDeckFields] = useState<DeckFields>(
+    deepCopy(emptyDeckFields)
   );
 
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCancelCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setDeckFormFields(deepCopy(emptyDeckFormFields));
+    setDeckFields(deepCopy(emptyDeckFields));
     setCreateDeckMode(false);
   };
 
@@ -29,7 +29,7 @@ export default function CreateDeckForm({
     e.preventDefault();
 
     // Validate form fields
-    if (!deckFormFields.name.trim()) {
+    if (!deckFields.name.trim()) {
       alert("Please enter a name for your deck");
       return;
     }
@@ -40,7 +40,7 @@ export default function CreateDeckForm({
 
     const optimisticDecksInfo: DeckInfo[] = [
       ...decksInfo,
-      { _id: Date.now().toString(), ...deckFormFields },
+      { _id: Date.now().toString(), ...deckFields },
     ];
     const options = {
       optimisticData: optimisticDecksInfo,
@@ -50,7 +50,7 @@ export default function CreateDeckForm({
     mutate(
       `/deck/all`,
       async () => {
-        await createDeckInfoRequest(deckFormFields);
+        await createDeckInfoRequest(deckFields);
         const updatedDecksInfo = await fetchDecksInfo();
         return updatedDecksInfo;
       },
@@ -60,10 +60,7 @@ export default function CreateDeckForm({
 
   return (
     <div className={`${styles.formContainer}`}>
-      <DeckForm
-        deckFormFields={deckFormFields}
-        setDeckFormFields={setDeckFormFields}
-      />
+      <DeckForm deckFields={deckFields} setDeckFields={setDeckFields} />
 
       <div className={styles.buttonsContainer}>
         <Button onClick={handleCancelCreateDeck} disabled={isCreating}>
@@ -71,7 +68,7 @@ export default function CreateDeckForm({
         </Button>
         <Button
           onClick={handleCreateDeck}
-          disabled={isCreating || deckFormFields.name === ""}
+          disabled={isCreating || deckFields.name === ""}
         >
           {isCreating ? "Creating..." : "Create"}
         </Button>

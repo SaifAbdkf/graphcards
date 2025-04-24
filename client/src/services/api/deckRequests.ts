@@ -1,4 +1,4 @@
-import { Deck, DeckFormFields, DeckInfo } from "../../Types/types";
+import { Deck, DeckFields, DeckInfo } from "../../Types/types";
 import {
   BACKEND_URL,
   deleteRequest,
@@ -24,8 +24,8 @@ export async function fetchDeck(deckId: string | null): Promise<Deck> {
   }
 }
 
-export async function createDeckInfoRequest(newDeckFields: DeckFormFields) {
-  const deckInfo: DeckInfo = await postRequest<DeckFormFields>(
+export async function createDeckInfoRequest(newDeckFields: DeckFields) {
+  const deckInfo: DeckInfo = await postRequest<DeckFields>(
     "/deck/",
     newDeckFields
   );
@@ -39,11 +39,11 @@ export async function getDeckRequest(deckId: string): Promise<Deck> {
 
 export async function editDeckInfoRequest(
   deckId: string,
-  deckFormFields: DeckFormFields
+  deckFields: DeckFields
 ) {
-  const isDeckUpdated = await patchRequest<DeckFormFields>(
+  const isDeckUpdated = await patchRequest<DeckFields>(
     `/deck/${deckId}`,
-    deckFormFields
+    deckFields
   );
   return isDeckUpdated;
 }

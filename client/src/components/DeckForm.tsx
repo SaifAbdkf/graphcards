@@ -1,32 +1,32 @@
 import { ChangeEvent, useCallback } from "react";
-import { DeckFormFields } from "../Types/types";
+import { DeckFields } from "../Types/types";
 import styles from "./DeckForm.module.scss";
 
 export default function DeckForm({
-  deckFormFields,
-  setDeckFormFields,
+  deckFields,
+  setDeckFields,
 }: {
-  deckFormFields: DeckFormFields;
-  setDeckFormFields: React.Dispatch<React.SetStateAction<DeckFormFields>>;
+  deckFields: DeckFields;
+  setDeckFields: React.Dispatch<React.SetStateAction<DeckFields>>;
 }) {
   const handleFieldChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
-      const newDeckFieldsBasic = { ...deckFormFields };
+      const newDeckFieldsBasic = { ...deckFields };
       switch (name) {
         case "deckName":
           newDeckFieldsBasic.name = value;
-          setDeckFormFields(newDeckFieldsBasic);
+          setDeckFields(newDeckFieldsBasic);
           break;
         case "deckDescription":
           newDeckFieldsBasic.description = value;
-          setDeckFormFields(newDeckFieldsBasic);
+          setDeckFields(newDeckFieldsBasic);
           break;
         default:
           throw new Error(`Unhandled field name ${value}`);
       }
     },
-    [deckFormFields, setDeckFormFields]
+    [deckFields, setDeckFields]
   );
   return (
     <div>
@@ -35,7 +35,7 @@ export default function DeckForm({
           placeholder={"name"}
           name="deckName"
           className={styles.deckName}
-          value={deckFormFields.name}
+          value={deckFields.name}
           onChange={handleFieldChange}
           autoComplete="off"
         ></input>
@@ -45,7 +45,7 @@ export default function DeckForm({
           placeholder={"decsription"}
           name={"deckDescription"}
           className={styles.deckDescription}
-          value={deckFormFields.description}
+          value={deckFields.description}
           onChange={handleFieldChange}
           autoComplete="off"
         ></textarea>

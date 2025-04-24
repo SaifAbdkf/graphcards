@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./EditDeckForm.module.scss";
-import { DeckFormFields, DeckInfo } from "../Types/types";
+import { DeckFields, DeckInfo } from "../Types/types";
 import Button from "../components/Button";
 import DeckForm from "../components/DeckForm";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
@@ -15,7 +15,7 @@ export default function EditDeckForm({
 }) {
   const { data: decksInfo, mutate } = useDecksInfo();
 
-  const [deckFormFields, setDeckFormFields] = useState<DeckFormFields>({
+  const [deckFields, setDeckFields] = useState<DeckFields>({
     name: deckInfo.name,
     description: deckInfo.description,
   });
@@ -30,7 +30,7 @@ export default function EditDeckForm({
     e.preventDefault();
 
     // Validate form fields
-    if (!deckFormFields.name.trim()) {
+    if (!deckFields.name.trim()) {
       alert("GraphDeck must have a name");
       return;
     }
@@ -42,7 +42,7 @@ export default function EditDeckForm({
     const optimisticDecksInfo = decksInfo.map((deckInfoElement) =>
       deckInfoElement._id !== deckInfo._id
         ? deckInfoElement
-        : { _id: deckInfo._id, ...deckFormFields }
+        : { _id: deckInfo._id, ...deckFields }
     );
 
     const options = {
@@ -53,7 +53,7 @@ export default function EditDeckForm({
     mutate(
       `/deck/all`,
       async () => {
-        await editDeckInfoRequest(deckInfo._id, deckFormFields);
+        await editDeckInfoRequest(deckInfo._id, deckFields);
         const updatedDecksInfo = await fetchDecksInfo();
         return updatedDecksInfo;
       },
@@ -63,10 +63,7 @@ export default function EditDeckForm({
 
   return (
     <div className={`${styles.formContainer}`}>
-      <DeckForm
-        deckFormFields={deckFormFields}
-        setDeckFormFields={setDeckFormFields}
-      />
+      <DeckForm deckFields={deckFields} setDeckFields={setDeckFields} />
 
       <div className={styles.buttonsContainer}>
         <Button onClick={handleCancelEditDeck} disabled={isEditing}>
