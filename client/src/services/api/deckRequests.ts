@@ -2,7 +2,6 @@ import { Deck, DeckFields, DeckFormFields, DeckInfo } from "../../Types/types";
 import {
   BACKEND_URL,
   deleteRequest,
-  getMultipleRequest,
   getOneRequest,
   patchRequest,
   postRequest,
@@ -23,11 +22,6 @@ export async function fetchDeck(deckId: string | null): Promise<Deck> {
   } else {
     throw new Error(json.message || "API error");
   }
-}
-
-export async function getDecksInfoRequest(): Promise<DeckInfo[]> {
-  const fetchedDecksInfo: DeckInfo[] = await getMultipleRequest("/deck/all");
-  return fetchedDecksInfo;
 }
 
 export async function createDeckInfoRequest(newDeckFields: DeckFormFields) {

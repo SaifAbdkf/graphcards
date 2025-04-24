@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 import z from "zod";
 import { Card } from "../models/CardModel";
 
-const ApiCardLinksSchema = z.object({
+const EdgeDirection = z.enum(["undirected", "fromNewCard", "toNewCard"]);
+
+const ApiEdgeSchema = z.object({
   linkedCardId: z.string(),
+  direction: EdgeDirection,
   label: z.string(),
 });
 
@@ -11,16 +14,11 @@ export const ApiCardSchema = z.object({
   deckId: z.string(),
   front: z.string(),
   back: z.string(),
-  links: z.array(ApiCardLinksSchema).optional(),
+  edges: z.array(ApiEdgeSchema),
 });
 
 export type ApiCard = z.infer<typeof ApiCardSchema>;
-export type ApiLinks = z.infer<typeof ApiCardLinksSchema>;
-
-export type ValidatedLink = {
-  linkedCardId: mongoose.Types.ObjectId;
-  label: string;
-};
+export type ApiEdge = z.infer<typeof ApiEdgeSchema>;
 
 export type ApiResponse<T> = SuccessResponse<T> | FailureResponse;
 type SuccessResponse<T> = {
@@ -36,7 +34,7 @@ type FailureResponse = {
 };
 
 export function successResponseObject<T>(data: T | T[]): SuccessResponse<T> {
-  // if success object  is an array of objects (Case: getCardsInfo) the default), reurn it in data
+  // if success object  is an array of objects (Case: getCardsInfo) the default), return it in data
   // if success object is a single object (case, getCard getDeck)
   return {
     status: "success",
@@ -63,32 +61,24 @@ export function failureResponseObject(
   }
 }
 
-export async function validateLinks(
-  links: ApiLinks[]
-): Promise<ApiResponse<ValidatedLink>> {
-  const definedLinks = links || [];
-  const linkedCardsIds = definedLinks.map(
-    (link: { linkedCardId: string; label: string }) => link.linkedCardId
-  );
+export async function validateEdges(
+  edges: ApiEdge[]
+): Promise<ApiResponse<ApiEdge>> {
+  const definedEdges = edges || [];
+  const relatedCardsIds = definedEdges.map((edge) => edge.linkedCardId);
+  const foundLinkedCards = await Card.find({
+    _id: { $in: relatedCardsIds },
+  });
 
-  const foundLinkedCards = await Card.find({ _id: { $in: linkedCardsIds } });
-
-  if (linkedCardsIds.length !== foundLinkedCards.length) {
+  if (relatedCardsIds.length !== foundLinkedCards.length) {
     return {
       status: "failure",
-      message: "all requested edges found ",
+      message: "not all requested edges found ",
     };
   }
 
-  const validatedLinks = definedLinks.map(
-    (link: { linkedCardId: string; label: string }) => ({
-      linkedCardId: new mongoose.Types.ObjectId(link.linkedCardId),
-      label: link.label,
-    })
-  );
-
   return {
     status: "success",
-    data: validatedLinks,
+    data: definedEdges,
   };
 }

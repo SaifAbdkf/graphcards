@@ -11,7 +11,6 @@ import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { Plus } from "lucide-react";
-import SelectRelatedCards from "../components/SelectRelatedCards";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -29,10 +28,10 @@ export default function PlaygroundPage() {
     isLoading: isLoadingDecksInfo,
   } = useDecksInfo();
   const {
-    data: deck,
+    data: selectedDeck,
     error: errorDeck,
     isLoading: isLoadingDeck,
-    mutate,
+    mutate: mutateDeck,
   } = useDeck(selectedDeckId);
 
   const handleDeckSelection = useCallback(
@@ -45,7 +44,13 @@ export default function PlaygroundPage() {
   // TODO: loading UI
   if (isLoadingDeck) return <h1>Loading deck</h1>;
 
-  if (!selectedDeckId) {
+  if (!selectedDeckId && selectedDeck) {
+    console.log(
+      "PROBLEM: selectedDeckId is not defined but selectedDeck is defined"
+    );
+  }
+
+  if (!selectedDeckId || !selectedDeck) {
     return (
       <div>
         <Link to="/graphdecks">create deck</Link>
@@ -73,12 +78,12 @@ export default function PlaygroundPage() {
       <div className={`${styles.graphViewerContainer} `}>
         <div className={`${styles.toolBar}`}>
           <div className={`${styles.selectedDeckName}`}>{activeDeck?.name}</div>
-          <SelectRelatedCards
+          {/*<SelectRelatedCards
             cards={[]}
             handleSelectRelatedCard={function (cardId: string): void {
               throw new Error("Function not implemented.");
             }}
-          />
+          /> */}
           <div
             className={`${styles.addCardIconContainer}`}
             onClick={() => setShowCardPanel(!showCardPanel)}
@@ -87,16 +92,15 @@ export default function PlaygroundPage() {
           </div>
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
-          <Graph selectedDeckId={selectedDeckId} />
+          <Graph deck={selectedDeck} />
         </div>
       </div>
 
-      {showCardPanel && deck && (
+      {showCardPanel && selectedDeck && (
         <div className={`${styles.cardPanelContainer}`}>
           <CardPanel
-            selectedDeck={deck}
-            deckMutate={mutate}
-            selectedCard={selectedCard}
+            deck={selectedDeck}
+            mutateDeck={mutateDeck}
             setShowCardPanel={setShowCardPanel}
           />
         </div>

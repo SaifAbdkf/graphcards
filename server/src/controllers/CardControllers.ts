@@ -7,16 +7,15 @@ import {
   ApiCardSchema,
   failureResponseObject,
   successResponseObject,
-  validateLinks,
+  validateEdges,
 } from "../utils/utils";
 import assert from "assert";
 
+// Creates edges attached to the card too.
+// TODO maybe make function createCardAndEdges that is a transaction calling createCard and CreaeEdge
 export async function createCard(request: Request, response: Response) {
-  ApiCardSchema.parse(request.body);
-  const { deckId, front, back, links } = request.body;
-  //TODO find a way to create a card where its linkedCards are not already created, but needs to be created
-  //introduce new linkcards arr  as a 5th element of the body
-  // newLinkedCards = [{front: string, label: string}]
+  const { deckId, front, back, edges } = ApiCardSchema.parse(request.body);
+  // TODO find a way to create a card where its linkedCards are not already created, but needs to be created
 
   const session = await mongoose.startSession();
   await session.startTransaction();
@@ -31,17 +30,6 @@ export async function createCard(request: Request, response: Response) {
 
     const validatedDeckId = new mongoose.Types.ObjectId(deckId);
 
-    //validate linked card exists
-    const validatedLinksResponse = await validateLinks(links);
-    if (validatedLinksResponse.status === "failure") {
-      return response
-        .status(404)
-        .json(failureResponseObject("some linked cards could not be found"));
-    }
-
-    assert(validatedLinksResponse.data);
-    const validatedLinks = validatedLinksResponse.data;
-
     //create card
     const newCard = await Card.create({
       deckId: validatedDeckId,
@@ -49,13 +37,32 @@ export async function createCard(request: Request, response: Response) {
       back,
     });
 
+    //validate edges connect to existing cards
+    const validatedEdgesResponse = await validateEdges(edges);
+    if (validatedEdgesResponse.status === "failure") {
+      return response
+        .status(404)
+        .json(
+          failureResponseObject(
+            "some cards could not be found to created the requesed edges"
+          )
+        );
+    }
+
+    assert(validatedEdgesResponse.data);
+    const validatedEdges = validatedEdgesResponse.data;
+
     // create edges
-    for (const linkedCard of validatedLinks) {
+    for (const edge of validatedEdges) {
       await Edge.create({
         deckId: validatedDeckId,
-        from: newCard._id,
-        to: linkedCard.linkedCardId,
-        label: linkedCard.label,
+        from: edge.direction === "toNewCard" ? edge.linkedCardId : newCard._id,
+        to:
+          edge.direction === "undirected" || edge.direction === "fromNewCard"
+            ? edge.linkedCardId
+            : newCard._id,
+        label: edge.label,
+        isDirected: edge.direction === "undirected" ? false : true,
       });
     }
 

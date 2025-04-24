@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import { DeckFormFields, emptyDeckFormFields } from "../Types/types";
+import { DeckFormFields, DeckInfo, emptyDeckFormFields } from "../Types/types";
 import Button from "../components/Button";
 import { createDeckInfoRequest } from "../services/api/deckRequests";
 import { deepCopy } from "../utils/utils";
@@ -38,9 +38,9 @@ export default function CreateDeckForm({
     setIsCreating(true);
     setCreateDeckMode(false);
 
-    const optimisticDecksInfo = [
+    const optimisticDecksInfo: DeckInfo[] = [
       ...decksInfo,
-      { _id: Date.now(), ...deckFormFields },
+      { _id: Date.now().toString(), ...deckFormFields },
     ];
     const options = {
       optimisticData: optimisticDecksInfo,

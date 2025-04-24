@@ -1,41 +1,45 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { Card, CardFields, Deck, emptyCardFields } from "../Types/types";
 import styles from "./CardPanel.module.scss";
-import { deepCopy, dummy } from "../utils/utils";
+import { deepCopy } from "../utils/utils";
 import SelectRelatedCards from "../components/SelectRelatedCards";
 import Xarrow from "react-xarrows";
 import { X } from "lucide-react";
+import { KeyedMutator } from "swr";
+import RelatedCardEdge from "./RelatedCardEdge";
+
+type EdgeFields = {
+  direction: "undirected" | "fromNewCard" | "toNewCard";
+  label?: string;
+};
+
+export type RelatedCardInfo = {
+  card: Card;
+  edge: EdgeFields;
+};
 
 export default function CardPanel({
-  selectedDeck,
-  selectedCard,
+  deck,
+  mutateDeck,
   setShowCardPanel,
 }: {
-  selectedDeck: Deck;
-  selectedCard: Card | null;
+  deck: Deck;
+  mutateDeck: KeyedMutator<Deck>;
   setShowCardPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const cards = selectedDeck.cards;
+  const cards = deck.cards;
+
   const [cardFields, setCardFields] = useState<CardFields>(
     deepCopy<CardFields>(emptyCardFields)
   );
 
-  type EdgesLabels = {
-    isDirected: boolean;
-    selectedToRelatedLabel: string | null;
-    relatedToSelectedLabel: string | null;
-    undirectedLabel: string | null;
-  };
-
-  type RelatedCardInfo = {
-    card: Card;
-    edgesLabels: EdgesLabels;
-  };
-
   const [relatedCardsInfo, setRelatedCardsInfo] = useState<RelatedCardInfo[]>(
     []
   );
+
   console.log(relatedCardsInfo);
+
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
 
   const handleSelectRelatedCard = useCallback(
     (cardId: string) => {
@@ -50,11 +54,8 @@ export default function CardPanel({
           ...relatedCardsInfo,
           {
             card: newRelatedCard,
-            edgesLabels: {
-              isDirected: false,
-              selectedToRelatedLabel: null,
-              relatedToSelectedLabel: null,
-              undirectedLabel: null,
+            edge: {
+              direction: "undirected",
             },
           },
         ]);
@@ -95,47 +96,40 @@ export default function CardPanel({
     [relatedCardsInfo]
   );
 
-  const handleEdgeLabelChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>, cardId: string) => {
-      const { name, value } = e.target;
+  const handleCreateCard = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // Validate form fields
+    if (!cardFields.front.trim()) {
+      alert("Please enter a title for your card");
+      return;
+    }
+    if (!cardFields.back.trim()) {
+      alert("Please enter a body for your card");
+      return;
+    }
+    if (relatedCardsInfo.length === 0) {
+      alert("Please select at least one related card");
+      return;
+    }
+    // Set loading state (isCreating) and close form immediately for better UX
+    setIsCreatingCard(true);
+    setShowCardPanel(false);
 
-      const newRelatedCardsInfo = relatedCardsInfo.map((cardInfo) =>
-        cardInfo.card._id === cardId
-          ? {
-              ...cardInfo,
-              edgesLabels: {
-                ...cardInfo.edgesLabels,
-                [name]: value, //HOW TO DO THS
-              },
-            }
-          : cardInfo
-      );
-      setRelatedCardsInfo(newRelatedCardsInfo);
-    },
-    [relatedCardsInfo]
-  );
+    const optimisticCard: Card = {
+      ...cardFields,
+      deckId: deck._id,
+      _id: Date.now().toString(),
+    };
+    const optimisticDeck = { ...deck, cards: [...deck.cards, optimisticCard] };
+    const options = {
+      optimisticData: optimisticDeck,
+      rollbackOnError: true,
+    };
 
-  const handleCheckboxChange = useCallback(
-    (cardId: string) => {
-      console.log("asba");
-      const newRelatedCardsInfo = relatedCardsInfo.map((cardInfo) =>
-        cardInfo.card._id === cardId
-          ? {
-              ...cardInfo,
-              edgesLabels: {
-                isDirected: !cardInfo.edgesLabels.isDirected,
-                selectedToRelatedLabel: null,
-                relatedToSelectedLabel: null,
-                undirectedLabel: null,
-              },
-            }
-          : cardInfo
-      );
-      setRelatedCardsInfo(newRelatedCardsInfo);
-    },
-    [relatedCardsInfo]
-  );
-
+    // mutateDeck(async () => {
+    //   await
+    // }, options);
+  };
   return (
     <div className={styles.formContainer}>
       <div className={styles.fieldContainer}>
@@ -185,113 +179,11 @@ export default function CardPanel({
             key={relatedCardInfo.card._id}
             className={`${styles.relatedCardContainer}`}
           >
-            <div className={`${styles.edgesContainer}`}>
-              {relatedCardInfo.edgesLabels.isDirected ? (
-                <>
-                  <div className={`${styles.toRelation}`}>
-                    <input
-                      type="text"
-                      className={`${styles.arrowLabel}`}
-                      name="selectedToRelatedLabel"
-                      value={
-                        relatedCardInfo.edgesLabels.selectedToRelatedLabel || ""
-                      }
-                      onChange={(e) =>
-                        handleEdgeLabelChange(e, relatedCardInfo.card._id)
-                      }
-                    ></input>
-                    <div
-                      id={`from-${relatedCardInfo.card._id}`}
-                      className={`${styles.start}`}
-                    ></div>
-                    <div
-                      id={`to-${relatedCardInfo.card._id}`}
-                      className={`${styles.end}`}
-                    ></div>
-                    <Xarrow
-                      start={`from-${relatedCardInfo.card._id}`}
-                      end={`to-${relatedCardInfo.card._id}`}
-                      strokeWidth={1}
-                      headSize={9}
-                      color="black"
-                    />
-                  </div>
-                  <div className={`${styles.fromRelation}`}>
-                    <input
-                      type="text"
-                      placeholder=""
-                      className={`${styles.arrowLabel}`}
-                      name="relatedToSelectedLabel"
-                      value={
-                        relatedCardInfo.edgesLabels.relatedToSelectedLabel || ""
-                      }
-                      onChange={(e) =>
-                        handleEdgeLabelChange(e, relatedCardInfo.card._id)
-                      }
-                    ></input>
-                    <div
-                      id={`from2-${relatedCardInfo.card._id}`}
-                      className={`${styles.start}`}
-                    ></div>
-                    <div
-                      id={`to2-${relatedCardInfo.card._id}`}
-                      className={`${styles.end}`}
-                    ></div>
-                    <Xarrow
-                      start={`to2-${relatedCardInfo.card._id}`}
-                      end={`from2-${relatedCardInfo.card._id}`}
-                      strokeWidth={1}
-                      headSize={9}
-                      color="black"
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className={`${styles.fromRelation}`}>
-                  <input
-                    type="text"
-                    className={`${styles.arrowLabel}`}
-                    name="undirectedLabel"
-                    value={relatedCardInfo.edgesLabels.undirectedLabel || ""}
-                    onChange={(e) =>
-                      handleEdgeLabelChange(e, relatedCardInfo.card._id)
-                    }
-                  ></input>
-                  <div
-                    id={`from2-${relatedCardInfo.card._id}`}
-                    className={`${styles.start}`}
-                  ></div>
-                  <div
-                    id={`to2-${relatedCardInfo.card._id}`}
-                    className={`${styles.end}`}
-                  ></div>
-                  <Xarrow
-                    start={`to2-${relatedCardInfo.card._id}`}
-                    end={`from2-${relatedCardInfo.card._id}`}
-                    strokeWidth={1}
-                    headSize={0}
-                    color="black"
-                  />
-                </div>
-              )}
-              <div className={`${styles.checkboxContainer}`}>
-                <input
-                  type="checkbox"
-                  className={`${styles.checkboxInput}`}
-                  id={`checkbox-${relatedCardInfo.card._id}`}
-                  checked={relatedCardInfo.edgesLabels.isDirected}
-                  onChange={() =>
-                    handleCheckboxChange(relatedCardInfo.card._id)
-                  }
-                />
-                <label
-                  className={`${styles.checkboxLabel}`}
-                  htmlFor={`checkbox-${relatedCardInfo.card._id}`}
-                >
-                  directed edges
-                </label>
-              </div>
-            </div>
+            <RelatedCardEdge
+              relatedCardInfo={relatedCardInfo}
+              relatedCardsInfo={relatedCardsInfo}
+              setRelatedCardsInfo={setRelatedCardsInfo}
+            />
 
             <div className={`${styles.cardContainer}`}>
               <div className={`${styles.cardRepresentation}`}>
@@ -316,7 +208,7 @@ export default function CardPanel({
       </div>
 
       <div className={`${styles.formButtonsContainer}`}>
-        <button onClick={dummy}>Create card</button>
+        <button onClick={handleCreateCard}>Create card</button>
       </div>
     </div>
   );

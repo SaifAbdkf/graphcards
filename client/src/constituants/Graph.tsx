@@ -1,12 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Edge, Network, Node } from "vis-network";
 import "vis-network/styles/vis-network.css";
-import { useDeck } from "../hooks/useDeck";
+import { Deck } from "../Types/types";
 
-export default function Graph({ selectedDeckId }: { selectedDeckId: string }) {
+export default function Graph({ deck }: { deck: Deck }) {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const { data: deck } = useDeck(selectedDeckId);
 
   useEffect(() => {
     if (!containerRef.current || !deck) return;
