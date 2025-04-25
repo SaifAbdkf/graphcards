@@ -33,7 +33,6 @@ export type Edge = {
   to: string;
   label?: string;
 };
-
 // 2 first cases used when creating a card and its connection
 // null referring to the id of the card in creation
 // last case will be used when creatng an edge between two existing cards
