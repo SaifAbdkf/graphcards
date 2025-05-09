@@ -1,20 +1,16 @@
-import { RelatedCardInfo } from "../../constituants/CardPanel";
-import { Card, CardFields } from "../../Types/types";
+import { Card, CardFields, EdgeFields } from "../../Types/types";
 import { postRequest } from "./apiRequestMethods";
 
 export async function createConnectedCardRequest(
   deckId: string,
-  newCardFields: CardFields,
-  relatedCards: RelatedCardInfo[]
+  cardFields: CardFields,
+  edgeFields: EdgeFields[]
 ) {
-  const cardBody = {
+  const connectedCardBody = {
     deckId: deckId,
-    ...newCardFields,
-    edges: relatedCards.map((relatedCard) => ({
-      linkedCardId: relatedCard.card._id,
-      ...relatedCard.edge,
-    })),
+    ...cardFields,
+    edges: edgeFields,
   };
-  const card: Card = await postRequest("/card", cardBody);
+  const card: Card = await postRequest("/card", connectedCardBody);
   return card;
 }

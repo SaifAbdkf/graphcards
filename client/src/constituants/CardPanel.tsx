@@ -117,9 +117,10 @@ export default function CardPanel({
       _id: Date.now().toString(),
     };
 
-    const optimisticEdges = relatedCardsFields.map((relatedCard) => ({
-      linkedCardId: relatedCard.card._id,
+    const optimisticEdges = relatedCardsFields.map((relatedCard, index) => ({
       ...relatedCard.edge,
+      deckId: deck._id,
+      _id: (Date.now() + index).toString(),
     }));
 
     const optimisticDeck = {
@@ -132,12 +133,12 @@ export default function CardPanel({
       rollbackOnError: true,
     };
 
+    const edgesFields = relatedCardsFields.map(
+      (relatedCard) => relatedCard.edge
+    );
+
     mutateDeck(async () => {
-      await createConnectedCardRequest(
-        deck._id,
-        cardFields,
-        relatedCardsFields
-      );
+      await createConnectedCardRequest(deck._id, cardFields, edgesFields);
       const updatedDeck = await fetchDeck(deck._id);
       return updatedDeck;
     }, options);

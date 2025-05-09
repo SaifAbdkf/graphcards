@@ -33,11 +33,16 @@ export async function createCard(request: Request, response: Response) {
     const validatedDeckId = new mongoose.Types.ObjectId(deckId);
 
     //create card
-    const newCard = await Card.create({
-      deckId: validatedDeckId,
-      front,
-      back,
-    });
+    const newCard = await Card.create(
+      [
+        {
+          deckId: validatedDeckId,
+          front,
+          back,
+        },
+      ],
+      { session }
+    );
 
     //validate edges connect to existing cards
     const validatedEdgesResponse = await validateEdges(edges);
@@ -56,16 +61,18 @@ export async function createCard(request: Request, response: Response) {
 
     // create edges
     for (const edge of validatedEdges) {
-      await Edge.create({
-        deckId: validatedDeckId,
-        from: edge.direction === "toNewCard" ? edge.linkedCardId : newCard._id,
-        to:
-          edge.direction === "undirected" || edge.direction === "fromNewCard"
-            ? edge.linkedCardId
-            : newCard._id,
-        label: edge.label,
-        isDirected: edge.direction === "undirected" ? false : true,
-      });
+      await Edge.create(
+        [
+          {
+            deckId: validatedDeckId,
+            from: edge.from ? edge.from : newCard[0]._id,
+            to: edge.to ? edge.to : newCard[0]._id,
+            label: edge.label,
+            isDirected: edge.isDirected,
+          },
+        ],
+        { session }
+      );
     }
 
     await session.commitTransaction();

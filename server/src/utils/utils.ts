@@ -1,12 +1,10 @@
-import mongoose from "mongoose";
 import z from "zod";
 import { Card } from "../models/CardModel";
 
-const EdgeDirection = z.enum(["undirected", "fromNewCard", "toNewCard"]);
-
 const ApiEdgeSchema = z.object({
-  linkedCardId: z.string(),
-  direction: EdgeDirection,
+  isDirected: z.boolean(),
+  from: z.string(),
+  to: z.string(),
   label: z.string().optional(),
 });
 
@@ -65,7 +63,9 @@ export async function validateEdges(
   edges: ApiEdge[]
 ): Promise<ApiResponse<ApiEdge>> {
   const definedEdges = edges || [];
-  const relatedCardsIds = definedEdges.map((edge) => edge.linkedCardId);
+  const relatedCardsIds = definedEdges.map((edge) =>
+    edge.to !== "" ? edge.to : edge.from
+  ); // direction is defined by from or to being null. related card id is eihter in from field or in o field
   const foundLinkedCards = await Card.find({
     _id: { $in: relatedCardsIds },
   });
