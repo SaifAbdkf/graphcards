@@ -33,25 +33,13 @@ export type Edge = {
   to: string;
   label?: string;
 };
-// 2 first cases used when creating a card and its connection
-// null referring to the id of the card in creation
-// last case will be used when creatng an edge between two existing cards
-export type EdgeFields =
-  | {
-      isDirected: boolean;
-      from: string;
-      to: null;
-      label?: string;
-    }
-  | {
-      isDirected: boolean;
-      from: null;
-      to: string;
-      label?: string;
-    }
-  | {
-      isDirected: boolean;
-      from: null;
-      to: string;
-      label?: string;
-    };
+// if edge not created yet, set the node in creation to ""
+export type EdgeFields = Omit<Edge, "_id" | "deckId">;
+export const emptyEdgeFields: EdgeFields = {
+  isDirected: false,
+  from: "",
+  to: "",
+};
+
+//PROJECT CONVETION
+// IF EDGE IS UNDIRECTED FROM = THE CARD BEING CREATED, TO = already existing card

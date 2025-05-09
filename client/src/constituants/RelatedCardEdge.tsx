@@ -1,83 +1,55 @@
 import Xarrow from "react-xarrows";
-import { RelatedCardInfo } from "./CardPanel";
+import { RelatedCardFields } from "./CardPanel";
 import styles from "./RelatedCardEdge.module.scss";
 import { useCallback, useState } from "react";
 import { ArrowRightLeft } from "lucide-react";
 
 export default function RelatedCardEdge({
-  relatedCardInfo,
-  relatedCardsInfo,
-  setRelatedCardsInfo,
+  relatedCardFields,
+  handleRelatedCardFieldsChange,
 }: {
-  relatedCardInfo: RelatedCardInfo;
-  relatedCardsInfo: RelatedCardInfo[];
-  setRelatedCardsInfo: React.Dispatch<React.SetStateAction<RelatedCardInfo[]>>;
+  relatedCardFields: RelatedCardFields;
+  handleRelatedCardFieldsChange: (newRelatedCard: RelatedCardFields) => void;
 }) {
   const [isSwitchDirectionHover, setSwitchDirectionHover] = useState(false);
 
   const handleEdgeLabelChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, cardId: string) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      const newRelatedCardsInfo: RelatedCardInfo[] = relatedCardsInfo.map(
-        (cardInfo) =>
-          cardInfo.card._id === cardId
-            ? {
-                ...cardInfo,
-                edge: {
-                  ...cardInfo.edge,
-                  label: value,
-                },
-              }
-            : cardInfo
-      );
-      setRelatedCardsInfo(newRelatedCardsInfo);
+      console.log(value);
+      const newRelatedCardFields = {
+        ...relatedCardFields,
+        edge: { ...relatedCardFields.edge, label: value },
+      };
+      handleRelatedCardFieldsChange(newRelatedCardFields);
     },
-    [relatedCardsInfo, setRelatedCardsInfo]
+    [relatedCardFields, handleRelatedCardFieldsChange]
   );
 
-  const handleCheckboxChange = useCallback(
-    (cardId: string) => {
-      const newRelatedCardsInfo: RelatedCardInfo[] = relatedCardsInfo.map(
-        (cardInfo) =>
-          cardInfo.card._id === cardId
-            ? {
-                ...cardInfo,
-                edge: {
-                  ...cardInfo.edge,
-                  direction:
-                    cardInfo.edge.direction === "undirected"
-                      ? "fromNewCard"
-                      : "undirected",
-                },
-              }
-            : cardInfo
-      );
-      setRelatedCardsInfo(newRelatedCardsInfo);
-    },
-    [relatedCardsInfo, setRelatedCardsInfo]
-  );
+  const handleDirectionCheckboxChange = useCallback(() => {
+    const newRelatedCardFields = {
+      ...relatedCardFields,
+      edge: {
+        ...relatedCardFields.edge,
+        isDirected: !relatedCardFields.edge.isDirected,
+        to: relatedCardFields.card._id,
+        from: "",
+      },
+    };
+    handleRelatedCardFieldsChange(newRelatedCardFields);
+  }, [handleRelatedCardFieldsChange, relatedCardFields]);
 
-  const handleSwitchDirection = useCallback(
-    (cardId: string) => {
-      const newRelatedCardsInfo: RelatedCardInfo[] = relatedCardsInfo.map(
-        (cardInfo) =>
-          cardInfo.card._id === cardId
-            ? {
-                ...cardInfo,
-                edge: {
-                  ...cardInfo.edge,
-                  direction:
-                    cardInfo.edge.direction === "toNewCard"
-                      ? "fromNewCard"
-                      : "toNewCard",
-                },
-              }
-            : cardInfo
-      );
-      setRelatedCardsInfo(newRelatedCardsInfo);
-    },
-    [relatedCardsInfo, setRelatedCardsInfo]
-  );
+  const handleSwitchDirection = useCallback(() => {
+    const newRelatedCardFields = {
+      ...relatedCardFields,
+      edge: {
+        ...relatedCardFields.edge,
+        from: relatedCardFields.edge.to,
+        to: relatedCardFields.edge.from,
+      },
+    };
+    handleRelatedCardFieldsChange(newRelatedCardFields);
+  }, [handleRelatedCardFieldsChange, relatedCardFields]);
 
   return (
     <div className={`${styles.controlledEdgeContainer}`}>
@@ -87,31 +59,33 @@ export default function RelatedCardEdge({
             type="text"
             className={`${styles.arrowLabel}`}
             name="label"
-            value={relatedCardInfo.edge.label || ""}
-            onChange={(e) => handleEdgeLabelChange(e, relatedCardInfo.card._id)}
+            value={relatedCardFields.edge.label || ""}
+            onChange={(e) => handleEdgeLabelChange(e)}
             autoComplete="off"
           ></input>
           <div
-            id={`left-${relatedCardInfo.card._id}`}
+            id={`left-${relatedCardFields.card._id}`}
             className={`${styles.left}`}
           ></div>
           <div
-            id={`right-${relatedCardInfo.card._id}`}
+            id={`right-${relatedCardFields.card._id}`}
             className={`${styles.right}`}
           ></div>
           <Xarrow
             start={
-              relatedCardInfo.edge.direction === "fromNewCard"
-                ? `left-${relatedCardInfo.card._id}`
-                : `right-${relatedCardInfo.card._id}`
+              relatedCardFields.edge.isDirected &&
+              relatedCardFields.edge.from === ""
+                ? `left-${relatedCardFields.card._id}`
+                : `right-${relatedCardFields.card._id}`
             }
             end={
-              relatedCardInfo.edge.direction === "fromNewCard"
-                ? `right-${relatedCardInfo.card._id}`
-                : `left-${relatedCardInfo.card._id}`
+              relatedCardFields.edge.isDirected &&
+              relatedCardFields.edge.from === ""
+                ? `right-${relatedCardFields.card._id}`
+                : `left-${relatedCardFields.card._id}`
             }
             strokeWidth={1}
-            headSize={relatedCardInfo.edge.direction !== "undirected" ? 10 : 0}
+            headSize={relatedCardFields.edge.isDirected ? 10 : 0}
             color="black"
           />
         </div>
@@ -121,34 +95,34 @@ export default function RelatedCardEdge({
           <input
             type="checkbox"
             className={`${styles.checkboxInput}`}
-            id={`checkbox-${relatedCardInfo.card._id}`}
-            checked={relatedCardInfo.edge.direction !== "undirected"}
-            onChange={() => handleCheckboxChange(relatedCardInfo.card._id)}
+            id={`checkbox-${relatedCardFields.card._id}`}
+            checked={relatedCardFields.edge.isDirected}
+            onChange={() => handleDirectionCheckboxChange()}
           />
           <label
             className={`${styles.controlLabel} ${styles.directedEdgeLabel}`}
-            htmlFor={`checkbox-${relatedCardInfo.card._id}`}
+            htmlFor={`checkbox-${relatedCardFields.card._id}`}
           >
             directed link
           </label>
         </div>
-        {relatedCardInfo.edge.direction !== "undirected" && (
+        {relatedCardFields.edge.isDirected && (
           <div
             className={`${styles.switchDirectionContainer}`}
             onMouseEnter={() => setSwitchDirectionHover(true)}
             onMouseLeave={() => setSwitchDirectionHover(false)}
           >
             <ArrowRightLeft
-              id={`switch-${relatedCardInfo.card._id}`}
+              id={`switch-${relatedCardFields.card._id}`}
               size={12}
               cursor={"pointer"}
               color={isSwitchDirectionHover ? `#3900c9` : `#4d4d4d`}
-              onClick={() => handleSwitchDirection(relatedCardInfo.card._id)}
+              onClick={() => handleSwitchDirection()}
             />
 
             <label
               className={`${styles.controlLabel} ${styles.switchDirectionLabel}`}
-              onClick={() => handleSwitchDirection(relatedCardInfo.card._id)}
+              onClick={() => handleSwitchDirection()}
             >
               switch direction
             </label>

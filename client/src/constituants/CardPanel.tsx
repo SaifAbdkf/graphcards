@@ -5,6 +5,7 @@ import {
   Deck,
   EdgeFields,
   emptyCardFields,
+  emptyEdgeFields,
 } from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { deepCopy } from "../utils/utils";
@@ -54,9 +55,7 @@ export default function CardPanel({
           ...relatedCardsFields,
           {
             card: newRelatedCard,
-            edge: {
-              direction: "undirected",
-            },
+            edge: { ...emptyEdgeFields, to: newRelatedCard._id },
           },
         ]);
     },
@@ -122,6 +121,7 @@ export default function CardPanel({
       linkedCardId: relatedCard.card._id,
       ...relatedCard.edge,
     }));
+
     const optimisticDeck = {
       ...deck,
       cards: [...deck.cards, optimisticCard],
@@ -142,6 +142,17 @@ export default function CardPanel({
       return updatedDeck;
     }, options);
   };
+
+  const updateRelatedCardFields = (newRelatedCard: RelatedCardFields) => {
+    const newRelatedCardsFields: RelatedCardFields[] = relatedCardsFields.map(
+      (cardFields) =>
+        cardFields.card._id === newRelatedCard.card._id
+          ? newRelatedCard
+          : cardFields
+    );
+    setRelatedCardsFields(newRelatedCardsFields);
+  };
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.fieldContainer}>
@@ -193,8 +204,7 @@ export default function CardPanel({
           >
             <RelatedCardEdge
               relatedCardFields={relatedCardFields}
-              relatedCardsFields={relatedCardsFields}
-              setRelatedCardsFields={setRelatedCardsFields}
+              handleRelatedCardFieldsChange={updateRelatedCardFields}
             />
 
             <div className={`${styles.cardContainer}`}>
