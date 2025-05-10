@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from "react";
-import { Card } from "../Types/types";
 import styles from "./PlaygroundPage.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelectedDeckId } from "../store/selectors/deckSelector";
@@ -18,18 +17,17 @@ export default function PlaygroundPage() {
   const { data: activeDeck } = useDeck(selectedDeckId);
 
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const dispatch = useDispatch();
 
   const {
     data: decksInfo,
-    error: decksInfoError,
-    isLoading: isLoadingDecksInfo,
+    // error: decksInfoError,
+    // isLoading: isLoadingDecksInfo,
   } = useDecksInfo();
   const {
     data: selectedDeck,
-    error: errorDeck,
+    // error: errorDeck,
     isLoading: isLoadingDeck,
     mutate: mutateDeck,
   } = useDeck(selectedDeckId);

@@ -109,7 +109,7 @@ export default function CardPanel({
 
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreatingCard(true);
-    // setShowCardPanel(false);
+    setShowCardPanel(false);
 
     const optimisticCard: Card = {
       ...cardFields,
