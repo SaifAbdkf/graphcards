@@ -10,6 +10,8 @@ import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { Plus } from "lucide-react";
+import TestGraph from "../constituants/TestGraph";
+import { ReactFlowProvider } from "@xyflow/react";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -91,7 +93,10 @@ export default function PlaygroundPage() {
           </div>
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
-          <Graph deck={selectedDeck} />
+          <ReactFlowProvider>
+            <Graph deck={selectedDeck} />
+            {/* <TestGraph deck={selectedDeck} /> */}
+          </ReactFlowProvider>
         </div>
       </div>
 

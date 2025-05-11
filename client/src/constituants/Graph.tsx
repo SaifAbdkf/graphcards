@@ -1,67 +1,40 @@
-import { useEffect, useRef } from "react";
-import { DataSet, Edge, Network, Node } from "vis-network";
-import "vis-network/styles/vis-network.css";
+import "@xyflow/react/dist/style.css";
 import { Deck } from "../Types/types";
+import {
+  addEdge,
+  Connection,
+  Controls,
+  ReactFlow,
+  useEdgesState,
+  useNodesState,
+} from "@xyflow/react";
+import { useCallback } from "react";
 
 export default function Graph({ deck }: { deck: Deck }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const initialNodes = deck.cards.map((card, index) => ({
+    id: card._id,
+    data: {
+      label: <div style={{ height: "200px", color: "blue" }}>card.front</div>,
+    },
+    position: { x: index * 100, y: 100 },
+  }));
 
-  useEffect(() => {
-    if (!containerRef.current || !deck) return;
-    // const nodes2 = new DataSet(
-    //   deck.cards.map((card) => ({
-    //     id: card._id,
-    //     label: card.front,
-    //     margin: 200,
-    //   }))
-    // );
-    const nodes: Node[] = deck.cards.map((card) => ({
-      id: card._id,
-      label: card.front,
-      margin: 10,
-      widthConstraint: 10,
-    }));
+  const initialEdges = deck.edges.map((edge) => ({
+    id: edge._id,
+    source: edge.from,
+    target: edge.to,
+  }));
 
-    const edges: Edge[] = deck.edges.map((edge) => ({
-      id: edge._id,
-      from: edge.from,
-      to: edge.to,
-      label: edge.label,
-    }));
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-    // Create the network
-    const network = new Network(
-      containerRef.current,
-      { nodes, edges },
-      {
-        nodes: {
-          shadow: {
-            enabled: true,
-            color: "black",
-            size: 0,
-            x: 2,
-            y: 2,
-          },
-          shape: "box", // Makes nodes look like cards
-          // margin: 15,
-          color: {
-            background: "#f0f0f0",
-            border: "#333",
-          },
-          font: { color: "#000" },
-        },
-        edges: {
-          color: "#848484",
-          arrows: { to: true },
-        },
-        physics: {
-          enabled: true, // Enable force-directed layout
-        },
-      }
-    );
-
-    return () => network.destroy();
-  }, [deck]);
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      const newEdge = { ...connection, animated: true };
+      setEdges((eds) => addEdge(newEdge, eds));
+    },
+    [setEdges]
+  );
 
   const handleClick = () => {
     console.log("asba");
@@ -70,7 +43,15 @@ export default function Graph({ deck }: { deck: Deck }) {
   return (
     <>
       <button onClick={handleClick}>test action</button>
-      <div ref={containerRef} style={{ height: "100%", width: "100%" }} />;
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+      >
+        <Controls />
+      </ReactFlow>
     </>
   );
 }
