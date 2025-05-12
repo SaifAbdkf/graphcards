@@ -9,13 +9,17 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import { useCallback } from "react";
+import { CardNode } from "./CardNode";
+
+const nodeTypes = {
+  cardNode: CardNode,
+};
 
 export default function Graph({ deck }: { deck: Deck }) {
   const initialNodes = deck.cards.map((card, index) => ({
     id: card._id,
-    data: {
-      label: <div style={{ height: "200px", color: "blue" }}>card.front</div>,
-    },
+    type: "cardNode",
+    data: { front: card.front, back: card.back },
     position: { x: index * 100, y: 100 },
   }));
 
@@ -49,6 +53,8 @@ export default function Graph({ deck }: { deck: Deck }) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        connectionMode={"loose"}
       >
         <Controls />
       </ReactFlow>
