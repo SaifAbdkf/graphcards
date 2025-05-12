@@ -9,7 +9,6 @@ import CreateDeck from "../constituants/CreateDeck";
 
 export default function GraphDecksPage() {
   const { data: decksInfo } = useDecksInfo();
-  console.log(decksInfo);
   return (
     <div className={styles.decksPageContainer}>
       <h1>My GraphDecks</h1>

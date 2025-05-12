@@ -3,6 +3,7 @@ import { Deck } from "../Types/types";
 import {
   addEdge,
   Connection,
+  ConnectionMode,
   Controls,
   ReactFlow,
   useEdgesState,
@@ -10,9 +11,14 @@ import {
 } from "@xyflow/react";
 import { useCallback } from "react";
 import { CardNode } from "./CardNode";
+import CardEdge from "./CardEdge";
 
 const nodeTypes = {
   cardNode: CardNode,
+};
+
+const edgeTypes = {
+  cardEdge: CardEdge,
 };
 
 export default function Graph({ deck }: { deck: Deck }) {
@@ -27,6 +33,8 @@ export default function Graph({ deck }: { deck: Deck }) {
     id: edge._id,
     source: edge.from,
     target: edge.to,
+    type: "cardEdge",
+    data: { label: edge.label },
   }));
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -34,7 +42,7 @@ export default function Graph({ deck }: { deck: Deck }) {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      const newEdge = { ...connection, animated: true };
+      const newEdge = { ...connection, type: "cardEdge" };
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -53,8 +61,9 @@ export default function Graph({ deck }: { deck: Deck }) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        connectionMode={ConnectionMode.Loose}
         nodeTypes={nodeTypes}
-        connectionMode={"loose"}
+        edgeTypes={edgeTypes}
       >
         <Controls />
       </ReactFlow>
