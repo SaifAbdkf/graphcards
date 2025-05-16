@@ -5,7 +5,7 @@ import {
   Connection,
   ConnectionMode,
   Controls,
-  MarkerType,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -13,6 +13,17 @@ import {
 import { useCallback } from "react";
 import { CardNode } from "./CardNode";
 import CardEdge from "./CardEdge";
+
+type EdgeData = {
+  _id: string;
+  from: string;
+  to: string;
+};
+
+type CustomEdge = Edge & {
+  type: "cardEdge";
+  data: EdgeData;
+};
 
 const nodeTypes = {
   cardNode: CardNode,
@@ -30,29 +41,30 @@ export default function Graph({ deck }: { deck: Deck }) {
     position: { x: index * 100, y: 100 },
   }));
 
-  const initialEdges = deck.edges.map((edge) => ({
+  const initialEdges: CustomEdge[] = deck.edges.map((edge) => ({
     id: edge._id,
     source: edge.from,
     target: edge.to,
     type: "cardEdge",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 200,
-      height: 200,
-    },
-    style: {
-      strokeWidth: 2,
-      stroke: "#FF0072",
-    },
     data: edge,
   }));
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] =
+    useEdgesState<CustomEdge>(initialEdges);
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      const newEdge = { ...connection, type: "cardEdge" };
+      const newEdge: CustomEdge = {
+        ...connection,
+        type: "cardEdge",
+        id: `${connection.source}-${connection.target}`,
+        data: {
+          _id: `${connection.source}-${connection.target}`,
+          from: connection.source!,
+          to: connection.target!,
+        },
+      };
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]

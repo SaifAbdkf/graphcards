@@ -1,4 +1,4 @@
-import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from "@xyflow/react";
+import { EdgeLabelRenderer, getSmoothStepPath } from "@xyflow/react";
 import styles from "./CardEdge.module.scss";
 import { Edge } from "../Types/types";
 
