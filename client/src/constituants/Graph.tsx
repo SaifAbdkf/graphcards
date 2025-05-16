@@ -5,6 +5,7 @@ import {
   Connection,
   ConnectionMode,
   Controls,
+  MarkerType,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -34,7 +35,16 @@ export default function Graph({ deck }: { deck: Deck }) {
     source: edge.from,
     target: edge.to,
     type: "cardEdge",
-    data: { label: edge.label },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 200,
+      height: 200,
+    },
+    style: {
+      strokeWidth: 2,
+      stroke: "#FF0072",
+    },
+    data: edge,
   }));
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
