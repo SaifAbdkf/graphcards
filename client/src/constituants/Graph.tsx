@@ -1,11 +1,11 @@
 import "@xyflow/react/dist/style.css";
-import { Deck } from "../Types/types";
+import { Deck, EdgeFields } from "../Types/types";
 import {
   addEdge,
   Connection,
   ConnectionMode,
   Controls,
-  Edge,
+  Edge as ReactFlowEdge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -14,15 +14,9 @@ import { useCallback } from "react";
 import { CardNode } from "./CardNode";
 import CardEdge from "./CardEdge";
 
-type EdgeData = {
-  _id: string;
-  from: string;
-  to: string;
-};
-
-type CustomEdge = Edge & {
+type CustomEdge = ReactFlowEdge & {
   type: "cardEdge";
-  data: EdgeData;
+  data: EdgeFields;
 };
 
 const nodeTypes = {
@@ -58,9 +52,11 @@ export default function Graph({ deck }: { deck: Deck }) {
       const newEdge: CustomEdge = {
         ...connection,
         type: "cardEdge",
-        id: `${connection.source}-${connection.target}`,
+        id: `${connection.source}-${
+          connection.target
+        }-${Date.now().toString()}`,
         data: {
-          _id: `${connection.source}-${connection.target}`,
+          isDirected: true,
           from: connection.source!,
           to: connection.target!,
         },
