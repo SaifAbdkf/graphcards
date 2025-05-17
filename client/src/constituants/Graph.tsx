@@ -9,10 +9,14 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
+  Node,
 } from "@xyflow/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { CardNode } from "./CardNode";
 import CardEdge from "./CardEdge";
+import { useDeck } from "../hooks/useDeck";
+import { useSelector } from "react-redux";
+import { selectSelectedDeckId } from "../store/selectors/deckSelector";
 
 type CustomEdge = ReactFlowEdge & {
   type: "cardEdge";
@@ -27,25 +31,28 @@ const edgeTypes = {
   cardEdge: CardEdge,
 };
 
-export default function Graph({ deck }: { deck: Deck }) {
-  const initialNodes = deck.cards.map((card, index) => ({
+export default function Graph({ dbDeck }: { dbDeck: Deck }) {
+  console.log("graph rendering");
+  const dbCards: Node[] = dbDeck.cards.map((card, index) => ({
     id: card._id,
     type: "cardNode",
     data: { front: card.front, back: card.back },
     position: { x: index * 100, y: 100 },
   }));
 
-  const initialEdges: CustomEdge[] = deck.edges.map((edge) => ({
+  const dbEdges: CustomEdge[] = dbDeck.edges.map((edge) => ({
     id: edge._id,
     source: edge.from,
     target: edge.to,
     type: "cardEdge",
     data: edge,
   }));
+  console.log("initial nodes: ", dbCards);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] =
-    useEdgesState<CustomEdge>(initialEdges);
+  // separation between dbDeck and browserDeck
+  // const [browserNodes, setBrowserNodes] = useState<Node[]>(dbCards);
+  //
+  const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(dbEdges);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -74,9 +81,8 @@ export default function Graph({ deck }: { deck: Deck }) {
     <>
       <button onClick={handleClick}>test action</button>
       <ReactFlow
-        nodes={nodes}
+        nodes={dbCards}
         edges={edges}
-        onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         connectionMode={ConnectionMode.Loose}

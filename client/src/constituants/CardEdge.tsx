@@ -1,10 +1,18 @@
-import { EdgeLabelRenderer, getSmoothStepPath } from "@xyflow/react";
+import {
+  EdgeLabelRenderer,
+  getSmoothStepPath,
+  Position,
+  useNodes,
+} from "@xyflow/react";
 import styles from "./CardEdge.module.scss";
 import { Edge } from "../Types/types";
+import { getSmartEdge } from "@tisoap/react-flow-smart-edge";
 
 export default function CardEdge({
   id,
   data,
+  sourcePosition,
+  targetPosition,
   sourceX,
   sourceY,
   targetX,
@@ -12,6 +20,8 @@ export default function CardEdge({
 }: {
   id: string;
   data: Edge;
+  sourcePosition: Position;
+  targetPosition: Position;
   sourceX: number;
   sourceY: number;
   targetX: number;
@@ -25,6 +35,19 @@ export default function CardEdge({
   });
 
   const markerId = `arrowhead-${id}`;
+  const nodes = useNodes();
+  console.log("positions:", sourcePosition, targetPosition);
+  const getSmartEdgeResponse = getSmartEdge({
+    sourcePosition,
+    targetPosition,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    nodes,
+  });
+
+  console.log(getSmartEdgeResponse);
 
   return (
     <>

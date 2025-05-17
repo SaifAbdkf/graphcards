@@ -13,6 +13,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
     "@szhsin/react-menu": "^4.3.1",
+    "@tisoap/react-flow-smart-edge": "^3.0.0",
     "@xyflow/react": "^12.6.0",
     "d3": "^7.9.0",
     "lucide-react": "^0.483.0",

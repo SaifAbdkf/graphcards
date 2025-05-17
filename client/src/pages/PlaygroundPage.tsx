@@ -10,13 +10,11 @@ import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { Plus } from "lucide-react";
-import TestGraph from "../constituants/TestGraph";
 import { ReactFlowProvider } from "@xyflow/react";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const selectedDeckId = useSelector(selectSelectedDeckId);
-  const { data: activeDeck } = useDeck(selectedDeckId);
 
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
 
@@ -77,7 +75,9 @@ export default function PlaygroundPage() {
     <div className={styles.playGroundContainer}>
       <div className={`${styles.graphViewerContainer} `}>
         <div className={`${styles.toolBar}`}>
-          <div className={`${styles.selectedDeckName}`}>{activeDeck?.name}</div>
+          <div className={`${styles.selectedDeckName}`}>
+            {selectedDeck?.name}
+          </div>
           {/*<SelectRelatedCards
             cards={[]}
             handleSelectRelatedCard={function (cardId: string): void {
@@ -93,7 +93,8 @@ export default function PlaygroundPage() {
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
           <ReactFlowProvider>
-            <Graph deck={selectedDeck} />
+            <Graph dbDeck={selectedDeck} />
+            {/* should I just have multiple Graph component instances cached, and mke select deck switch between them */}
             {/* <TestGraph deck={selectedDeck} /> */}
           </ReactFlowProvider>
         </div>
