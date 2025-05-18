@@ -1,0 +1,27 @@
+$black: #1f1f1f;
+// TODO: manually sync mixin black
+$dark-gray: #4d4d4d;
+$gray: #868686;
+$gray-light: rgba($gray, 0.1);
+$white: white;
+$white-hover: rgb(248, 248, 248);
+
+$primary-color: #3900c9;
+$primary-color-underline: rgba($primary-color, 0.2);
+$primary-color-background: rgba($primary-color, 0.1);
+$primary-color-hover: rgba($primary-color, 0.03);
+
+$smallest-font-size: 0.675rem;
+$small-font-size: 0.775rem;
+$smallish-font-size: 0.925rem;
+$normal-font-size: 1rem;
+$big-font-size: 1.5rem;
+
+$navbar-height: 3rem;
+
+@mixin input_text_textarea($x: 1px, $color: #1f1f1f) {
+  box-sizing: border-box;
+  padding: 0.225em;
+  border: $x solid $color;
+  border-radius: 0.125rem;
+}

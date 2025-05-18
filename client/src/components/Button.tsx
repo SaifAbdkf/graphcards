@@ -1,5 +1,3 @@
-// import "./../main.css";
-
 import { ReactNode } from "react";
 import styles from "./Button.module.scss";
 export type BgColorClass = "bg-red" | "bg-green" | "bg-neutral";

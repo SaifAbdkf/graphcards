@@ -1,8 +1,0 @@
-@use "./_variables.scss";
-
-@mixin input_text_textarea($x: 1px, $color: #1f1f1f) {
-  box-sizing: border-box;
-  padding: 0.225em;
-  border: $x solid $color;
-  border-radius: 0.125rem;
-}
