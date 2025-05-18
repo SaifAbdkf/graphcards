@@ -9,12 +9,12 @@ import {
 } from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { deepCopy } from "../utils/utils";
-import SelectRelatedCards from "../components/SelectRelatedCards";
+import SelectLinkedCards from "../components/SelectLinkedCards";
 import { X } from "lucide-react";
 import { KeyedMutator } from "swr";
-import RelatedCardEdge from "./RelatedCardEdge";
 import { createConnectedCardRequest } from "../services/api/cardRequests";
 import { fetchDeck } from "../services/api/deckRequests";
+import LinkedCardForm from "./LinkedCardForm";
 
 export type LinkedCardFields = {
   card: Card;
@@ -42,12 +42,12 @@ export default function CardPanel({
 
   const [isCreatingCard, setIsCreatingCard] = useState(false);
 
-  const handleSelectRelatedCard = useCallback(
+  const handleSelectLinkedCard = useCallback(
     (cardId: string) => {
-      const alreadyRelatedCard = linkedCardsFields.find(
+      const alreadyLinkedCard = linkedCardsFields.find(
         (linkedCardFields) => linkedCardFields.card._id === cardId
       );
-      if (alreadyRelatedCard) return;
+      if (alreadyLinkedCard) return;
 
       const foundLinkedCard = cards.find((card) => card._id === cardId);
       if (foundLinkedCard)
@@ -84,11 +84,11 @@ export default function CardPanel({
     [cardFields]
   );
 
-  const handleUnselectRelatedCard = useCallback(
+  const handleUnselectLinkedCard = useCallback(
     (cardId: string) => {
       setLinkedCardsFields(
         linkedCardsFields.filter(
-          (relatedCardFields) => relatedCardFields.card._id !== cardId
+          (linkedCardFields) => linkedCardFields.card._id !== cardId
         )
       );
     },
@@ -117,8 +117,8 @@ export default function CardPanel({
       _id: Date.now().toString(),
     };
 
-    const optimisticLinks = linkedCardsFields.map((relatedCard, index) => ({
-      ...relatedCard.link,
+    const optimisticLinks = linkedCardsFields.map((linkedCard, index) => ({
+      ...linkedCard.link,
       deckId: deck._id,
       _id: (Date.now() + index).toString(),
     }));
@@ -144,14 +144,14 @@ export default function CardPanel({
     }, options);
   };
 
-  const updatelinkedCardFields = (newRelatedCard: LinkedCardFields) => {
-    const newRelatedCardsFields: LinkedCardFields[] = linkedCardsFields.map(
+  const updatelinkedCardFields = (newLinkedCard: LinkedCardFields) => {
+    const newLinkedCardsFields: LinkedCardFields[] = linkedCardsFields.map(
       (cardFields) =>
-        cardFields.card._id === newRelatedCard.card._id
-          ? newRelatedCard
+        cardFields.card._id === newLinkedCard.card._id
+          ? newLinkedCard
           : cardFields
     );
-    setLinkedCardsFields(newRelatedCardsFields);
+    setLinkedCardsFields(newLinkedCardsFields);
   };
 
   return (
@@ -186,26 +186,26 @@ export default function CardPanel({
         ></textarea>
       </div>
       <div
-        className={`${styles.fieldContainer} ${styles.relatedCardsFieldContainer}`}
+        className={`${styles.fieldContainer} ${styles.linkedCardsFieldContainer}`}
       >
         <label htmlFor="linkedCards" className={`${styles.formLabel}`}>
-          Related Cards
+          Linked Cards
         </label>{" "}
         <br />
-        <SelectRelatedCards
+        <SelectLinkedCards
           cards={cards}
-          handleSelectRelatedCard={handleSelectRelatedCard}
+          handleSelectLinkedCard={handleSelectLinkedCard}
         />
       </div>
-      <div className={`${styles.relatedCardsContainer}`}>
-        {linkedCardsFields.map((relatedCardFields) => (
+      <div className={`${styles.linkedCardsContainer}`}>
+        {linkedCardsFields.map((linkedCardFields) => (
           <div
-            key={relatedCardFields.card._id}
-            className={`${styles.relatedCardContainer}`}
+            key={linkedCardFields.card._id}
+            className={`${styles.linkedCardContainer}`}
           >
-            <RelatedCardEdge
-              relatedCardFields={relatedCardFields}
-              handleRelatedCardFieldsChange={updatelinkedCardFields}
+            <LinkedCardForm
+              linkedCardFields={linkedCardFields}
+              handleLinkedCardFieldsChange={updatelinkedCardFields}
             />
 
             <div className={`${styles.cardContainer}`}>
@@ -213,16 +213,16 @@ export default function CardPanel({
                 <div
                   className={`${styles.xIconContainer}`}
                   onClick={() =>
-                    handleUnselectRelatedCard(relatedCardFields.card._id)
+                    handleUnselectLinkedCard(linkedCardFields.card._id)
                   }
                 >
                   <X size={13} />
                 </div>
                 <div className={`${styles.cardFrontContainer}`}>
-                  {relatedCardFields.card.front}
+                  {linkedCardFields.card.front}
                 </div>
                 <div className={`${styles.cardBackContainer}`}>
-                  {relatedCardFields.card.back}
+                  {linkedCardFields.card.back}
                 </div>
               </div>
             </div>

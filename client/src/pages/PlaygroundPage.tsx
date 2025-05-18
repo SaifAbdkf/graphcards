@@ -78,12 +78,6 @@ export default function PlaygroundPage() {
           <div className={`${styles.selectedDeckName}`}>
             {selectedDeck?.name}
           </div>
-          {/*<SelectRelatedCards
-            cards={[]}
-            handleSelectRelatedCard={function (cardId: string): void {
-              throw new Error("Function not implemented.");
-            }}
-          /> */}
           <div
             className={`${styles.addCardIconContainer}`}
             onClick={() => setShowCardPanel(!showCardPanel)}

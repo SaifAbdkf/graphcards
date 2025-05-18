@@ -63,14 +63,14 @@ export async function validateLinks(
   links: ApiLink[]
 ): Promise<ApiResponse<ApiLink>> {
   const definedLinks = links || [];
-  const relatedCardsIds = definedLinks.map((link) =>
+  const linkedCardsIds = definedLinks.map((link) =>
     link.to !== "" ? link.to : link.from
-  ); // direction is defined by from or to being null. related card id is eihter in from field or in o field
+  ); // direction is defined by from or to being null. linked card id is eihter in from field or in to field
   const foundLinkedCards = await Card.find({
-    _id: { $in: relatedCardsIds },
+    _id: { $in: linkedCardsIds },
   });
 
-  if (relatedCardsIds.length !== foundLinkedCards.length) {
+  if (linkedCardsIds.length !== foundLinkedCards.length) {
     return {
       status: "failure",
       message: "not all requested links found ",

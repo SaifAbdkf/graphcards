@@ -1,4 +1,4 @@
-.controlledEdgeContainer {
+.controlledLinkContainer {
   // flex-basis: 50%;
   flex: 3;
   // height: 50%;
@@ -7,13 +7,13 @@
   flex-direction: column;
   justify-content: center;
 
-  .edgeContainer {
+  .linkContainer {
     flex: 1;
-    // max-height: 1.7rem; // less space for when it is a sngl undirected edge -> keep the check box label closer
+    // max-height: 1.7rem; // less space for when it is a sngl undirected link -> keep the check box label closer
     display: flex;
     align-items: end;
     justify-content: center;
-    .edge {
+    .link {
       position: relative;
       margin-bottom: 0.125rem;
       text-align: center;
@@ -43,7 +43,7 @@
     }
   }
 
-  .edgeDirectionControllersContainer {
+  .linkDirectionControllersContainer {
     flex: 1;
 
     .controlLabel {
@@ -57,7 +57,7 @@
       display: flex;
       align-items: start;
       &:hover {
-        .directedEdgeLabel {
+        .directedLinkLabel {
           cursor: pointer;
           color: $primary-color;
         }

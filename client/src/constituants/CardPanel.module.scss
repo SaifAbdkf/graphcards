@@ -32,7 +32,7 @@
       max-width: 420px;
     }
   }
-  .relatedCardsFieldContainer {
+  .linkedCardsFieldContainer {
     padding-bottom: 0px;
   }
 
@@ -43,11 +43,11 @@
   }
 }
 
-.relatedCardsContainer {
+.linkedCardsContainer {
   overflow: scroll;
   scrollbar-width: none;
 }
-.relatedCardContainer {
+.linkedCardContainer {
   display: flex;
   padding-top: 0.775rem;
   padding-bottom: 0.325rem;

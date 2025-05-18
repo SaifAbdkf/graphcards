@@ -9,7 +9,7 @@ export async function createConnectedCardRequest(
   const connectedCardBody = {
     deckId: deckId,
     ...cardFields,
-    edges: linkFields,
+    links: linkFields,
   };
   const card: Card = await postRequest("/card", connectedCardBody);
   return card;

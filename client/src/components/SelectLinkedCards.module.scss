@@ -1,0 +1,26 @@
+li {
+  padding: 0px !important; //remove the padding of zh menu
+}
+ul {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  transform: translateY(-1px);
+}
+.item {
+  box-sizing: border-box;
+  padding: 0.325rem;
+  &:hover {
+    background-color: $white-hover;
+  }
+}
+
+.searchInput {
+  box-sizing: border-box;
+  width: 100%;
+  @include input_text_textarea;
+  &:focus {
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    outline: none !important;
+  }
+}
