@@ -5,10 +5,10 @@ import {
   useNodes,
 } from "@xyflow/react";
 import styles from "./CardEdge.module.scss";
-import { Edge } from "../Types/types";
+import { Link } from "../Types/types";
 import { getSmartEdge } from "@tisoap/react-flow-smart-edge";
 
-export default function CardEdge({
+export default function LinkEdge({
   id,
   data,
   sourcePosition,
@@ -19,7 +19,7 @@ export default function CardEdge({
   targetY,
 }: {
   id: string;
-  data: Edge;
+  data: Link;
   sourcePosition: Position;
   targetPosition: Position;
   sourceX: number;

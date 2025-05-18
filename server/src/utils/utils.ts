@@ -1,7 +1,7 @@
 import z from "zod";
 import { Card } from "../models/CardModel";
 
-const ApiEdgeSchema = z.object({
+const ApiLinkSchema = z.object({
   isDirected: z.boolean(),
   from: z.string(),
   to: z.string(),
@@ -12,11 +12,11 @@ export const ApiConnectedCardSchema = z.object({
   deckId: z.string(),
   front: z.string(),
   back: z.string(),
-  edges: z.array(ApiEdgeSchema),
+  links: z.array(ApiLinkSchema),
 });
 
 export type ApiConnectedCard = z.infer<typeof ApiConnectedCardSchema>;
-export type ApiEdge = z.infer<typeof ApiEdgeSchema>;
+export type ApiLink = z.infer<typeof ApiLinkSchema>;
 
 export type ApiResponse<T> = SuccessResponse<T> | FailureResponse;
 type SuccessResponse<T> = {
@@ -59,12 +59,12 @@ export function failureResponseObject(
   }
 }
 
-export async function validateEdges(
-  edges: ApiEdge[]
-): Promise<ApiResponse<ApiEdge>> {
-  const definedEdges = edges || [];
-  const relatedCardsIds = definedEdges.map((edge) =>
-    edge.to !== "" ? edge.to : edge.from
+export async function validateLinks(
+  links: ApiLink[]
+): Promise<ApiResponse<ApiLink>> {
+  const definedLinks = links || [];
+  const relatedCardsIds = definedLinks.map((link) =>
+    link.to !== "" ? link.to : link.from
   ); // direction is defined by from or to being null. related card id is eihter in from field or in o field
   const foundLinkedCards = await Card.find({
     _id: { $in: relatedCardsIds },
@@ -73,12 +73,12 @@ export async function validateEdges(
   if (relatedCardsIds.length !== foundLinkedCards.length) {
     return {
       status: "failure",
-      message: "not all requested edges found ",
+      message: "not all requested links found ",
     };
   }
 
   return {
     status: "success",
-    data: definedEdges,
+    data: definedLinks,
   };
 }

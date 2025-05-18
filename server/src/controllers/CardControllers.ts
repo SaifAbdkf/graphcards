@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 import { Card } from "../models/CardModel";
 import mongoose from "mongoose";
-import { Edge } from "../models/EdgeModel";
+import { Link } from "../models/LinkModel";
 import { DeckInfo } from "../models/DeckModel";
 import {
   ApiConnectedCardSchema,
   failureResponseObject,
   successResponseObject,
-  validateEdges,
+  validateLinks,
 } from "../utils/utils";
 import assert from "assert";
 
-// Creates edges attached to the card too.
-// TODO maybe make function createCardAndEdges that is a transaction calling createCard and CreaeEdge
+// Creates links attached to the card too.
+// TODO maybe make function createCardAndLinks that is a transaction calling createCard and CreaeLink
 export async function createCard(request: Request, response: Response) {
-  const { deckId, front, back, edges } = ApiConnectedCardSchema.parse(
+  const { deckId, front, back, links } = ApiConnectedCardSchema.parse(
     request.body
   );
   // TODO find a way to create a card where its linkedCards are not already created, but needs to be created
@@ -44,31 +44,31 @@ export async function createCard(request: Request, response: Response) {
       { session }
     );
 
-    //validate edges connect to existing cards
-    const validatedEdgesResponse = await validateEdges(edges);
-    if (validatedEdgesResponse.status === "failure") {
+    //validate links connect to existing cards
+    const validatedLinksResponse = await validateLinks(links);
+    if (validatedLinksResponse.status === "failure") {
       return response
         .status(404)
         .json(
           failureResponseObject(
-            "some cards could not be found to created the requesed edges"
+            "some cards could not be found to created the requesed links"
           )
         );
     }
 
-    assert(validatedEdgesResponse.data);
-    const validatedEdges = validatedEdgesResponse.data;
+    assert(validatedLinksResponse.data);
+    const validatedLinks = validatedLinksResponse.data;
 
-    // create edges
-    for (const edge of validatedEdges) {
-      await Edge.create(
+    // create links
+    for (const link of validatedLinks) {
+      await Link.create(
         [
           {
             deckId: validatedDeckId,
-            from: edge.from ? edge.from : newCard[0]._id,
-            to: edge.to ? edge.to : newCard[0]._id,
-            label: edge.label,
-            isDirected: edge.isDirected,
+            from: link.from ? link.from : newCard[0]._id,
+            to: link.to ? link.to : newCard[0]._id,
+            label: link.label,
+            isDirected: link.isDirected,
           },
         ],
         { session }
@@ -166,7 +166,7 @@ export async function deleteCard(
         .json(failureResponseObject("card not found to be deleted"));
     }
 
-    await Edge.deleteMany({ $or: [{ from: cardId }, { to: cardId }] });
+    await Link.deleteMany({ $or: [{ from: cardId }, { to: cardId }] });
 
     await session.commitTransaction();
     await session.endSession();

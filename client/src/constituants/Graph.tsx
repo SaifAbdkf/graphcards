@@ -1,5 +1,5 @@
 import "@xyflow/react/dist/style.css";
-import { Deck, EdgeFields } from "../Types/types";
+import { Deck, LinkFields } from "../Types/types";
 import {
   addEdge,
   Connection,
@@ -8,19 +8,15 @@ import {
   Edge as ReactFlowEdge,
   ReactFlow,
   useEdgesState,
-  useNodesState,
   Node,
 } from "@xyflow/react";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { CardNode } from "./CardNode";
 import CardEdge from "./CardEdge";
-import { useDeck } from "../hooks/useDeck";
-import { useSelector } from "react-redux";
-import { selectSelectedDeckId } from "../store/selectors/deckSelector";
 
 type CustomEdge = ReactFlowEdge & {
   type: "cardEdge";
-  data: EdgeFields;
+  data: LinkFields;
 };
 
 const nodeTypes = {
@@ -32,7 +28,7 @@ const edgeTypes = {
 };
 
 export default function Graph({ dbDeck }: { dbDeck: Deck }) {
-  console.log("graph rendering");
+  console.log("graph rendering", dbDeck);
   const dbCards: Node[] = dbDeck.cards.map((card, index) => ({
     id: card._id,
     type: "cardNode",
@@ -40,7 +36,7 @@ export default function Graph({ dbDeck }: { dbDeck: Deck }) {
     position: { x: index * 100, y: 100 },
   }));
 
-  const dbEdges: CustomEdge[] = dbDeck.edges.map((edge) => ({
+  const dbEdges: CustomEdge[] = dbDeck.links.map((edge) => ({
     id: edge._id,
     source: edge.from,
     target: edge.to,

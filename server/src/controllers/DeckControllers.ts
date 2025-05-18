@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { DeckInfo } from "../models/DeckModel";
 import mongoose from "mongoose";
 import { Card } from "../models/CardModel";
-import { Edge } from "../models/EdgeModel";
+import { Link } from "../models/LinkModel";
 import { failureResponseObject, successResponseObject } from "../utils/utils";
 
 export async function createDeck(
@@ -10,7 +10,7 @@ export async function createDeck(
   response: Response
 ): Promise<Response> {
   const { name, description } = request.body;
-  // TODO: in he future we are gonna have an array of cards and edges in the body maybe
+  // TODO: in he future we are gonna have an array of cards and links in the body maybe
 
   try {
     const deckInfo = await DeckInfo.create({ name, description });
@@ -53,14 +53,14 @@ export async function getDeck(
     }
 
     const deckCards = await Card.find({ deckId: deckId });
-    const deckEdges = await Edge.find({ deckId: deckId });
+    const deckLinks = await Link.find({ deckId: deckId });
 
     const deck = {
       _id: deckInfo._id,
       name: deckInfo.name,
       description: deckInfo.description,
       cards: deckCards,
-      edges: deckEdges,
+      links: deckLinks,
     };
 
     return response.status(200).json(successResponseObject(deck));
@@ -69,7 +69,7 @@ export async function getDeck(
       .status(500)
       .json(
         failureResponseObject(
-          "error getting the deck and its nodes and edges",
+          "error getting the deck and its nodes and links",
           error
         )
       );
@@ -137,7 +137,7 @@ export async function deleteDeck(
     }
 
     await await Card.deleteMany({ deckId: deckId });
-    await Edge.deleteMany({ deckId: deckId });
+    await Link.deleteMany({ deckId: deckId });
 
     return response.status(200).json(successResponseObject(deckInfo));
   } catch (error) {

@@ -1,15 +1,15 @@
-import { Card, CardFields, EdgeFields } from "../../Types/types";
+import { Card, CardFields, LinkFields } from "../../Types/types";
 import { postRequest } from "./apiRequestMethods";
 
 export async function createConnectedCardRequest(
   deckId: string,
   cardFields: CardFields,
-  edgeFields: EdgeFields[]
+  linkFields: LinkFields[]
 ) {
   const connectedCardBody = {
     deckId: deckId,
     ...cardFields,
-    edges: edgeFields,
+    edges: linkFields,
   };
   const card: Card = await postRequest("/card", connectedCardBody);
   return card;

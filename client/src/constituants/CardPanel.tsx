@@ -3,9 +3,9 @@ import {
   Card,
   CardFields,
   Deck,
-  EdgeFields,
   emptyCardFields,
-  emptyEdgeFields,
+  emptyLinkFields,
+  LinkFields,
 } from "../Types/types";
 import styles from "./CardPanel.module.scss";
 import { deepCopy } from "../utils/utils";
@@ -16,9 +16,9 @@ import RelatedCardEdge from "./RelatedCardEdge";
 import { createConnectedCardRequest } from "../services/api/cardRequests";
 import { fetchDeck } from "../services/api/deckRequests";
 
-export type RelatedCardFields = {
+export type LinkedCardFields = {
   card: Card;
-  edge: EdgeFields;
+  link: LinkFields;
 };
 
 export default function CardPanel({
@@ -36,30 +36,30 @@ export default function CardPanel({
     deepCopy<CardFields>(emptyCardFields)
   );
 
-  const [relatedCardsFields, setRelatedCardsFields] = useState<
-    RelatedCardFields[]
+  const [linkedCardsFields, setLinkedCardsFields] = useState<
+    LinkedCardFields[]
   >([]);
 
   const [isCreatingCard, setIsCreatingCard] = useState(false);
 
   const handleSelectRelatedCard = useCallback(
     (cardId: string) => {
-      const alreadyRelatedCard = relatedCardsFields.find(
-        (relatedCardFields) => relatedCardFields.card._id === cardId
+      const alreadyRelatedCard = linkedCardsFields.find(
+        (linkedCardFields) => linkedCardFields.card._id === cardId
       );
       if (alreadyRelatedCard) return;
 
-      const newRelatedCard = cards.find((card) => card._id === cardId);
-      if (newRelatedCard)
-        setRelatedCardsFields([
-          ...relatedCardsFields,
+      const foundLinkedCard = cards.find((card) => card._id === cardId);
+      if (foundLinkedCard)
+        setLinkedCardsFields([
+          ...linkedCardsFields,
           {
-            card: newRelatedCard,
-            edge: { ...emptyEdgeFields, to: newRelatedCard._id },
+            card: foundLinkedCard,
+            link: { ...emptyLinkFields, to: foundLinkedCard._id },
           },
         ]);
     },
-    [cards, relatedCardsFields]
+    [cards, linkedCardsFields]
   );
 
   const handleFieldChange = useCallback(
@@ -86,13 +86,13 @@ export default function CardPanel({
 
   const handleUnselectRelatedCard = useCallback(
     (cardId: string) => {
-      setRelatedCardsFields(
-        relatedCardsFields.filter(
+      setLinkedCardsFields(
+        linkedCardsFields.filter(
           (relatedCardFields) => relatedCardFields.card._id !== cardId
         )
       );
     },
-    [relatedCardsFields]
+    [linkedCardsFields]
   );
 
   const handleCreateCard = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -117,8 +117,8 @@ export default function CardPanel({
       _id: Date.now().toString(),
     };
 
-    const optimisticEdges = relatedCardsFields.map((relatedCard, index) => ({
-      ...relatedCard.edge,
+    const optimisticLinks = linkedCardsFields.map((relatedCard, index) => ({
+      ...relatedCard.link,
       deckId: deck._id,
       _id: (Date.now() + index).toString(),
     }));
@@ -126,32 +126,32 @@ export default function CardPanel({
     const optimisticDeck = {
       ...deck,
       cards: [...deck.cards, optimisticCard],
-      edges: [...deck.edges, ...optimisticEdges],
+      links: [...deck.links, ...optimisticLinks],
     };
     const options = {
       optimisticData: optimisticDeck,
       rollbackOnError: true,
     };
 
-    const edgesFields = relatedCardsFields.map(
-      (relatedCard) => relatedCard.edge
+    const linksFields = linkedCardsFields.map(
+      (linkedCardFields) => linkedCardFields.link
     );
 
     mutateDeck(async () => {
-      await createConnectedCardRequest(deck._id, cardFields, edgesFields);
+      await createConnectedCardRequest(deck._id, cardFields, linksFields);
       const updatedDeck = await fetchDeck(deck._id);
       return updatedDeck;
     }, options);
   };
 
-  const updateRelatedCardFields = (newRelatedCard: RelatedCardFields) => {
-    const newRelatedCardsFields: RelatedCardFields[] = relatedCardsFields.map(
+  const updatelinkedCardFields = (newRelatedCard: LinkedCardFields) => {
+    const newRelatedCardsFields: LinkedCardFields[] = linkedCardsFields.map(
       (cardFields) =>
         cardFields.card._id === newRelatedCard.card._id
           ? newRelatedCard
           : cardFields
     );
-    setRelatedCardsFields(newRelatedCardsFields);
+    setLinkedCardsFields(newRelatedCardsFields);
   };
 
   return (
@@ -198,14 +198,14 @@ export default function CardPanel({
         />
       </div>
       <div className={`${styles.relatedCardsContainer}`}>
-        {relatedCardsFields.map((relatedCardFields) => (
+        {linkedCardsFields.map((relatedCardFields) => (
           <div
             key={relatedCardFields.card._id}
             className={`${styles.relatedCardContainer}`}
           >
             <RelatedCardEdge
               relatedCardFields={relatedCardFields}
-              handleRelatedCardFieldsChange={updateRelatedCardFields}
+              handleRelatedCardFieldsChange={updatelinkedCardFields}
             />
 
             <div className={`${styles.cardContainer}`}>
