@@ -12,25 +12,25 @@ export function CardNode({ data }: { data: CardFields }) {
   return (
     <>
       <Handle
-        id={"1"}
+        id={"top"}
         type="source"
         position={Position.Top}
         style={handleStyle}
       />
       <Handle
-        id={"3"}
+        id={"left"}
         type="source"
         position={Position.Left}
         style={handleStyle}
       />
       <Handle
-        id={"4"}
+        id={"right"}
         type="source"
         position={Position.Right}
         style={handleStyle}
       />
       <Handle
-        id={"2"}
+        id={"bottom"}
         type="source"
         position={Position.Bottom}
         style={handleStyle}

@@ -34,8 +34,8 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
         isDirected: true,
         from: connection.source,
         to: connection.target,
-        toSide: cardHandleToSide(connection.targetHandle),
-        fromSide: cardHandleToSide(connection.sourceHandle),
+        fromSide: connection.sourceHandle || "",
+        toSide: connection.targetHandle || "",
       },
     };
     set({ edges: addEdge(newEdge, get().edges) });

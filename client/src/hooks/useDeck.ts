@@ -29,6 +29,8 @@ export function useDeck(deckId: string | null) {
       label: link.label,
       source: link.from,
       target: link.to,
+      sourceHandle: link.fromSide,
+      targetHandle: link.toSide,
     }));
     setEdges(linkEdges);
   }

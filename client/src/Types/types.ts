@@ -74,18 +74,3 @@ export type GraphcardsState = {
 
 //PROJECT CONVETION
 // IF EDGE IS UNDIRECTED FROM = THE CARD BEING CREATED, TO = already existing card
-
-export function cardHandleToSide(cardHandle: string | null) {
-  switch (cardHandle) {
-    case "1":
-      return "top";
-    case "2":
-      return "bottom";
-    case "3":
-      return "left";
-    case "4":
-      return "right";
-    default:
-      throw Error("card Handle no match case");
-  }
-}
