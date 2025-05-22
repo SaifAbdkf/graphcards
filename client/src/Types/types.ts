@@ -49,11 +49,16 @@ export const emptyLinkFields: LinkFields = {
   to: "",
 };
 
-export type CardNode = Node<Card>;
-export type LinkEdge = Edge<Link>;
+// LinkData contains the information needed to build he graph and update db that is not already found in
 
-export type AppState = {
-  activeDeckInfo: DeckInfo;
+export type CardNode = Node<Card & { toUpdate: boolean }>;
+export type LinkEdge = Edge<Link & { toUpdate: boolean }> & {
+  type: string;
+  data: Link & { toUpdate: boolean };
+};
+
+export type GraphcardsState = {
+  activeDeckInfo: DeckInfo | null;
   nodes: CardNode[];
   edges: LinkEdge[];
   onNodesChange: OnNodesChange<CardNode>;

@@ -4,7 +4,7 @@ import {
   Position,
   useNodes,
 } from "@xyflow/react";
-import styles from "./CardEdge.module.scss";
+import styles from "./LinkEdge.module.scss";
 import { Link } from "../Types/types";
 import { getSmartEdge } from "@tisoap/react-flow-smart-edge";
 
@@ -27,6 +27,7 @@ export default function LinkEdge({
   targetX: number;
   targetY: number;
 }) {
+  console.log("edge data is ", data);
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
@@ -36,7 +37,6 @@ export default function LinkEdge({
 
   const markerId = `arrowhead-${id}`;
   const nodes = useNodes();
-  console.log("positions:", sourcePosition, targetPosition);
   const getSmartEdgeResponse = getSmartEdge({
     sourcePosition,
     targetPosition,
@@ -46,8 +46,6 @@ export default function LinkEdge({
     targetY,
     nodes,
   });
-
-  console.log(getSmartEdgeResponse);
 
   return (
     <>
