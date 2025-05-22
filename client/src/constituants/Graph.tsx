@@ -6,11 +6,6 @@ import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
 import LinkEdge from "./LinkEdge";
 
-// type CustomEdge = ReactFlowEdge & {
-//   type: "cardEdge";
-//   data: LinkFields;
-// };
-
 const nodeTypes = {
   cardNode: CardNode,
 };
@@ -27,50 +22,10 @@ const ReactFlowDataSelector = (state: GraphcardsState) => ({
   onConnect: state.onConnect,
 });
 
-export default function Graph({ dbDeck }: { dbDeck: Deck }) {
+export default function Graph() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
     useGraphcardStore(useShallow(ReactFlowDataSelector));
-
-  console.log("edges are ", edges);
-  console.log("graph rendering", dbDeck);
-  const dbCards: Node[] = dbDeck.cards.map((card, index) => ({
-    id: card._id,
-    type: "cardNode",
-    data: { front: card.front, back: card.back },
-    position: { x: index * 100, y: 100 },
-  }));
-
-  // const dbEdges: CustomEdge[] = dbDeck.links.map((edge) => ({
-  //   id: edge._id,
-  //   source: edge.from,
-  //   target: edge.to,
-  //   type: "cardEdge",
-  //   data: edge,
-  // }));
-
-  // separation between dbDeck and browserDeck
-  // const [browserNodes, setBrowserNodes] = useState<Node[]>(dbCards);
-  //
-  // const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(dbEdges);
-
-  // const onConnect = useCallback(
-  //   (connection: Connection) => {
-  //     const newEdge: CustomEdge = {
-  //       ...connection,
-  //       type: "cardEdge",
-  //       id: `${connection.source}-${
-  //         connection.target
-  //       }-${Date.now().toString()}`,
-  //       data: {
-  //         isDirected: true,
-  //         from: connection.source!,
-  //         to: connection.target!,
-  //       },
-  //     };
-  //     setEdges((eds) => addEdge(newEdge, eds));
-  //   },
-  //   [setEdges]
-  // );
+  console.log("edges are", edges);
 
   const handleClick = () => {
     console.log("asba");

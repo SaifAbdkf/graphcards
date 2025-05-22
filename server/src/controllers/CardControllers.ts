@@ -67,6 +67,8 @@ export async function createCard(request: Request, response: Response) {
             deckId: validatedDeckId,
             from: link.from ? link.from : newCard[0]._id,
             to: link.to ? link.to : newCard[0]._id,
+            fromSide: link.fromSide,
+            toSide: link.toSide,
             label: link.label,
             isDirected: link.isDirected,
           },
@@ -77,7 +79,6 @@ export async function createCard(request: Request, response: Response) {
 
     await session.commitTransaction();
     await session.endSession();
-    // throw new Error("takhrali fih");
     return response.status(200).json(successResponseObject(newCard));
   } catch (error) {
     await session.abortTransaction();

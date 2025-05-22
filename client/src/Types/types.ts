@@ -39,6 +39,8 @@ export type Link = {
   isDirected: boolean;
   from: string;
   to: string;
+  fromSide: string;
+  toSide: string;
   label?: string;
 };
 // if edge not created yet, set the node in creation to ""
@@ -47,6 +49,8 @@ export const emptyLinkFields: LinkFields = {
   isDirected: false,
   from: "",
   to: "",
+  fromSide: "bottom",
+  toSide: "top",
 };
 
 // LinkData contains the information needed to build he graph and update db that is not already found in
@@ -70,3 +74,18 @@ export type GraphcardsState = {
 
 //PROJECT CONVETION
 // IF EDGE IS UNDIRECTED FROM = THE CARD BEING CREATED, TO = already existing card
+
+export function cardHandleToSide(cardHandle: string | null) {
+  switch (cardHandle) {
+    case "1":
+      return "top";
+    case "2":
+      return "bottom";
+    case "3":
+      return "left";
+    case "4":
+      return "right";
+    default:
+      throw Error("card Handle no match case");
+  }
+}

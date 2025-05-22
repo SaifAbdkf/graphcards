@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { GraphcardsState, LinkEdge } from "../Types/types";
+import { cardHandleToSide, GraphcardsState, LinkEdge } from "../Types/types";
 import {
   addEdge,
   applyEdgeChanges,
@@ -20,12 +20,23 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
     });
   },
   onConnect: (connection: Connection) => {
+    console.log(connection);
     const newEdge: LinkEdge = {
       ...connection,
+      id: `tempId-${connection.source}-${
+        connection.target
+      }-${Date.now().toString()}`,
       type: "LinkEdge",
-      toUpdate: true,
-      id: `${connection.source}-${connection.target}-${Date.now().toString()}`,
-      isDirected: true,
+      data: {
+        deckId: "dummy",
+        _id: "dummy",
+        toUpdate: true,
+        isDirected: true,
+        from: connection.source,
+        to: connection.target,
+        toSide: cardHandleToSide(connection.targetHandle),
+        fromSide: cardHandleToSide(connection.sourceHandle),
+      },
     };
     set({ edges: addEdge(newEdge, get().edges) });
   },

@@ -5,6 +5,8 @@ const ApiLinkSchema = z.object({
   isDirected: z.boolean(),
   from: z.string(),
   to: z.string(),
+  fromSide: z.string(),
+  toSide: z.string(),
   label: z.string().optional(),
 });
 

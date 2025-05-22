@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Card } from "../models/CardModel";
 import mongoose from "mongoose";
 import { Link } from "../models/LinkModel";
 

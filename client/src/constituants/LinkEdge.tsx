@@ -1,12 +1,6 @@
-import {
-  EdgeLabelRenderer,
-  getSmoothStepPath,
-  Position,
-  useNodes,
-} from "@xyflow/react";
+import { EdgeLabelRenderer, getStraightPath, Position } from "@xyflow/react";
 import styles from "./LinkEdge.module.scss";
 import { Link } from "../Types/types";
-import { getSmartEdge } from "@tisoap/react-flow-smart-edge";
 
 export default function LinkEdge({
   id,
@@ -27,8 +21,7 @@ export default function LinkEdge({
   targetX: number;
   targetY: number;
 }) {
-  console.log("edge data is ", data);
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getStraightPath({
     sourceX,
     sourceY,
     targetX,
@@ -36,16 +29,6 @@ export default function LinkEdge({
   });
 
   const markerId = `arrowhead-${id}`;
-  const nodes = useNodes();
-  const getSmartEdgeResponse = getSmartEdge({
-    sourcePosition,
-    targetPosition,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    nodes,
-  });
 
   return (
     <>

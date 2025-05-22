@@ -87,7 +87,7 @@ export default function PlaygroundPage() {
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>
           <ReactFlowProvider>
-            <Graph dbDeck={selectedDeck} />
+            <Graph />
             {/* should I just have multiple Graph component instances cached, and mke select deck switch between them */}
             {/* <TestGraph deck={selectedDeck} /> */}
           </ReactFlowProvider>

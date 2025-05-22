@@ -8,6 +8,8 @@ const linkSchema = new Schema(
     isDirected: { type: Boolean, required: false },
     from: { type: mongoose.Types.ObjectId, ref: "Card", required: true },
     to: { type: mongoose.Types.ObjectId, ref: "Card", required: true },
+    fromSide: { type: String, required: true },
+    toSide: { type: String, required: true },
     label: { type: String, required: false },
     metadata: { type: Map, of: String },
   },

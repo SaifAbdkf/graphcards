@@ -16,7 +16,6 @@ export function useDeck(deckId: string | null) {
     const cardNodes = data.cards.map((card, index) => ({
       id: card._id,
       type: "cardNode",
-
       data: { ...card, toUpdate: false },
       position: { x: index * 100, y: 100 },
     }));
