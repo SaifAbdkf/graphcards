@@ -5,6 +5,8 @@ const Schema = mongoose.Schema;
 export const cardSchema = new Schema(
   {
     deckId: { type: Schema.Types.ObjectId, ref: "Deck", required: true },
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
     front: { type: String, required: true },
     back: {
       type: String,

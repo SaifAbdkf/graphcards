@@ -1,6 +1,6 @@
 import "@xyflow/react/dist/style.css";
-import { GraphcardsState, Deck } from "../Types/types";
-import { ConnectionMode, Controls, ReactFlow, Node } from "@xyflow/react";
+import { GraphcardsState } from "../Types/types";
+import { ConnectionMode, Controls, ReactFlow } from "@xyflow/react";
 import { CardNode } from "./CardNode";
 import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
@@ -25,7 +25,7 @@ const ReactFlowDataSelector = (state: GraphcardsState) => ({
 export default function Graph() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
     useGraphcardStore(useShallow(ReactFlowDataSelector));
-  console.log("edges are", edges);
+  console.log("nodes are", nodes);
 
   const handleClick = () => {
     console.log("asba");

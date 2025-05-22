@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { fetchDeck } from "../services/api/deckRequests";
 import { useGraphcardStore } from "../zustore/store";
+import { CardNode, DbAction } from "../Types/types";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,10 +14,10 @@ export function useDeck(deckId: string | null) {
   const setEdges = useGraphcardStore((state) => state.setEdges);
 
   if (data) {
-    const cardNodes = data.cards.map((card, index) => ({
+    const cardNodes: CardNode[] = data.cards.map((card, index) => ({
       id: card._id,
       type: "cardNode",
-      data: { ...card, toUpdate: false },
+      data: { ...card, dbAction: "none" },
       position: { x: index * 100, y: 100 },
     }));
     setNodes(cardNodes);
@@ -24,7 +25,7 @@ export function useDeck(deckId: string | null) {
     const linkEdges = data.links.map((link) => ({
       id: link._id,
       type: "LinkEdge",
-      data: { ...link, toUpdate: false },
+      data: { ...link, dbAction: "none" as DbAction },
       isDirected: link.isDirected,
       label: link.label,
       source: link.from,

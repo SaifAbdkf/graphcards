@@ -14,7 +14,7 @@ import assert from "assert";
 // Creates links attached to the card too.
 // TODO maybe make function createCardAndLinks that is a transaction calling createCard and CreaeLink
 export async function createCard(request: Request, response: Response) {
-  const { deckId, front, back, links } = ApiConnectedCardSchema.parse(
+  const { deckId, x, y, front, back, links } = ApiConnectedCardSchema.parse(
     request.body
   );
   // TODO find a way to create a card where its linkedCards are not already created, but needs to be created
@@ -37,6 +37,8 @@ export async function createCard(request: Request, response: Response) {
       [
         {
           deckId: validatedDeckId,
+          x,
+          y,
           front,
           back,
         },

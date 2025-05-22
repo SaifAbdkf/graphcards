@@ -9,7 +9,7 @@ import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { setSelectedDeckId } from "../store/slices/deckSlice";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { ReactFlowProvider } from "@xyflow/react";
 
 export default function PlaygroundPage() {
@@ -38,6 +38,10 @@ export default function PlaygroundPage() {
     },
     [dispatch]
   );
+
+  const handleSaveGraphDeck = useCallback(() => {
+    console.log("save");
+  }, []);
 
   // TODO: loading UI
   if (isLoadingDeck) return <h1>Loading deck</h1>;
@@ -83,6 +87,9 @@ export default function PlaygroundPage() {
             onClick={() => setShowCardPanel(!showCardPanel)}
           >
             <Plus size={18} />
+          </div>
+          <div className={`${styles.saveIconContainer}`}>
+            <Save onClick={handleSaveGraphDeck}></Save>
           </div>
         </div>
         <div ref={containerRef} className={styles.canvasContainer}>

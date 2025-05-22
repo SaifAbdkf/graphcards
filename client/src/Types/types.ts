@@ -24,11 +24,15 @@ export const emptyDeckFields: DeckFields = {
 export type Card = {
   _id: string;
   deckId: string; //is this needed?
+  x: number;
+  y: number;
   front: string;
   back: string;
 };
 export type CardFields = Omit<Card, "_id" | "deckId">;
 export const emptyCardFields: CardFields = {
+  x: 0,
+  y: 0,
   front: "",
   back: "",
 };
@@ -55,12 +59,8 @@ export const emptyLinkFields: LinkFields = {
 
 // LinkData contains the information needed to build he graph and update db that is not already found in
 
-export type CardNode = Node<Card & { toUpdate: boolean }>;
-export type LinkEdge = Edge<Link & { toUpdate: boolean }> & {
-  type: string;
-  data: Link & { toUpdate: boolean };
-};
-
+export type CardNode = Node<Card & { dbAction: DbAction }>;
+export type LinkEdge = Edge<Link & { dbAction: DbAction }>;
 export type GraphcardsState = {
   activeDeckInfo: DeckInfo | null;
   nodes: CardNode[];
@@ -71,6 +71,8 @@ export type GraphcardsState = {
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
 };
+
+export type DbAction = "create" | "update" | "none";
 
 //PROJECT CONVETION
 // IF EDGE IS UNDIRECTED FROM = THE CARD BEING CREATED, TO = already existing card

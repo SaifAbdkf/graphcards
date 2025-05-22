@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { cardHandleToSide, GraphcardsState, LinkEdge } from "../Types/types";
+import { DbAction, GraphcardsState, LinkEdge } from "../Types/types";
 import {
   addEdge,
   applyEdgeChanges,
@@ -13,6 +13,19 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
   edges: [],
   onNodesChange: (changes) => {
     set({ nodes: applyNodeChanges(changes, get().nodes) });
+    if (changes[0].type === "position") {
+      const changedNodeId = changes[0].id;
+      set({
+        nodes: get().nodes.map((node) =>
+          node.id === changedNodeId
+            ? {
+                ...node,
+                data: { ...node.data, dbAction: "update" as DbAction },
+              }
+            : node
+        ),
+      });
+    }
   },
   onEdgesChange: (changes) => {
     set({
@@ -30,7 +43,7 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
       data: {
         deckId: "dummy",
         _id: "dummy",
-        toUpdate: true,
+        dbAction: "create",
         isDirected: true,
         from: connection.source,
         to: connection.target,

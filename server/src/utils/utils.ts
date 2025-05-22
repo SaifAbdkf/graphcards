@@ -12,6 +12,8 @@ const ApiLinkSchema = z.object({
 
 export const ApiConnectedCardSchema = z.object({
   deckId: z.string(),
+  x: z.number(),
+  y: z.number(),
   front: z.string(),
   back: z.string(),
   links: z.array(ApiLinkSchema),
