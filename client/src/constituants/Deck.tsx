@@ -3,7 +3,6 @@ import { DeckInfo } from "../Types/types";
 import styles from "./Deck.module.scss";
 import { deleteDeckRequest } from "../services/api/deckRequests";
 
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EditDeckForm from "./EditDeckForm";
 import { Menu, MenuItem } from "@szhsin/react-menu";
@@ -11,22 +10,31 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
-import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
+import { useGraphcardStore } from "../zustore/store";
+import { useShallow } from "zustand/shallow";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const { data: decksInfo, mutate } = useDecksInfo();
 
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const setActiveDeckInfo = useGraphcardStore(
+    useShallow((state) => state.setActiveDeckInfo)
+  );
 
   const handleDeckClick = (deckId: string) => {
-    dispatch(setSelectedDeckId(deckId));
+    const activeDeckInfo = decksInfo.find(
+      (deckInfo) => deckInfo._id === deckId
+    );
+    if (activeDeckInfo) {
+      setActiveDeckInfo(activeDeckInfo);
+    }
+
     navigate("/playground");
   };
 
-  const handleDeckEditIConClick = useCallback((deckId: string) => {
+  const handleDeckEditIconClick = useCallback((deckId: string) => {
     setEditingDeck(deckId);
   }, []);
 
@@ -89,7 +97,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
               />
             }
           >
-            <MenuItem onClick={() => handleDeckEditIConClick(deckInfo._id)}>
+            <MenuItem onClick={() => handleDeckEditIconClick(deckInfo._id)}>
               <div className={`${styles.itemDiv}`}>
                 <Pencil className={`${styles.deckEditIcon}`} size={14} />
                 <div>Edit</div>

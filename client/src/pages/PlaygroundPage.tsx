@@ -1,24 +1,27 @@
 import { useCallback, useRef, useState } from "react";
 import styles from "./PlaygroundPage.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { selectSelectedDeckId } from "../store/selectors/deckSelector";
 import { Link } from "react-router-dom";
 import CardPanel from "../constituants/CardPanel";
 
 import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
-import { setSelectedDeckId } from "../store/slices/deckSlice";
 import { Plus, Save } from "lucide-react";
 import { ReactFlowProvider } from "@xyflow/react";
+import { useGraphcardStore } from "../zustore/store";
+import { useShallow } from "zustand/shallow";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const selectedDeckId = useSelector(selectSelectedDeckId);
+  const activeDeckInfo = useGraphcardStore(
+    useShallow((state) => state.activeDeckInfo)
+  );
 
   const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
+  const setActiveDeckInfo = useGraphcardStore(
+    useShallow((state) => state.setActiveDeckInfo)
+  );
 
   const {
     data: decksInfo,
@@ -30,13 +33,18 @@ export default function PlaygroundPage() {
     // error: errorDeck,
     isLoading: isLoadingDeck,
     mutate: mutateDeck,
-  } = useDeck(selectedDeckId);
+  } = useDeck(activeDeckInfo?._id || null);
 
   const handleDeckSelection = useCallback(
     (deckId: string) => {
-      dispatch(setSelectedDeckId(deckId));
+      const activeDeckInfo = decksInfo.find(
+        (deckInfo) => deckInfo._id === deckId
+      );
+      if (activeDeckInfo) {
+        setActiveDeckInfo(activeDeckInfo);
+      }
     },
-    [dispatch]
+    [decksInfo, setActiveDeckInfo]
   );
 
   const handleSaveGraphDeck = useCallback(() => {
@@ -46,13 +54,13 @@ export default function PlaygroundPage() {
   // TODO: loading UI
   if (isLoadingDeck) return <h1>Loading deck</h1>;
 
-  if (!selectedDeckId && selectedDeck) {
+  if (!activeDeckInfo && selectedDeck) {
     console.log(
       "PROBLEM: selectedDeckId is not defined but selectedDeck is defined"
     );
   }
 
-  if (!selectedDeckId || !selectedDeck) {
+  if (!activeDeckInfo || !selectedDeck) {
     return (
       <div>
         <Link to="/graphdecks">create deck</Link>

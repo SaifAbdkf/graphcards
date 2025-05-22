@@ -68,6 +68,7 @@ export type GraphcardsState = {
   onNodesChange: OnNodesChange<CardNode>;
   onEdgesChange: OnEdgesChange<LinkEdge>;
   onConnect: OnConnect;
+  setActiveDeckInfo: (deckInfo: DeckInfo) => void;
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
 };

@@ -11,22 +11,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.6.0",
     "@szhsin/react-menu": "^4.3.1",
     "@tisoap/react-flow-smart-edge": "^3.0.0",
     "@xyflow/react": "^12.6.0",
-    "d3": "^7.9.0",
     "lucide-react": "^0.483.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-force-graph-2d": "^1.27.1",
-    "react-redux": "^9.2.0",
     "react-router-dom": "^7.2.0",
     "react-xarrows": "^2.0.2",
     "sass": "^1.85.0",
     "swr": "^2.3.3",
-    "vis-data": "^7.1.9",
-    "vis-network": "^9.1.9",
     "zustand": "^5.0.4"
   },
   "devDependencies": {

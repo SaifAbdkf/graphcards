@@ -53,6 +53,9 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
     };
     set({ edges: addEdge(newEdge, get().edges) });
   },
+  setActiveDeckInfo: (activeDeckInfo) => {
+    set({ activeDeckInfo });
+  },
   setNodes: (nodes) => {
     set({ nodes });
   },
