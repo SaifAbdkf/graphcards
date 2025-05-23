@@ -10,6 +10,12 @@ import { Plus, Save } from "lucide-react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
+import {
+  CardPayload,
+  DeckInfoPayload,
+  LinkPayload,
+  UpdateGraphPayload,
+} from "../Types/types";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +54,43 @@ export default function PlaygroundPage() {
   );
 
   const handleSaveGraphDeck = useCallback(() => {
-    console.log("save");
+    const { activeDeckInfo, nodes, edges } = useGraphcardStore.getState();
+
+    let deckInfoPayload: DeckInfoPayload = null;
+    if (activeDeckInfo && activeDeckInfo.dbAction !== "none") {
+      const { dbAction: deckInfoDbAction, ...deckInfoData } = activeDeckInfo;
+      deckInfoPayload = {
+        dbAction: deckInfoDbAction,
+        data: deckInfoData,
+      };
+    }
+
+    const cardsPayload: CardPayload[] = nodes
+      .filter((card) => card.data.dbAction !== "none")
+      .map((filteredCard) => {
+        const { dbAction, ...cardData } = filteredCard.data;
+        return { dbAction: dbAction, data: cardData };
+      });
+
+    // For some reason BaseLink in React flow has data field optional so i have to validate every time tha it is not undefined
+    const linksToUpdate = edges.filter(
+      (link) => link.data !== undefined && link.data.dbAction !== "none"
+    );
+    const linksPayload: LinkPayload[] = linksToUpdate
+      .map((filteredLink) => {
+        if (filteredLink.data) {
+          const { dbAction, ...linkData } = filteredLink.data;
+          return { dbAction: dbAction, data: linkData };
+        }
+      })
+      .filter((link) => link !== undefined);
+
+    const updateGraphPayload: UpdateGraphPayload = {
+      deckInfo: deckInfoPayload,
+      cards: cardsPayload,
+      links: linksPayload,
+    };
+    console.log("save", updateGraphPayload);
   }, []);
 
   // TODO: loading UI

@@ -27,13 +27,8 @@ export default function Graph() {
     useGraphcardStore(useShallow(ReactFlowDataSelector));
   console.log("nodes are", nodes);
 
-  const handleClick = () => {
-    console.log("asba");
-  };
-
   return (
     <>
-      <button onClick={handleClick}>test action</button>
       <ReactFlow
         nodes={nodes}
         edges={edges}

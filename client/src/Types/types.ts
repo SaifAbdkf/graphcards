@@ -62,7 +62,7 @@ export const emptyLinkFields: LinkFields = {
 export type CardNode = Node<Card & { dbAction: DbAction }>;
 export type LinkEdge = Edge<Link & { dbAction: DbAction }>;
 export type GraphcardsState = {
-  activeDeckInfo: DeckInfo | null;
+  activeDeckInfo: (DeckInfo & { dbAction: DbAction }) | null;
   nodes: CardNode[];
   edges: LinkEdge[];
   onNodesChange: OnNodesChange<CardNode>;
@@ -74,6 +74,27 @@ export type GraphcardsState = {
 };
 
 export type DbAction = "create" | "update" | "none";
+
+export type DeckInfoPayload = {
+  dbAction: DbAction;
+  data: DeckInfo;
+} | null;
+
+export type CardPayload = {
+  dbAction: DbAction;
+  data: Card;
+};
+
+export type LinkPayload = {
+  dbAction: DbAction;
+  data: Link;
+};
+
+export type UpdateGraphPayload = {
+  deckInfo: DeckInfoPayload;
+  cards: CardPayload[];
+  links: LinkPayload[];
+};
 
 //PROJECT CONVETION
 // IF EDGE IS UNDIRECTED FROM = THE CARD BEING CREATED, TO = already existing card
