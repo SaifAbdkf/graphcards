@@ -79,7 +79,6 @@ function calculateControlOffset(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _curvature: number
 ): number {
-  console.log("distance is", distance);
   if (distance >= 0) {
     return 0.5 * distance + 150;
   }

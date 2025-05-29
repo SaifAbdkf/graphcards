@@ -1,0 +1,35 @@
+.cardNodeContainer {
+  box-sizing: border-box;
+  height: 150px;
+  background-color: $white;
+  padding: 0.865rem;
+  aspect-ratio: 5/3;
+  border: 1px solid $black;
+  box-shadow: 1px 1px 0px $black;
+  overflow-y: auto;
+}
+
+.selectedCardNodeContainer {
+  border: 1px solid $primary-color;
+  box-shadow: 1px 1px 0px $primary-color;
+}
+
+.contextMenuContainer {
+  position: absolute;
+  transform: translateY(-110%);
+  display: flex;
+  border: 1px solid black;
+
+  .iconContainer {
+    padding: 0.125rem;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $primary-color-hover;
+    }
+  }
+
+  .editContainer {
+    border-right: 1px solid black;
+  }
+}

@@ -12,6 +12,7 @@ export type Deck = {
   description: string;
   cards: Card[];
   links: Link[];
+  // viewport: ViewportData; //TODO to save the state of the viewport in db
 };
 
 export type DeckInfo = Omit<Deck, "cards" | "links">; // the metaDeck, deck - (edges and cards) //in the future will contain stats
@@ -59,11 +60,25 @@ export const emptyLinkFields: LinkFields = {
 
 // LinkData contains the information needed to build he graph and update db that is not already found in
 
-export type CardNode = Node<Card & { dbAction: DbAction }>;
-export type LinkEdge = Edge<Link & { dbAction: DbAction }>;
+export type AppCard = Card & {
+  dbAction: DbAction;
+  editMode: boolean;
+};
+
+export type AppLink = Link & {
+  dbAction: DbAction;
+  editMode: boolean;
+};
+
+export type AppDeckInfo = DeckInfo & {
+  dbAction: DbAction;
+};
+
+export type CardNode = Node<AppCard>;
+export type LinkEdge = Edge<AppLink>;
 
 export type GraphcardsState = {
-  activeDeckInfo: (DeckInfo & { dbAction: DbAction }) | null;
+  activeDeckInfo: AppDeckInfo | null;
   nodes: CardNode[];
   edges: LinkEdge[];
   onNodesChange: OnNodesChange<CardNode>;
@@ -72,6 +87,8 @@ export type GraphcardsState = {
   setActiveDeckInfo: (deckInfo: DeckInfo & { dbAction: DbAction }) => void;
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
+  addNode: (node: CardNode) => void;
+  setNodeEditMode: (node: CardNode, editMode: boolean) => void;
 };
 
 export type DbAction = "create" | "update" | "none";

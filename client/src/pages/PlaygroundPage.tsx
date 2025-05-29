@@ -47,7 +47,7 @@ export default function PlaygroundPage() {
         (deckInfo) => deckInfo._id === deckId
       );
       if (activeDeckInfo) {
-        setActiveDeckInfo(activeDeckInfo);
+        setActiveDeckInfo({ ...activeDeckInfo, dbAction: "none" });
       }
     },
     [decksInfo, setActiveDeckInfo]
@@ -56,9 +56,11 @@ export default function PlaygroundPage() {
   const handleSaveGraphDeck = useCallback(() => {
     const { activeDeckInfo, nodes, edges } = useGraphcardStore.getState();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let deckInfoPayload: DeckInfoPayload = null;
     if (activeDeckInfo && activeDeckInfo.dbAction !== "none") {
       const { dbAction: deckInfoDbAction, ...deckInfoData } = activeDeckInfo;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       deckInfoPayload = {
         dbAction: deckInfoDbAction,
         data: deckInfoData,
@@ -86,7 +88,7 @@ export default function PlaygroundPage() {
       .filter((link) => link !== undefined);
 
     const updateGraphPayload: UpdateGraphPayload = {
-      deckInfo: deckInfoPayload,
+      // deckInfo: deckInfoPayload, //todo: bring this back
       cards: cardsPayload,
       links: linksPayload,
     };

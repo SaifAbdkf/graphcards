@@ -28,7 +28,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
       (deckInfo) => deckInfo._id === deckId
     );
     if (activeDeckInfo) {
-      setActiveDeckInfo(activeDeckInfo);
+      setActiveDeckInfo({ ...activeDeckInfo, dbAction: "none" });
     }
 
     navigate("/playground");

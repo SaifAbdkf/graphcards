@@ -1,0 +1,13 @@
+.frontInput {
+  width: 80%;
+  @include input_text_textarea;
+  margin-bottom: 0.425rem;
+}
+
+.backTextarea {
+  width: 100%; //TODO: for some reason width 100% exteds byond width 100% of input element
+  @include input_text_textarea;
+
+  max-width: 98%;
+  height: 70px;
+}
