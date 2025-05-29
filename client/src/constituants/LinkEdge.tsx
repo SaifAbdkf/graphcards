@@ -1,6 +1,7 @@
-import { EdgeLabelRenderer, getStraightPath, Position } from "@xyflow/react";
+import { EdgeLabelRenderer, Position } from "@xyflow/react";
 import styles from "./LinkEdge.module.scss";
 import { Link } from "../Types/types";
+import { getMyBezierPath } from "./mybezier";
 
 export default function LinkEdge({
   id,
@@ -21,11 +22,13 @@ export default function LinkEdge({
   targetX: number;
   targetY: number;
 }) {
-  const [edgePath, labelX, labelY] = getStraightPath({
-    sourceX,
+  const [edgePath, labelX, labelY] = getMyBezierPath({
+    sourceX: sourceX,
     sourceY,
+    sourcePosition,
     targetX,
     targetY,
+    targetPosition,
   });
 
   const markerId = `arrowhead-${id}`;

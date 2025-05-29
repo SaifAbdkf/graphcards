@@ -25,7 +25,16 @@ const ReactFlowDataSelector = (state: GraphcardsState) => ({
 export default function Graph() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
     useGraphcardStore(useShallow(ReactFlowDataSelector));
-  console.log("nodes are", nodes);
+
+  const createCard = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // const emptyCardNode: CardNode = {
+    //   id: `temp-${Date.now()}`,
+    //   position: {
+
+    //   }
+    // };
+    console.log("double click");
+  };
 
   return (
     <>
@@ -34,10 +43,13 @@ export default function Graph() {
         edges={edges}
         onEdgesChange={onEdgesChange}
         onNodesChange={onNodesChange}
+        // onNodeDoubleClick={()}
         onConnect={onConnect}
         connectionMode={ConnectionMode.Loose}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        zoomOnDoubleClick={false}
+        onDoubleClick={(event) => createCard(event)}
       >
         <Controls />
       </ReactFlow>

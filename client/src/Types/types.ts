@@ -23,7 +23,7 @@ export const emptyDeckFields: DeckFields = {
 
 export type Card = {
   _id: string;
-  deckId: string; //is this needed?
+  deckId: string;
   x: number;
   y: number;
   front: string;
@@ -61,6 +61,7 @@ export const emptyLinkFields: LinkFields = {
 
 export type CardNode = Node<Card & { dbAction: DbAction }>;
 export type LinkEdge = Edge<Link & { dbAction: DbAction }>;
+
 export type GraphcardsState = {
   activeDeckInfo: (DeckInfo & { dbAction: DbAction }) | null;
   nodes: CardNode[];
@@ -68,7 +69,7 @@ export type GraphcardsState = {
   onNodesChange: OnNodesChange<CardNode>;
   onEdgesChange: OnEdgesChange<LinkEdge>;
   onConnect: OnConnect;
-  setActiveDeckInfo: (deckInfo: DeckInfo) => void;
+  setActiveDeckInfo: (deckInfo: DeckInfo & { dbAction: DbAction }) => void;
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
 };
@@ -91,7 +92,7 @@ export type LinkPayload = {
 };
 
 export type UpdateGraphPayload = {
-  deckInfo: DeckInfoPayload;
+  // deckInfo: DeckInfoPayload; // TODO when I transform decks to canvas
   cards: CardPayload[];
   links: LinkPayload[];
 };

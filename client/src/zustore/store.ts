@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { DbAction, GraphcardsState, LinkEdge } from "../Types/types";
+import {
+  CardNode,
+  DbAction,
+  DeckInfo,
+  GraphcardsState,
+  LinkEdge,
+} from "../Types/types";
 import {
   addEdge,
   applyEdgeChanges,
@@ -53,11 +59,14 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
     };
     set({ edges: addEdge(newEdge, get().edges) });
   },
-  setActiveDeckInfo: (activeDeckInfo) => {
+  setActiveDeckInfo: (activeDeckInfo: DeckInfo & { dbAction: DbAction }) => {
     set({ activeDeckInfo });
   },
   setNodes: (nodes) => {
     set({ nodes });
+  },
+  addNode: (node: CardNode) => {
+    set({ nodes: [...get().nodes, node] });
   },
   setEdges: (edges) => {
     set({ edges });

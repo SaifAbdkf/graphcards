@@ -1,5 +1,6 @@
 # scripts.sh
-documentation 
+documentation.sh
+gitAddCommit.sh
 
 # Logs
 logs
