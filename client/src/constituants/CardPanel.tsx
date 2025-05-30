@@ -113,6 +113,8 @@ export default function CardPanel({
 
     const optimisticCard: Card = {
       ...cardFields,
+      x: 0,
+      y: 0,
       deckId: deck._id,
       _id: Date.now().toString(),
     };

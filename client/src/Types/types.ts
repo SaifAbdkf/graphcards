@@ -30,10 +30,11 @@ export type Card = {
   front: string;
   back: string;
 };
-export type CardFields = Omit<Card, "_id" | "deckId">;
+export type CardFields = {
+  front: string;
+  back: string;
+};
 export const emptyCardFields: CardFields = {
-  x: 0,
-  y: 0,
   front: "",
   back: "",
 };
@@ -89,6 +90,7 @@ export type GraphcardsState = {
   setEdges: (edges: LinkEdge[]) => void;
   addNode: (node: CardNode) => void;
   setNodeEditMode: (node: CardNode, editMode: boolean) => void;
+  setNodeCardFields: (nodeId: string, data: CardFields) => void;
 };
 
 export type DbAction = "create" | "update" | "none";

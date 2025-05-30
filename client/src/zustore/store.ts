@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  CardFields,
   CardNode,
   DbAction,
   DeckInfo,
@@ -82,6 +83,25 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
     const newNodes = get().nodes.map((storeNode) =>
       storeNode.id === node.id
         ? { ...node, data: { ...storeNode.data, editMode: editMode } }
+        : storeNode
+    );
+    set({ nodes: newNodes });
+  },
+  setNodeCardFields: (nodeId: string, data: CardFields) => {
+    const newNodes = get().nodes.map((storeNode) =>
+      storeNode.id === nodeId
+        ? {
+            ...storeNode,
+            data: {
+              ...storeNode.data,
+              dbAction:
+                storeNode.data.dbAction === "create"
+                  ? ("create" as DbAction)
+                  : ("update" as DbAction),
+              front: data.front,
+              back: data.back,
+            },
+          }
         : storeNode
     );
     set({ nodes: newNodes });
