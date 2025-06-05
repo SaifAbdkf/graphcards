@@ -9,15 +9,15 @@ import {
 import { CardNodeComponent } from "./CardNodeComponent";
 import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
-import LinkEdge from "./LinkEdge";
 import { useCallback, useState } from "react";
+import LinkEdgeComponent from "./LinkEdgeComponent";
 
 const nodeTypes = {
   cardNode: CardNodeComponent,
 };
 
 const edgeTypes = {
-  LinkEdge: LinkEdge,
+  LinkEdge: LinkEdgeComponent,
 };
 
 const ReactFlowDataSelector = (state: GraphcardsState) => ({
@@ -47,7 +47,6 @@ export default function Graph() {
   const { screenToFlowPosition } = useReactFlow();
   console.log("nodes are ", nodes);
   const createCard = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log("double click - create card fuction");
     if (!activeDeckInfo) throw Error("aciveDeckInfo should not be undefined");
     const { clientX, clientY } = event;
 
@@ -84,14 +83,12 @@ export default function Graph() {
     event: React.MouseEvent<Element, MouseEvent>,
     node: CardNode
   ) => {
-    console.log("card double click event");
     event.stopPropagation();
     setNodeEditMode(node, true);
     setcurrentlyEditingCard(node);
   };
 
   const setCardEditModeOff = useCallback(() => {
-    console.log("paneclick triggered setCardEditModeOff");
     if (currentlyEditingCard) {
       setNodeEditMode(currentlyEditingCard, false);
       setcurrentlyEditingCard(null);
@@ -100,7 +97,6 @@ export default function Graph() {
 
   const maybeSetCardEditModeOff = useCallback(
     (e: React.MouseEvent<Element, MouseEvent>, node: CardNode) => {
-      console.log("card click triggered maybesetCardeditmodeoff");
       e.stopPropagation();
       if (currentlyEditingCard && currentlyEditingCard.id !== node.id) {
         setcurrentlyEditingCard(null);

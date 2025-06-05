@@ -18,8 +18,9 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
   activeDeckInfo: null,
   nodes: [],
   edges: [],
+  deletedNodes: [],
+  deletedEdges: [],
   onNodesChange: (changes) => {
-    console.log("chages are", changes);
     set({ nodes: applyNodeChanges(changes, get().nodes) });
 
     // Get all position changes
@@ -105,5 +106,45 @@ export const useGraphcardStore = create<GraphcardsState>((set, get) => ({
         : storeNode
     );
     set({ nodes: newNodes });
+  },
+  onDeleteNode: (nodeId: string) => {
+    const deletedNode = get().nodes.find(
+      (storeNode) => storeNode.id === nodeId
+    );
+    if (deletedNode) {
+      // Remove the node
+      const newNodes = get().nodes.filter(
+        (storeNode) => storeNode.id !== nodeId
+      );
+      set({ deletedNodes: [...get().deletedNodes, deletedNode] });
+      set({ nodes: newNodes });
+
+      // Find and remove connected edges
+      const connectedEdges = get().edges.filter(
+        (storeEdge) =>
+          storeEdge.source === nodeId || storeEdge.target === nodeId
+      );
+      const newEdges = get().edges.filter(
+        (storeEdge) =>
+          storeEdge.source !== nodeId && storeEdge.target !== nodeId
+      );
+
+      // Store deleted edges and update edges in a single state update
+      set({ deletedEdges: [...get().deletedEdges, ...connectedEdges] });
+      set({ edges: newEdges });
+    }
+  },
+  onDeleteEdge: (edgeId: string) => {
+    const deletedEdge = get().edges.find(
+      (storeEdge) => storeEdge.id === edgeId
+    );
+    if (deletedEdge) {
+      // Remove the edge
+      const newEdges = get().edges.filter(
+        (storeEdge) => storeEdge.id !== edgeId
+      );
+      set({ deletedEdges: [...get().deletedEdges, deletedEdge] });
+      set({ edges: newEdges });
+    }
   },
 }));

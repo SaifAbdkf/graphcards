@@ -17,7 +17,7 @@ export function useDeck(deckId: string | null) {
     const cardNodes: CardNode[] = data.cards.map((card, index) => ({
       id: card._id,
       type: "cardNode",
-      data: { ...card, dbAction: "none" },
+      data: { ...card, dbAction: "none", editMode: false },
       position: { x: index * 100, y: 100 },
     }));
     setNodes(cardNodes);
@@ -25,7 +25,7 @@ export function useDeck(deckId: string | null) {
     const linkEdges = data.links.map((link) => ({
       id: link._id,
       type: "LinkEdge",
-      data: { ...link, dbAction: "none" as DbAction },
+      data: { ...link, dbAction: "none" as DbAction, editMode: false },
       isDirected: link.isDirected,
       label: link.label,
       source: link.from,

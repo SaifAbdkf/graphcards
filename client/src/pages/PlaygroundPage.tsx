@@ -54,7 +54,8 @@ export default function PlaygroundPage() {
   );
 
   const handleSaveGraphDeck = useCallback(() => {
-    const { activeDeckInfo, nodes, edges } = useGraphcardStore.getState();
+    const { activeDeckInfo, nodes, edges, deletedNodes, deletedEdges } =
+      useGraphcardStore.getState();
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let deckInfoPayload: DeckInfoPayload = null;
@@ -67,25 +68,54 @@ export default function PlaygroundPage() {
       };
     }
 
-    const cardsPayload: CardPayload[] = nodes
+    const editedAndCreatedCardsPayload: CardPayload[] = nodes
       .filter((card) => card.data.dbAction !== "none")
       .map((filteredCard) => {
-        const { dbAction, ...cardData } = filteredCard.data;
-        return { dbAction: dbAction, data: cardData };
+        const { dbAction, editMode, ...cardData } = filteredCard.data;
+        return { dbAction, data: cardData };
       });
+
+    const deletedCardsPayload: CardPayload[] = deletedNodes.map((node) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { dbAction, editMode, ...cardData } = node.data;
+      return { dbAction: "delete" as DbAction, data: cardData };
+    });
+
+    const cardsPayload = [
+      ...editedAndCreatedCardsPayload,
+      ...deletedCardsPayload,
+    ];
 
     // For some reason BaseLink in React flow has data field optional so i have to validate every time tha it is not undefined
     const linksToUpdate = edges.filter(
       (link) => link.data !== undefined && link.data.dbAction !== "none"
     );
-    const linksPayload: LinkPayload[] = linksToUpdate
+    const editedAndCreatedLinksPayload: LinkPayload[] = linksToUpdate
       .map((filteredLink) => {
         if (filteredLink.data) {
-          const { dbAction, ...linkData } = filteredLink.data;
-          return { dbAction: dbAction, data: linkData };
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { dbAction, editMode, ...linkData } = filteredLink.data;
+          return { dbAction, data: linkData };
         }
+        return undefined;
       })
-      .filter((link) => link !== undefined);
+      .filter((link): link is LinkPayload => link !== undefined);
+
+    const deletedLinksPayload: LinkPayload[] = deletedEdges
+      .map((edge) => {
+        if (edge.data) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { dbAction, editMode, ...linkData } = edge.data;
+          return { dbAction: "delete" as DbAction, data: linkData };
+        }
+        return undefined;
+      })
+      .filter((link): link is LinkPayload => link !== undefined);
+
+    const linksPayload = [
+      ...editedAndCreatedLinksPayload,
+      ...deletedLinksPayload,
+    ];
 
     const updateGraphPayload: UpdateGraphPayload = {
       // deckInfo: deckInfoPayload, //todo: bring this back

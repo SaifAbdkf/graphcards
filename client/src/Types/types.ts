@@ -82,6 +82,8 @@ export type GraphcardsState = {
   activeDeckInfo: AppDeckInfo | null;
   nodes: CardNode[];
   edges: LinkEdge[];
+  deletedNodes: CardNode[];
+  deletedEdges: LinkEdge[];
   onNodesChange: OnNodesChange<CardNode>;
   onEdgesChange: OnEdgesChange<LinkEdge>;
   onConnect: OnConnect;
@@ -91,6 +93,8 @@ export type GraphcardsState = {
   addNode: (node: CardNode) => void;
   setNodeEditMode: (node: CardNode, editMode: boolean) => void;
   setNodeCardFields: (nodeId: string, data: CardFields) => void;
+  onDeleteNode: (nodeId: string) => void;
+  onDeleteEdge: (edgeId: string) => void;
 };
 
 export type DbAction = "create" | "update" | "none";
