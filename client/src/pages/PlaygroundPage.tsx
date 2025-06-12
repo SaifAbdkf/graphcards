@@ -12,6 +12,7 @@ import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
 import {
   CardPayload,
+  DbAction,
   DeckInfoPayload,
   LinkPayload,
   UpdateGraphPayload,
@@ -71,6 +72,7 @@ export default function PlaygroundPage() {
     const editedAndCreatedCardsPayload: CardPayload[] = nodes
       .filter((card) => card.data.dbAction !== "none")
       .map((filteredCard) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { dbAction, editMode, ...cardData } = filteredCard.data;
         return { dbAction, data: cardData };
       });

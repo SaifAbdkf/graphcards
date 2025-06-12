@@ -32,8 +32,9 @@ const ReactFlowDataSelector = (state: GraphcardsState) => ({
 });
 
 export default function Graph() {
-  const [currentlyEditingCard, setcurrentlyEditingCard] =
-    useState<CardNode | null>(null);
+  const [currentlyEditingCardId, setcurrentlyEditingCardId] = useState<
+    string | null
+  >(null);
   const {
     activeDeckInfo,
     nodes,
@@ -75,7 +76,7 @@ export default function Graph() {
         back: "",
       },
     };
-    setcurrentlyEditingCard(emptyCardNode);
+    setcurrentlyEditingCardId(emptyCardNode.id);
     addNode(emptyCardNode);
   };
 
@@ -84,26 +85,26 @@ export default function Graph() {
     node: CardNode
   ) => {
     event.stopPropagation();
-    setNodeEditMode(node, true);
-    setcurrentlyEditingCard(node);
+    setNodeEditMode(node.id, true);
+    setcurrentlyEditingCardId(node.id);
   };
 
   const setCardEditModeOff = useCallback(() => {
-    if (currentlyEditingCard) {
-      setNodeEditMode(currentlyEditingCard, false);
-      setcurrentlyEditingCard(null);
+    if (currentlyEditingCardId) {
+      setNodeEditMode(currentlyEditingCardId, false);
+      setcurrentlyEditingCardId(null);
     }
-  }, [currentlyEditingCard, setNodeEditMode]);
+  }, [currentlyEditingCardId, setNodeEditMode]);
 
   const maybeSetCardEditModeOff = useCallback(
     (e: React.MouseEvent<Element, MouseEvent>, node: CardNode) => {
       e.stopPropagation();
-      if (currentlyEditingCard && currentlyEditingCard.id !== node.id) {
-        setcurrentlyEditingCard(null);
-        setNodeEditMode(currentlyEditingCard, false);
+      if (currentlyEditingCardId && currentlyEditingCardId !== node.id) {
+        setcurrentlyEditingCardId(null);
+        setNodeEditMode(currentlyEditingCardId, false);
       }
     },
-    [currentlyEditingCard, setNodeEditMode]
+    [currentlyEditingCardId, setNodeEditMode]
   );
 
   return (

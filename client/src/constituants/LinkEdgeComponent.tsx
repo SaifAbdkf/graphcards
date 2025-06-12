@@ -17,9 +17,10 @@ export default function LinkEdgeComponent({
   targetY,
   selected,
 }: EdgeProps<LinkEdge>) {
-  const { onDeleteEdge } = useGraphcardStore(
+  const { onDeleteEdge, setEdgeEditMode } = useGraphcardStore(
     useShallow((state) => ({
       onDeleteEdge: state.onDeleteEdge,
+      setEdgeEditMode: state.setEdgeEditMode,
     }))
   );
 
@@ -40,9 +41,12 @@ export default function LinkEdgeComponent({
     console.log("delete edge");
   };
 
+  const handleEdgeEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEdgeEditMode(id, true);
+  };
   const markerId = `arrowhead-${id}`;
-  console.log("id is", id);
-  console.log("selected", selected);
+
   return (
     <>
       <defs>
@@ -70,7 +74,7 @@ export default function LinkEdgeComponent({
         d={edgePath}
         fill="none"
         className={selected ? styles.selectedEdge : styles.unselectedEdge}
-        strokeWidth={selected ? 2.5 : 1.5}
+        strokeWidth={selected ? 2.2 : 1.5}
         style={{ cursor: "pointer" }}
       />
       <path
@@ -100,7 +104,6 @@ export default function LinkEdgeComponent({
               transform: `translate(-50%, -50%) translate(${labelX}px, ${
                 labelY - 30
               }px)`,
-              pointerEvents: "all",
               zIndex: 1000,
             }}
             className={`${styles.contextMenuContainer}`}
@@ -109,28 +112,36 @@ export default function LinkEdgeComponent({
               className={`${styles.iconContainer} ${styles.editContainer}`}
               style={{ pointerEvents: "all", cursor: "pointer" }}
             >
-              <Edit size={16} color="gray" />
+              <Edit size={16} color="gray" onClick={handleEdgeEditClick} />
             </div>
             <div
               className={`${styles.iconContainer}`}
               style={{ pointerEvents: "all", cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("cliiiiick");
-              }}
             >
               <Trash
                 style={{ pointerEvents: "all", cursor: "pointer" }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleEdgeDelete(e);
-                }}
+                onClick={handleEdgeDelete}
                 size={16}
               />
             </div>
           </div>
         )}
-        {data?.label && (
+        {data?.editMode && (
+          <div
+            className={`${styles.labelContainer}`}
+            style={{
+              position: "absolute",
+              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px) `,
+            }}
+          >
+            <input
+              style={{ pointerEvents: "all", cursor: "pointer" }}
+              type="text"
+              value={data.label}
+            ></input>
+          </div>
+        )}
+        {data?.label && !data?.editMode && (
           <div
             className={`${styles.labelContainer}`}
             style={{

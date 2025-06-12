@@ -91,8 +91,10 @@ export type GraphcardsState = {
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
   addNode: (node: CardNode) => void;
-  setNodeEditMode: (node: CardNode, editMode: boolean) => void;
+  setNodeEditMode: (nodeID: string, editMode: boolean) => void;
   setNodeCardFields: (nodeId: string, data: CardFields) => void;
+  setEdgeEditMode: (edgeId: string, editMode: boolean) => void;
+  setLinkEdgeFields: (edgeId: string, data: LinkFields) => void;
   onDeleteNode: (nodeId: string) => void;
   onDeleteEdge: (edgeId: string) => void;
 };
