@@ -1,7 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import styles from "./PlaygroundPage.module.scss";
 import { Link } from "react-router-dom";
-import CardPanel from "../constituants/CardPanel";
 
 import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";
@@ -184,16 +183,6 @@ export default function PlaygroundPage() {
           </ReactFlowProvider>
         </div>
       </div>
-
-      {showCardPanel && selectedDeck && (
-        <div className={`${styles.cardPanelContainer}`}>
-          <CardPanel
-            deck={selectedDeck}
-            mutateDeck={mutateDeck}
-            setShowCardPanel={setShowCardPanel}
-          />
-        </div>
-      )}
     </div>
   );
 }
