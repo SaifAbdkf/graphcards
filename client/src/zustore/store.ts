@@ -7,7 +7,6 @@ import {
   DeckInfo,
   GraphcardsState,
   LinkEdge,
-  LinkFields,
 } from "../Types/types";
 import {
   addEdge,
@@ -59,21 +58,43 @@ export const useGraphcardStore = create<GraphcardsState>()(
       }
     },
     onEdgesChange: (changes) => {
+      console.log("edge change", changes);
+      const edgeSelectionChange = changes.filter(
+        (change) => change.type === "select"
+      );
+
       set({
         edges: applyEdgeChanges(changes, get().edges),
       });
+
+      // case: edge was selected and have editMode true.
+      const newEdges = get().edges.map((storeEdge) =>
+        storeEdge.id === edgeSelectionChange[0].id &&
+        !edgeSelectionChange[0].selected &&
+        storeEdge.data !== undefined
+          ? {
+              ...storeEdge,
+              data: { ...storeEdge.data, editMode: false },
+            }
+          : storeEdge
+      );
+      set({
+        edges: newEdges,
+      });
     },
     onConnect: (connection: Connection) => {
-      console.log(connection);
+      const edgeTempId = `tempId-${connection.source}-${
+        connection.target
+      }-${Date.now().toString()}`;
+
       const newEdge: LinkEdge = {
         ...connection,
-        id: `tempId-${connection.source}-${
-          connection.target
-        }-${Date.now().toString()}`,
+        id: edgeTempId,
         type: "LinkEdge",
+        selected: true,
         data: {
           deckId: "dummy",
-          _id: "dummy",
+          _id: edgeTempId,
           dbAction: "create",
           editMode: true,
           isDirected: true,
@@ -132,25 +153,23 @@ export const useGraphcardStore = create<GraphcardsState>()(
       );
       set({ edges: newEdges });
     },
-    setLinkEdgeFields: (edgeId: string, data: LinkFields) => {
-      const newNodes = get().nodes.map((storeNode) =>
-        storeNode.id === edgeId
+    setLinkEdgeLabel: (edgeId: string, newLabel: string) => {
+      const newEdges = get().edges.map((storeEdge) =>
+        storeEdge.id === edgeId && storeEdge.data !== undefined
           ? {
-              ...storeNode,
-              source: data.from,
-              target: data.to,
+              ...storeEdge,
               data: {
-                ...storeNode.data,
+                ...storeEdge.data,
                 dbAction:
-                  storeNode.data.dbAction === "create"
+                  storeEdge.data.dbAction === "create"
                     ? ("create" as DbAction)
                     : ("update" as DbAction),
-                ...data,
+                label: newLabel,
               },
             }
-          : storeNode
+          : storeEdge
       );
-      set({ nodes: newNodes });
+      set({ edges: newEdges });
     },
     onDeleteNode: (nodeId: string) => {
       const deletedNode = get().nodes.find(
@@ -199,7 +218,8 @@ export const useGraphcardStore = create<GraphcardsState>()(
         const newEdges = get().edges.filter(
           (storeEdge) => storeEdge.id !== edgeId
         );
-        set({ deletedEdges: [...get().deletedEdges, deletedEdge] });
+        if (deletedEdge.data?.dbAction !== "create")
+          set({ deletedEdges: [...get().deletedEdges, deletedEdge] });
         set({ edges: newEdges });
       }
     },

@@ -5,6 +5,7 @@ import { getMyBezierPath } from "./mybezier";
 import { useGraphcardStore } from "../zustore/store";
 import { useShallow } from "zustand/shallow";
 import { Edit, Trash } from "lucide-react";
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 
 export default function LinkEdgeComponent({
   id,
@@ -17,14 +18,29 @@ export default function LinkEdgeComponent({
   targetY,
   selected,
 }: EdgeProps<LinkEdge>) {
-  const { onDeleteEdge, setEdgeEditMode } = useGraphcardStore(
+  const { onDeleteEdge, setEdgeEditMode, setLinkEdgeLabel } = useGraphcardStore(
     useShallow((state) => ({
       onDeleteEdge: state.onDeleteEdge,
       setEdgeEditMode: state.setEdgeEditMode,
+      setLinkEdgeLabel: state.setLinkEdgeLabel,
     }))
   );
 
-  if (!data) return null;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (data?.editMode && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [data?.editMode]);
+
+  const handleLabelFieldChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const label = e.target.value;
+      setLinkEdgeLabel(id, label);
+    },
+    [id, setLinkEdgeLabel]
+  );
 
   const [edgePath, labelX, labelY] = getMyBezierPath({
     sourceX: sourceX,
@@ -37,8 +53,7 @@ export default function LinkEdgeComponent({
 
   const handleEdgeDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDeleteEdge(data._id);
-    console.log("delete edge");
+    if (data) onDeleteEdge(id);
   };
 
   const handleEdgeEditClick = (e: React.MouseEvent) => {
@@ -135,9 +150,14 @@ export default function LinkEdgeComponent({
             }}
           >
             <input
+              ref={inputRef}
               style={{ pointerEvents: "all", cursor: "pointer" }}
               type="text"
               value={data.label}
+              onChange={handleLabelFieldChange}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+              }}
             ></input>
           </div>
         )}

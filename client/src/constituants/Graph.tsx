@@ -1,5 +1,5 @@
 import "@xyflow/react/dist/style.css";
-import { CardNode, GraphcardsState } from "../Types/types";
+import { CardNode, GraphcardsState, LinkEdge } from "../Types/types";
 import {
   ConnectionMode,
   Controls,
@@ -29,6 +29,7 @@ const ReactFlowDataSelector = (state: GraphcardsState) => ({
   onConnect: state.onConnect,
   addNode: state.addNode,
   setNodeEditMode: state.setNodeEditMode,
+  setEdgeEditMode: state.setEdgeEditMode,
 });
 
 export default function Graph() {
@@ -44,6 +45,7 @@ export default function Graph() {
     onConnect,
     addNode,
     setNodeEditMode,
+    setEdgeEditMode,
   } = useGraphcardStore(useShallow(ReactFlowDataSelector));
   const { screenToFlowPosition } = useReactFlow();
   console.log("nodes are ", nodes);
@@ -89,6 +91,14 @@ export default function Graph() {
     setcurrentlyEditingCardId(node.id);
   };
 
+  const doubleClickEdge = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    edge: LinkEdge
+  ) => {
+    event.stopPropagation();
+    setEdgeEditMode(edge.id, true);
+  };
+
   const setCardEditModeOff = useCallback(() => {
     if (currentlyEditingCardId) {
       setNodeEditMode(currentlyEditingCardId, false);
@@ -122,6 +132,7 @@ export default function Graph() {
         onNodeClick={(event, node) => maybeSetCardEditModeOff(event, node)}
         onDoubleClick={(event) => createCard(event)}
         onNodeDoubleClick={(event, node) => doubleClickCard(event, node)}
+        onEdgeDoubleClick={(event, edge) => doubleClickEdge(event, edge)}
         onPaneClick={setCardEditModeOff}
       >
         <Controls />
