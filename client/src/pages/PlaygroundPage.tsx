@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import styles from "./PlaygroundPage.module.scss";
 import { Link } from "react-router-dom";
 
@@ -16,14 +16,13 @@ import {
   LinkPayload,
   UpdateGraphPayload,
 } from "../Types/types";
+import { dummy } from "../utils/utils";
 
 export default function PlaygroundPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeDeckInfo = useGraphcardStore(
     useShallow((state) => state.activeDeckInfo)
   );
-
-  const [showCardPanel, setShowCardPanel] = useState<boolean>(false);
 
   const setActiveDeckInfo = useGraphcardStore(
     useShallow((state) => state.setActiveDeckInfo)
@@ -165,10 +164,7 @@ export default function PlaygroundPage() {
           <div className={`${styles.selectedDeckName}`}>
             {selectedDeck?.name}
           </div>
-          <div
-            className={`${styles.addCardIconContainer}`}
-            onClick={() => setShowCardPanel(!showCardPanel)}
-          >
+          <div className={`${styles.addCardIconContainer}`} onClick={dummy}>
             <Plus size={18} />
           </div>
           <div className={`${styles.saveIconContainer}`}>
