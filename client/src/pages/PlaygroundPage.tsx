@@ -158,26 +158,22 @@ export default function PlaygroundPage() {
   }
 
   return (
-    <div className={styles.playGroundContainer}>
-      <div className={`${styles.graphViewerContainer} `}>
-        <div className={`${styles.toolBar}`}>
-          <div className={`${styles.selectedDeckName}`}>
-            {selectedDeck?.name}
-          </div>
-          <div className={`${styles.addCardIconContainer}`} onClick={dummy}>
-            <Plus size={18} />
-          </div>
-          <div className={`${styles.saveIconContainer}`}>
-            <Save onClick={handleSaveGraphDeck}></Save>
-          </div>
+    <div className={styles.labContainer}>
+      <div className={`${styles.toolBar}`}>
+        <div className={`${styles.selectedDeckName}`}>{selectedDeck?.name}</div>
+        <div className={`${styles.addCardIconContainer}`} onClick={dummy}>
+          <Plus size={18} />
         </div>
-        <div ref={containerRef} className={styles.canvasContainer}>
-          <ReactFlowProvider>
-            <Graph />
-            {/* should I just have multiple Graph component instances cached, and mke select deck switch between them */}
-            {/* <TestGraph deck={selectedDeck} /> */}
-          </ReactFlowProvider>
+        <div className={`${styles.saveIconContainer}`}>
+          <Save onClick={handleSaveGraphDeck}></Save>
         </div>
+      </div>
+      <div ref={containerRef} className={styles.canvasContainer}>
+        <ReactFlowProvider>
+          <Graph />
+          {/* should I just have multiple Graph component instances cached, and mke select deck switch between them */}
+          {/* <TestGraph deck={selectedDeck} /> */}
+        </ReactFlowProvider>
       </div>
     </div>
   );

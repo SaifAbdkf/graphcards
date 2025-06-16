@@ -1,12 +1,10 @@
 .appContainer {
   width: 100%;
-
-  position: relative;
-  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   .navbarContainer {
-    z-index: 12;
-    position: fixed;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -14,12 +12,8 @@
     border-bottom: 2px solid $black;
   }
 
-  .pageContainer {
+  .pageContentContainer {
     box-sizing: border-box;
-    padding-top: $navbar-height;
-  }
-
-  .playgroundPageContainer {
-    height: 100vh;
+    height: 100%;
   }
 }

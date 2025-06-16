@@ -5,7 +5,6 @@ import { useCallback, useState } from "react";
 export default function NavBar() {
   const location = useLocation().pathname;
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-
   const handleMouseEnter = useCallback(
     (page: string): React.MouseEventHandler<HTMLDivElement> =>
       () => {
@@ -17,57 +16,28 @@ export default function NavBar() {
   const handleMouseLeave = useCallback(() => {
     setHoveredLink(null);
   }, []);
-
   return (
     <div className={`${styles.navBar}`}>
-      <div>
-        <Link to="/" className={styles.logo}>
-          <div
-            onMouseEnter={handleMouseEnter("home")}
-            onMouseLeave={handleMouseLeave}
-          >
-            GraphCards
-          </div>
-          <div
-            className={` ${
-              location === "/" || hoveredLink === "home"
-                ? styles.underlineDivLogo
-                : ""
-            }`}
-          ></div>
-        </Link>
+      <div
+        className={`${styles.logo} ${
+          (location === "/" || hoveredLink === "home") && styles.selectedColor
+        }`}
+        onMouseEnter={handleMouseEnter("home")}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Link to="/">GraphCards</Link>
       </div>
-      <div className={styles.navLinks}>
-        <Link to="/graphdecks" className={`${styles.link} `}>
-          <div
-            className={`${
-              (location === "/graphdecks" || hoveredLink === "graphdecks") &&
-              styles.underlineDiv
-            }`}
-          ></div>
-          <div
-            key={"deck"}
-            onMouseEnter={handleMouseEnter("graphdecks")}
-            onMouseLeave={handleMouseLeave}
-          >
-            GraphDeck
-          </div>
-        </Link>
-        <Link to="/playground" className={`${styles.link} `}>
-          <div
-            className={` ${
-              (location === "/playground" || hoveredLink === "playground") &&
-              styles.underlineDiv
-            }`}
-          ></div>
-          <div
-            key={"playground"}
-            onMouseEnter={handleMouseEnter("playground")}
-            onMouseLeave={handleMouseLeave}
-          >
-            Playground
-          </div>
-        </Link>
+
+      <div
+        key={"playground"}
+        onMouseEnter={handleMouseEnter("playground")}
+        onMouseLeave={handleMouseLeave}
+        className={`${styles.link}  ${
+          (location === "/playground" || hoveredLink === "playground") &&
+          styles.selectedColor
+        }`}
+      >
+        <Link to="/playground">Lab</Link>
       </div>
     </div>
   );

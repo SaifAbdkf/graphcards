@@ -16,7 +16,7 @@ export default function App() {
       </div>
 
       <div
-        className={`${styles.pageContainer} ${
+        className={`${styles.pageContentContainer} ${
           location === "/playground" && styles.playgroundPageContainer
         }`}
       >
