@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/types";
+import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/appDataTypes";
 import Button from "../components/Button";
 import { createDeckInfoRequest } from "../services/api/deckRequests";
 import { deepCopy } from "../utils/utils";

@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
-import { DeckFields } from "../Types/types";
+import { DeckFields } from "../Types/appDataTypes";
 import styles from "./DeckForm.module.scss";
 
 export default function DeckForm({

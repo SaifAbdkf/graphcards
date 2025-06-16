@@ -1,6 +1,6 @@
 import { ControlledMenu, MenuItem } from "@szhsin/react-menu";
 import { useCallback, useRef, useState } from "react";
-import { Card } from "../Types/types";
+import { Card } from "../Types/appDataTypes";
 import styles from "./SelectLinkedCards.module.scss";
 
 export default function SelectLinkedCards({

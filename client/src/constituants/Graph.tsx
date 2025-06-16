@@ -1,5 +1,5 @@
 import "@xyflow/react/dist/style.css";
-import { CardNode, GraphcardsState, LinkEdge } from "../Types/types";
+import { CardNode, LinkEdge } from "../Types/appDataTypes";
 import {
   ConnectionMode,
   Controls,
@@ -7,7 +7,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { CardNodeComponent } from "./CardNodeComponent";
-import { useGraphcardStore } from "../zustore/store";
+import { GraphcardsStoreState, useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useCallback, useState } from "react";
 import LinkEdgeComponent from "./LinkEdgeComponent";
@@ -20,7 +20,7 @@ const edgeTypes = {
   LinkEdge: LinkEdgeComponent,
 };
 
-const ReactFlowDataSelector = (state: GraphcardsState) => ({
+const ReactFlowDataSelector = (state: GraphcardsStoreState) => ({
   activeDeckInfo: state.activeDeckInfo,
   nodes: state.nodes,
   edges: state.edges,
@@ -46,7 +46,7 @@ export default function Graph() {
     addNode,
     setNodeEditMode,
     setEdgeEditMode,
-  } = useGraphcardStore(useShallow(ReactFlowDataSelector));
+  } = useGraphcardsStore(useShallow(ReactFlowDataSelector));
   const { screenToFlowPosition } = useReactFlow();
   console.log("nodes are ", nodes);
   const createCard = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

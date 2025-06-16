@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { fetchDeck } from "../services/api/deckRequests";
-import { useGraphcardStore } from "../zustore/store";
-import { CardNode, DbAction } from "../Types/types";
+import { useGraphcardStore } from "../store/store";
+import { CardNode, DbAction } from "../Types/appDataTypes";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 

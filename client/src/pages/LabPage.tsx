@@ -7,7 +7,7 @@ import { useDeck } from "../hooks/useDeck";
 import Graph from "../constituants/Graph";
 import { Plus, Save } from "lucide-react";
 import { ReactFlowProvider } from "@xyflow/react";
-import { useGraphcardStore } from "../zustore/store";
+import { useGraphcardStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import {
   CardPayload,
@@ -15,7 +15,7 @@ import {
   DeckInfoPayload,
   LinkPayload,
   UpdateGraphPayload,
-} from "../Types/types";
+} from "../Types/appDataTypes";
 import { dummy } from "../utils/utils";
 
 export default function LabPage() {

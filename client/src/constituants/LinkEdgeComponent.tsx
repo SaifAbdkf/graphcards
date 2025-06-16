@@ -1,8 +1,8 @@
 import { EdgeLabelRenderer, EdgeProps } from "@xyflow/react";
 import styles from "./LinkEdgeComponent.module.scss";
-import { LinkEdge } from "../Types/types";
+import { LinkEdge } from "../Types/appDataTypes";
 import { getMyBezierPath } from "./mybezier";
-import { useGraphcardStore } from "../zustore/store";
+import { useGraphcardStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { Edit, Trash } from "lucide-react";
 import { ChangeEvent, useCallback, useEffect, useRef } from "react";

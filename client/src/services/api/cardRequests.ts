@@ -1,4 +1,4 @@
-import { Card, CardFields, LinkFields } from "../../Types/types";
+import { Card, CardFields, LinkFields } from "../../Types/appDataTypes";
 import { postRequest } from "./apiRequestMethods";
 
 export async function createConnectedCardRequest(

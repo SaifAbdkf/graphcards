@@ -1,4 +1,4 @@
-import { Deck, DeckFields, DeckInfo } from "../../Types/types";
+import { Deck, DeckFields, DeckInfo } from "../../Types/appDataTypes";
 import {
   BACKEND_URL,
   deleteRequest,

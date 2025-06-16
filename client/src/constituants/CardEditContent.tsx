@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback } from "react";
-import { AppCard } from "../Types/types";
-import { useGraphcardStore } from "../zustore/store";
+import { AppCard } from "../Types/appDataTypes";
+import { useGraphcardStore } from "../store/store";
 import styles from "./CardEditContent.module.scss";
 import { useShallow } from "zustand/shallow";
 

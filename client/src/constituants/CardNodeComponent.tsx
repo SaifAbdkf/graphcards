@@ -1,10 +1,10 @@
 import { Handle, Position } from "@xyflow/react";
 import styles from "./CardNodeComponent.module.scss";
-import { AppCard } from "../Types/types";
+import { AppCard } from "../Types/appDataTypes";
 import CardEditContent from "./CardEditContent";
 import CardDisplayContent from "./CardDisplayContent";
 import { Edit, Trash } from "lucide-react";
-import { useGraphcardStore } from "../zustore/store";
+import { useGraphcardStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 
 export function CardNodeComponent({

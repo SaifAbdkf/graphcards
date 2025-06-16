@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { DeckInfo } from "../Types/types";
+import { DeckInfo } from "../Types/appDataTypes";
 import styles from "./Deck.module.scss";
 import { deleteDeckRequest } from "../services/api/deckRequests";
 
@@ -11,7 +11,7 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
-import { useGraphcardStore } from "../zustore/store";
+import { useGraphcardStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {

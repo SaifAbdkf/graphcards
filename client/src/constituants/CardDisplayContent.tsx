@@ -1,4 +1,4 @@
-import { AppCard } from "../Types/types";
+import { AppCard } from "../Types/appDataTypes";
 import styles from "./CardDisplayContent.module.scss";
 
 export default function CardDisplayContent({
