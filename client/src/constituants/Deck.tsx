@@ -31,7 +31,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
       setActiveDeckInfo({ ...activeDeckInfo, dbAction: "none" });
     }
 
-    navigate("/playground");
+    navigate("/lab");
   };
 
   const handleDeckEditIconClick = useCallback((deckId: string) => {

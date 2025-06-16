@@ -29,15 +29,14 @@ export default function NavBar() {
       </div>
 
       <div
-        key={"playground"}
-        onMouseEnter={handleMouseEnter("playground")}
+        key={"lab"}
+        onMouseEnter={handleMouseEnter("lab")}
         onMouseLeave={handleMouseLeave}
         className={`${styles.link}  ${
-          (location === "/playground" || hoveredLink === "playground") &&
-          styles.selectedColor
+          (location === "/lab" || hoveredLink === "lab") && styles.selectedColor
         }`}
       >
-        <Link to="/playground">Lab</Link>
+        <Link to="/lab">Lab</Link>
       </div>
     </div>
   );

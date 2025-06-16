@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/HomePage";
 
-import PlaygroundPage from "./pages/PlaygroundPage";
+import LabPage from "./pages/LabPage";
 
 import styles from "./App.module.scss";
 import NavBar from "./constituants/NavBar";
@@ -17,13 +17,13 @@ export default function App() {
 
       <div
         className={`${styles.pageContentContainer} ${
-          location === "/playground" && styles.playgroundPageContainer
+          location === "/lab" && styles.labPageContainer
         }`}
       >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/graphdecks" element={<GraphDecksPage />}></Route>
-          <Route path="/playground" element={<PlaygroundPage />} />
+          <Route path="/lab" element={<LabPage />} />
         </Routes>
       </div>
     </div>
