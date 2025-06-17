@@ -6,7 +6,11 @@ import { GraphdecksDataSlice } from "../Types/storeTypes";
 export const createGraphdecksDataSlice: StateCreator<GraphdecksDataSlice> = (
   set
 ) => ({
+  decksInfo: [],
   activeDeckInfo: null,
+  setDecksInfo: (decksInfo: DeckInfo[]) => {
+    set({ decksInfo });
+  },
   setActiveDeckInfo: (activeDeckInfo: DeckInfo & { dbAction: DbAction }) => {
     set({ activeDeckInfo });
   },

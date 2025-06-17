@@ -5,11 +5,14 @@
   align-items: center;
 
   .logo {
+    box-sizing: border-box;
+    height: 100%;
+    align-content: center;
     position: relative;
     font-size: $big-font-size;
     font-weight: 600;
     text-decoration: none;
-    border-right: 2px solid $black;
+    border-right: $border-2 solid $black;
     padding: 0.325rem 1rem;
 
     a {

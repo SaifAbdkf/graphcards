@@ -1,7 +1,8 @@
 import useSWR from "swr";
 import { fetchDeck } from "../services/api/deckRequests";
-import { useGraphcardStore } from "../store/store";
-import { CardNode, DbAction } from "../Types/appDataTypes";
+import { useGraphcardsStore } from "../store/store";
+import { CardNode } from "../Types/appDataTypes";
+import { DbAction } from "../Types/storageManagementTypes";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,8 +11,8 @@ export function useDeck(deckId: string | null) {
     deckId ? `/deck/${deckId}` : null,
     () => fetchDeck(deckId)
   );
-  const setNodes = useGraphcardStore((state) => state.setNodes);
-  const setEdges = useGraphcardStore((state) => state.setEdges);
+  const setNodes = useGraphcardsStore((state) => state.setNodes);
+  const setEdges = useGraphcardsStore((state) => state.setEdges);
 
   if (data) {
     const cardNodes: CardNode[] = data.cards.map((card, index) => ({

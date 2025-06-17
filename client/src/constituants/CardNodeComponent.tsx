@@ -4,7 +4,7 @@ import { AppCard } from "../Types/appDataTypes";
 import CardEditContent from "./CardEditContent";
 import CardDisplayContent from "./CardDisplayContent";
 import { Edit, Trash } from "lucide-react";
-import { useGraphcardStore } from "../store/store";
+import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 
 export function CardNodeComponent({
@@ -14,7 +14,7 @@ export function CardNodeComponent({
   data: AppCard;
   selected: boolean;
 }) {
-  const { onDeleteNode } = useGraphcardStore(
+  const { onDeleteNode } = useGraphcardsStore(
     useShallow((state) => ({
       onDeleteNode: state.onDeleteNode,
     }))

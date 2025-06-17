@@ -1,11 +1,11 @@
 import { ChangeEvent, useCallback } from "react";
 import { AppCard } from "../Types/appDataTypes";
-import { useGraphcardStore } from "../store/store";
+import { useGraphcardsStore } from "../store/store";
 import styles from "./CardEditContent.module.scss";
 import { useShallow } from "zustand/shallow";
 
 export default function CardEditContent({ cardData }: { cardData: AppCard }) {
-  const { setNodeCardFields } = useGraphcardStore(
+  const { setNodeCardFields } = useGraphcardsStore(
     useShallow((state) => ({
       setNodeCardFields: state.setNodeCardFields,
     }))

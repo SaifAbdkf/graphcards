@@ -11,7 +11,7 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
-import { useGraphcardStore } from "../store/store";
+import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
@@ -19,7 +19,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
 
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
   const navigate = useNavigate();
-  const setActiveDeckInfo = useGraphcardStore(
+  const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
   );
 

@@ -9,7 +9,9 @@ import {
 import { DbAction } from "./storageManagementTypes";
 
 export type GraphdecksDataSlice = {
+  decksInfo: DeckInfo[];
   activeDeckInfo: AppDeckInfo | null;
+  setDecksInfo: (decksInfo: DeckInfo[]) => void;
   setActiveDeckInfo: (deckInfo: DeckInfo & { dbAction: DbAction }) => void;
 };
 

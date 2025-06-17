@@ -1,0 +1,62 @@
+.labBar {
+  box-sizing: border-box;
+
+  border-bottom: $border-3 solid $black;
+  display: flex;
+  justify-content: space-between;
+  height: $navbar-height * 0.7;
+  align-items: center;
+
+  .leftSideLabBar {
+    display: flex;
+    height: 100%;
+
+    .graphdecksNavLink {
+      align-content: center;
+      font-weight: 600;
+      border-right: $border-2 solid $black;
+      padding: 0 1rem;
+    }
+
+    .activeDeckTools {
+      display: flex;
+      align-items: center;
+      .selectedDeckName {
+        height: 100%;
+        align-content: center;
+        padding: 0 1rem;
+        border-right: $border-1 solid $black;
+      }
+      .addCardIconContainer {
+        padding: 0 0.325rem;
+      }
+      .addCardIconBox {
+        height: 18px;
+        aspect-ratio: 5/3;
+        border: 1px solid $black;
+        border-radius: 0.125rem;
+        box-shadow: 1px 1px 0px $black;
+        text-align: center;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .storageManagementTools {
+    box-sizing: border-box;
+    display: flex;
+    height: 100%;
+    border-left: $border-2 solid $black;
+    .importIconContainer,
+    .exportIconContainer {
+      display: flex;
+      align-items: center;
+      padding: 0.325rem;
+    }
+    .exportIconContainer {
+      border-left: $border-1 solid $black;
+    }
+  }
+}

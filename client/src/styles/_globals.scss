@@ -19,6 +19,11 @@ $big-font-size: 1.275rem;
 
 $navbar-height: 3rem;
 
+$border-1: 1px;
+$border-2: 2px;
+$border-3: 3px;
+$border-4: 4px;
+
 @mixin input_text_textarea($x: 1px, $color: #1f1f1f) {
   box-sizing: border-box;
   padding: 0.225em;

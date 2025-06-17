@@ -2,7 +2,7 @@ import { EdgeLabelRenderer, EdgeProps } from "@xyflow/react";
 import styles from "./LinkEdgeComponent.module.scss";
 import { LinkEdge } from "../Types/appDataTypes";
 import { getMyBezierPath } from "./mybezier";
-import { useGraphcardStore } from "../store/store";
+import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { Edit, Trash } from "lucide-react";
 import { ChangeEvent, useCallback, useEffect, useRef } from "react";
@@ -18,13 +18,14 @@ export default function LinkEdgeComponent({
   targetY,
   selected,
 }: EdgeProps<LinkEdge>) {
-  const { onDeleteEdge, setEdgeEditMode, setLinkEdgeLabel } = useGraphcardStore(
-    useShallow((state) => ({
-      onDeleteEdge: state.onDeleteEdge,
-      setEdgeEditMode: state.setEdgeEditMode,
-      setLinkEdgeLabel: state.setLinkEdgeLabel,
-    }))
-  );
+  const { onDeleteEdge, setEdgeEditMode, setLinkEdgeLabel } =
+    useGraphcardsStore(
+      useShallow((state) => ({
+        onDeleteEdge: state.onDeleteEdge,
+        setEdgeEditMode: state.setEdgeEditMode,
+        setLinkEdgeLabel: state.setLinkEdgeLabel,
+      }))
+    );
 
   const inputRef = useRef<HTMLInputElement>(null);
 

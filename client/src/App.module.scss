@@ -9,7 +9,8 @@
     justify-content: center;
     width: 100%;
     background-color: $white;
-    border-bottom: 2px solid $black;
+    height: $navbar-height;
+    border-bottom: $border-3 solid $black;
   }
 
   .pageContentContainer {
