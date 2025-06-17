@@ -7,16 +7,20 @@ import {
   LinkPayload,
   UpdateGraphPayload,
 } from "../Types/storageManagementTypes";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useDeck } from "../hooks/useDeck";
 import { dummy } from "../utils/utils";
+import { LabView } from "../Types/storeTypes";
+import { useLabView } from "../store/UISlice";
 
 export default function LabBar() {
+  const [hovered, setHovered] = useState<string | null>(null);
   const activeDeckInfo = useGraphcardsStore(
     useShallow((state) => state.activeDeckInfo)
   );
+  const { labView, setLabView } = useLabView();
   const {
     data: selectedDeck,
     // error: errorDeck,
@@ -97,23 +101,70 @@ export default function LabBar() {
     console.log("save", updateGraphPayload);
   }, []);
 
+  const handleLabViewChange = useCallback(
+    (view: string): React.MouseEventHandler<HTMLDivElement> =>
+      () => {
+        setLabView(view as LabView);
+      },
+    [setLabView]
+  );
+
+  const handleMouseEnter = useCallback(
+    (hoveredElement: string): React.MouseEventHandler<HTMLDivElement> =>
+      () => {
+        setHovered(hoveredElement);
+      },
+    []
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setHovered(null);
+  }, []);
+  console.log(hovered);
   return (
     <div className={`${styles.labBar}`}>
       <div className={`${styles.leftSideLabBar}`}>
-        <div className={`${styles.graphdecksNavLink}`}>GraphDecks</div>
-        <div className={`${styles.activeDeckTools}`}>
-          <div className={`${styles.selectedDeckName}`}>
-            {selectedDeck?.name}
-          </div>
-          <div className={`${styles.addCardIconContainer}`}>
-            <div className={`${styles.addCardIconBox}`} onClick={dummy}>
-              <Plus size={18} />
+        <div
+          className={`${styles.graphdecksNavLink} ${
+            (hovered === "graphdecksNavLink" || labView === "graphdecks") &&
+            styles.hoveredColor
+          } `}
+          onClick={handleLabViewChange("graphdecks")}
+          onMouseEnter={handleMouseEnter("graphdecksNavLink")}
+          onMouseLeave={handleMouseLeave}
+        >
+          GraphDecks
+        </div>
+        {activeDeckInfo !== null && (
+          <div className={`${styles.activeDeckTools}`}>
+            <div
+              className={`${styles.selectedDeckName} ${
+                (hovered === "deckName" || labView === "activeDeck") &&
+                styles.hoveredColor
+              }`}
+              onClick={handleLabViewChange("activeDeck")}
+              onMouseEnter={handleMouseEnter("deckName")}
+              onMouseLeave={handleMouseLeave}
+            >
+              {selectedDeck?.name}
             </div>
-          </div>
-          {/* <div className={`${styles.saveIconContainer}`}>
+            <div className={`${styles.addCardIconContainer}`}>
+              <div
+                className={`${styles.addCardIconBox} ${
+                  hovered === "addCardIcon" && styles.hoveredAddCardIcon
+                } `}
+                onMouseEnter={handleMouseEnter("addCardIcon")}
+                onMouseLeave={handleMouseLeave}
+                onClick={dummy}
+              >
+                <Plus size={18} />
+              </div>
+            </div>
+            {/* <div className={`${styles.saveIconContainer}`}>
           <Save onClick={handleSaveGraphDeck}></Save>
           </div> */}
-        </div>
+          </div>
+        )}
       </div>
       <div className={`${styles.storageManagementTools}`}>
         <div className={`${styles.importIconContainer}`}>

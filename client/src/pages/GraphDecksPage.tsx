@@ -11,7 +11,6 @@ export default function GraphDecksPage() {
   const { data: decksInfo } = useDecksInfo();
   return (
     <div className={styles.decksPageContainer}>
-      <h1>My GraphDecks</h1>
       <div className={styles.decksList}>
         <CreateDeck />
         {decksInfo?.map((deckInfo) => (

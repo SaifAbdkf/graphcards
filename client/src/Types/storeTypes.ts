@@ -34,7 +34,7 @@ export type GraphcardsDataSlice = {
   onDeleteEdge: (edgeId: string) => void;
 };
 
-export type LabView = "graphdecks" | "graphcards";
+export type LabView = "graphdecks" | "activeDeck";
 export type UISlice = {
   labView: LabView;
   setLabView: (view: LabView) => void;

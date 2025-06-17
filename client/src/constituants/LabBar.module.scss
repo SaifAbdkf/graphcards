@@ -12,6 +12,7 @@
     height: 100%;
 
     .graphdecksNavLink {
+      cursor: pointer;
       align-content: center;
       font-weight: 600;
       border-right: $border-2 solid $black;
@@ -22,13 +23,17 @@
       display: flex;
       align-items: center;
       .selectedDeckName {
+        cursor: pointer;
+        font-weight: 600;
+
         height: 100%;
         align-content: center;
-        padding: 0 1rem;
+        padding: 0rem 1rem;
         border-right: $border-1 solid $black;
       }
       .addCardIconContainer {
-        padding: 0 0.325rem;
+        cursor: pointer;
+        padding: 0 1rem;
       }
       .addCardIconBox {
         height: 18px;
@@ -59,4 +64,13 @@
       border-left: $border-1 solid $black;
     }
   }
+}
+
+.hoveredColor {
+  color: $primary-color;
+}
+
+.hoveredAddCardIcon {
+  border-color: $primary-color !important;
+  box-shadow: 1px 1px 0px $primary-color !important;
 }

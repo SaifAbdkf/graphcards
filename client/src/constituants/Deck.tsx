@@ -13,6 +13,7 @@ import "./DeckMenu.scss";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
+import { useLabView } from "../store/UISlice";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const { data: decksInfo, mutate } = useDecksInfo();
@@ -22,16 +23,15 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
   );
-
+  const { setLabView } = useLabView();
   const handleDeckClick = (deckId: string) => {
     const activeDeckInfo = decksInfo.find(
       (deckInfo) => deckInfo._id === deckId
     );
     if (activeDeckInfo) {
       setActiveDeckInfo({ ...activeDeckInfo, dbAction: "none" });
+      setLabView("activeDeck");
     }
-
-    navigate("/lab");
   };
 
   const handleDeckEditIconClick = useCallback((deckId: string) => {

@@ -10,8 +10,12 @@ import { useShallow } from "zustand/shallow";
 
 import { useGraphcardsStore } from "../store/store";
 import LabBar from "../constituants/LabBar";
+import { useLabView } from "../store/UISlice";
+import GraphDecksPage from "./GraphDecksPage";
 
 export default function LabPage() {
+  const { labView } = useLabView();
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeDeckInfo = useGraphcardsStore(
     useShallow((state) => state.activeDeckInfo)
@@ -54,38 +58,18 @@ export default function LabPage() {
     );
   }
 
-  if (!activeDeckInfo || !selectedDeck) {
-    return (
-      <div>
-        <Link to="/graphdecks">create deck</Link>
-        <span> or </span>
-        <label>Select a GraphDeck</label>
-        <select
-          defaultValue={"select-a-deck"}
-          onChange={(e) => handleDeckSelection(e.target.value)}
-        >
-          <option value="select-a-deck" disabled>
-            select a deck
-          </option>
-          {decksInfo?.map((deckInfo) => (
-            <option key={deckInfo._id} value={deckInfo._id}>
-              {deckInfo.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.labContainer}>
       <LabBar />
-
-      <div ref={containerRef} className={styles.canvasContainer}>
-        <ReactFlowProvider>
-          <Graph />
-        </ReactFlowProvider>
-      </div>
+      {labView === "graphdecks" ? (
+        <GraphDecksPage />
+      ) : (
+        <div ref={containerRef} className={styles.canvasContainer}>
+          <ReactFlowProvider>
+            <Graph />
+          </ReactFlowProvider>
+        </div>
+      )}
     </div>
   );
 }

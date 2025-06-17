@@ -6,7 +6,7 @@ export default function NavBar() {
   const location = useLocation().pathname;
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const handleMouseEnter = useCallback(
-    (page: string): React.MouseEventHandler<HTMLDivElement> =>
+    (page: string): React.MouseEventHandler<HTMLAnchorElement> =>
       () => {
         setHoveredLink(page);
       },
@@ -18,26 +18,26 @@ export default function NavBar() {
   }, []);
   return (
     <div className={`${styles.navBar}`}>
-      <div
+      <Link
+        to="/"
         className={`${styles.logo} ${
           (location === "/" || hoveredLink === "home") && styles.selectedColor
         }`}
         onMouseEnter={handleMouseEnter("home")}
         onMouseLeave={handleMouseLeave}
       >
-        <Link to="/">GraphCards</Link>
-      </div>
-
-      <div
-        key={"lab"}
+        GraphCards
+      </Link>
+      <Link
+        to="/lab"
         onMouseEnter={handleMouseEnter("lab")}
         onMouseLeave={handleMouseLeave}
         className={`${styles.link}  ${
           (location === "/lab" || hoveredLink === "lab") && styles.selectedColor
         }`}
       >
-        <Link to="/lab">Lab</Link>
-      </div>
+        <div key={"lab"}>Lab</div>
+      </Link>
     </div>
   );
 }
