@@ -1,6 +1,5 @@
 import { useCallback, useRef } from "react";
 import styles from "./LabPage.module.scss";
-import { Link } from "react-router-dom";
 
 import { useDecksInfo } from "../hooks/useDecksInfo";
 import { useDeck } from "../hooks/useDeck";

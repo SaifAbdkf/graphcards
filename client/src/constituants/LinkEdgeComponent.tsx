@@ -18,14 +18,13 @@ export default function LinkEdgeComponent({
   targetY,
   selected,
 }: EdgeProps<LinkEdge>) {
-  const { onDeleteEdge, setEdgeEditMode, setLinkEdgeLabel } =
-    useGraphcardsStore(
-      useShallow((state) => ({
-        onDeleteEdge: state.onDeleteEdge,
-        setEdgeEditMode: state.setEdgeEditMode,
-        setLinkEdgeLabel: state.setLinkEdgeLabel,
-      }))
-    );
+  const { deleteEdge, setEdgeEditMode, editLinkEdgeLabel } = useGraphcardsStore(
+    useShallow((state) => ({
+      deleteEdge: state.deleteEdge,
+      setEdgeEditMode: state.setEdgeEditMode,
+      editLinkEdgeLabel: state.editLinkEdgeLabel,
+    }))
+  );
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,9 +37,9 @@ export default function LinkEdgeComponent({
   const handleLabelFieldChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const label = e.target.value;
-      setLinkEdgeLabel(id, label);
+      editLinkEdgeLabel(id, label);
     },
-    [id, setLinkEdgeLabel]
+    [id, editLinkEdgeLabel]
   );
 
   const [edgePath, labelX, labelY] = getMyBezierPath({
@@ -54,7 +53,7 @@ export default function LinkEdgeComponent({
 
   const handleEdgeDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (data) onDeleteEdge(id);
+    if (data) deleteEdge(id);
   };
 
   const handleEdgeEditClick = (e: React.MouseEvent) => {

@@ -1,4 +1,4 @@
-import { FileDown, FileUp, Plus, Save } from "lucide-react";
+import { FileDown, FileUp, Plus } from "lucide-react";
 import styles from "./LabBar.module.scss";
 import {
   CardPayload,
@@ -120,7 +120,6 @@ export default function LabBar() {
   const handleMouseLeave = useCallback(() => {
     setHovered(null);
   }, []);
-  console.log(hovered);
   return (
     <div className={`${styles.labBar}`}>
       <div className={`${styles.leftSideLabBar}`}>
@@ -128,7 +127,11 @@ export default function LabBar() {
           className={`${styles.graphdecksNavLink} ${
             (hovered === "graphdecksNavLink" || labView === "graphdecks") &&
             styles.hoveredColor
-          } `}
+          } ${
+            labView === "graphdecks" &&
+            selectedDeck === undefined &&
+            styles.noBorder
+          }  `}
           onClick={handleLabViewChange("graphdecks")}
           onMouseEnter={handleMouseEnter("graphdecksNavLink")}
           onMouseLeave={handleMouseLeave}
@@ -141,25 +144,27 @@ export default function LabBar() {
               className={`${styles.selectedDeckName} ${
                 (hovered === "deckName" || labView === "activeDeck") &&
                 styles.hoveredColor
-              }`}
+              } ${labView !== "activeDeck" && styles.noBorder} `}
               onClick={handleLabViewChange("activeDeck")}
               onMouseEnter={handleMouseEnter("deckName")}
               onMouseLeave={handleMouseLeave}
             >
               {selectedDeck?.name}
             </div>
-            <div className={`${styles.addCardIconContainer}`}>
-              <div
-                className={`${styles.addCardIconBox} ${
-                  hovered === "addCardIcon" && styles.hoveredAddCardIcon
-                } `}
-                onMouseEnter={handleMouseEnter("addCardIcon")}
-                onMouseLeave={handleMouseLeave}
-                onClick={dummy}
-              >
-                <Plus size={18} />
+            {labView === "activeDeck" && (
+              <div className={`${styles.addCardIconContainer}`}>
+                <div
+                  className={`${styles.addCardIconBox} ${
+                    hovered === "addCardIcon" && styles.hoveredAddCardIcon
+                  } `}
+                  onMouseEnter={handleMouseEnter("addCardIcon")}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={dummy}
+                >
+                  <Plus size={18} />
+                </div>
               </div>
-            </div>
+            )}
             {/* <div className={`${styles.saveIconContainer}`}>
           <Save onClick={handleSaveGraphDeck}></Save>
           </div> */}

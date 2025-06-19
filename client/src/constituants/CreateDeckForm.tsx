@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/appDataTypes";
 import Button from "../components/Button";
 import { createDeckInfoRequest } from "../services/api/deckRequests";
 import { deepCopy } from "../utils/utils";
 import DeckForm from "../components/DeckForm";
 import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
+import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/appDataTypes";
 
 export default function CreateDeckForm({
   setCreateDeckMode,

@@ -5,9 +5,9 @@ import styles from "./CardEditContent.module.scss";
 import { useShallow } from "zustand/shallow";
 
 export default function CardEditContent({ cardData }: { cardData: AppCard }) {
-  const { setNodeCardFields } = useGraphcardsStore(
+  const { editNodeCardFields } = useGraphcardsStore(
     useShallow((state) => ({
-      setNodeCardFields: state.setNodeCardFields,
+      editNodeCardFields: state.editNodeCardFields,
     }))
   );
 
@@ -16,12 +16,12 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
       e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
       const { name, value } = e.target;
-      setNodeCardFields(cardData._id, {
+      editNodeCardFields(cardData._id, {
         front: name === "front" ? value : cardData.front,
         back: name === "back" ? value : cardData.back,
       });
     },
-    [cardData._id, cardData.front, cardData.back, setNodeCardFields]
+    [cardData._id, cardData.front, cardData.back, editNodeCardFields]
   );
 
   return (

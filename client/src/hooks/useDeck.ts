@@ -3,6 +3,7 @@ import { fetchDeck } from "../services/api/deckRequests";
 import { useGraphcardsStore } from "../store/store";
 import { CardNode } from "../Types/appDataTypes";
 import { DbAction } from "../Types/storageManagementTypes";
+import { useMemo } from "react";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,6 +12,7 @@ export function useDeck(deckId: string | null) {
     deckId ? `/deck/${deckId}` : null,
     () => fetchDeck(deckId)
   );
+  console.log("data in useDeck is ", data);
   const setNodes = useGraphcardsStore((state) => state.setNodes);
   const setEdges = useGraphcardsStore((state) => state.setEdges);
 
@@ -37,10 +39,14 @@ export function useDeck(deckId: string | null) {
     setEdges(linkEdges);
   }
 
-  return {
-    data: data,
-    error: error,
-    isLoading,
-    mutate,
-  };
+  return useMemo(
+    () => ({
+      // check: Math.random(),
+      data: data,
+      error: error,
+      isLoading,
+      mutate,
+    }),
+    [data, error, isLoading, mutate]
+  );
 }

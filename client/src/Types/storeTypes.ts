@@ -6,13 +6,12 @@ import {
   DeckInfo,
   LinkEdge,
 } from "./appDataTypes";
-import { DbAction } from "./storageManagementTypes";
 
 export type GraphdecksDataSlice = {
   decksInfo: DeckInfo[];
   activeDeckInfo: AppDeckInfo | null;
   setDecksInfo: (decksInfo: DeckInfo[]) => void;
-  setActiveDeckInfo: (deckInfo: DeckInfo & { dbAction: DbAction }) => void;
+  setActiveDeckInfo: (deckInfo: AppDeckInfo) => void;
 };
 
 export type GraphcardsDataSlice = {
@@ -27,11 +26,11 @@ export type GraphcardsDataSlice = {
   setEdges: (edges: LinkEdge[]) => void;
   addNode: (node: CardNode) => void;
   setNodeEditMode: (nodeID: string, editMode: boolean) => void;
-  setNodeCardFields: (nodeId: string, data: CardFields) => void;
+  editNodeCardFields: (nodeId: string, data: CardFields) => void;
   setEdgeEditMode: (edgeId: string, editMode: boolean) => void;
-  setLinkEdgeLabel: (edgeId: string, newLabel: string) => void;
-  onDeleteNode: (nodeId: string) => void;
-  onDeleteEdge: (edgeId: string) => void;
+  editLinkEdgeLabel: (edgeId: string, newLabel: string) => void;
+  deleteNode: (nodeId: string) => void;
+  deleteEdge: (edgeId: string) => void;
 };
 
 export type LabView = "graphdecks" | "activeDeck";

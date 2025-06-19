@@ -14,9 +14,9 @@ export function CardNodeComponent({
   data: AppCard;
   selected: boolean;
 }) {
-  const { onDeleteNode } = useGraphcardsStore(
+  const { deleteNode } = useGraphcardsStore(
     useShallow((state) => ({
-      onDeleteNode: state.onDeleteNode,
+      deleteNode: state.deleteNode,
     }))
   );
 
@@ -29,7 +29,7 @@ export function CardNodeComponent({
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent node selection when clicking delete
-    onDeleteNode(data._id);
+    deleteNode(data._id);
   };
 
   return (

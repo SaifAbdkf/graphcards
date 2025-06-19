@@ -119,7 +119,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     );
     set({ nodes: newNodes });
   },
-  setNodeCardFields: (nodeId: string, data: CardFields) => {
+  editNodeCardFields: (nodeId: string, data: CardFields) => {
     const newNodes = get().nodes.map((storeNode) =>
       storeNode.id === nodeId
         ? {
@@ -146,7 +146,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     );
     set({ edges: newEdges });
   },
-  setLinkEdgeLabel: (edgeId: string, newLabel: string) => {
+  editLinkEdgeLabel: (edgeId: string, newLabel: string) => {
     const newEdges = get().edges.map((storeEdge) =>
       storeEdge.id === edgeId && storeEdge.data !== undefined
         ? {
@@ -164,7 +164,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     );
     set({ edges: newEdges });
   },
-  onDeleteNode: (nodeId: string) => {
+  deleteNode: (nodeId: string) => {
     const deletedNode = get().nodes.find(
       (storeNode) => storeNode.id === nodeId
     );
@@ -201,7 +201,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
       }
     }
   },
-  onDeleteEdge: (edgeId: string) => {
+  deleteEdge: (edgeId: string) => {
     const deletedEdge = get().edges.find(
       (storeEdge) => storeEdge.id === edgeId
     );
