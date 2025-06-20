@@ -3,13 +3,14 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   .navbarContainer {
+    height: $navbar-height !important;
     display: flex;
     justify-content: center;
     width: 100%;
     background-color: $white;
-    height: $navbar-height;
     border-bottom: $border-3 solid $black;
   }
 

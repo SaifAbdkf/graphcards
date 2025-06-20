@@ -10,7 +10,6 @@ import {
 import { useCallback, useState } from "react";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
-import { useDeck } from "../hooks/useDeck";
 import { dummy } from "../utils/utils";
 import { LabView } from "../Types/storeTypes";
 import { useLabView } from "../store/UISlice";
@@ -21,12 +20,6 @@ export default function LabBar() {
     useShallow((state) => state.activeDeckInfo)
   );
   const { labView, setLabView } = useLabView();
-  const {
-    data: selectedDeck,
-    // error: errorDeck,
-    isLoading: isLoadingDeck,
-    // mutate: mutateDeck,
-  } = useDeck(activeDeckInfo?._id || null);
 
   const handleSaveGraphDeck = useCallback(() => {
     const { activeDeckInfo, nodes, edges, deletedNodes, deletedEdges } =
@@ -129,7 +122,7 @@ export default function LabBar() {
             styles.hoveredColor
           } ${
             labView === "graphdecks" &&
-            selectedDeck === undefined &&
+            activeDeckInfo === null &&
             styles.noBorder
           }  `}
           onClick={handleLabViewChange("graphdecks")}
@@ -149,7 +142,7 @@ export default function LabBar() {
               onMouseEnter={handleMouseEnter("deckName")}
               onMouseLeave={handleMouseLeave}
             >
-              {selectedDeck?.name}
+              {activeDeckInfo.name}
             </div>
             {labView === "activeDeck" && (
               <div className={`${styles.addCardIconContainer}`}>
@@ -165,9 +158,6 @@ export default function LabBar() {
                 </div>
               </div>
             )}
-            {/* <div className={`${styles.saveIconContainer}`}>
-          <Save onClick={handleSaveGraphDeck}></Save>
-          </div> */}
           </div>
         )}
       </div>

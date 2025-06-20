@@ -41,7 +41,6 @@ export function useDeck(deckId: string | null) {
 
   return useMemo(
     () => ({
-      // check: Math.random(),
       data: data,
       error: error,
       isLoading,

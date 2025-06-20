@@ -3,7 +3,6 @@ import { DeckInfo } from "../Types/appDataTypes";
 import styles from "./Deck.module.scss";
 import { deleteDeckRequest } from "../services/api/deckRequests";
 
-import { useNavigate } from "react-router-dom";
 import EditDeckForm from "./EditDeckForm";
 import { Menu, MenuItem } from "@szhsin/react-menu";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
@@ -19,7 +18,6 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const { data: decksInfo, mutate } = useDecksInfo();
 
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
-  const navigate = useNavigate();
   const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
   );
