@@ -36,7 +36,11 @@ export async function updateLink(
   const { linkId } = request.body;
 
   if (!mongoose.Types.ObjectId.isValid(linkId)) {
-    return response.status(404).json({ error: "Card Id not valid" });
+    if (!mongoose.Types.ObjectId.isValid(linkId)) {
+      if (!mongoose.Types.ObjectId.isValid(linkId)) {
+        return response.status(404).json({ error: "Link Id not valid" });
+      }
+    }
   }
 
   const link = await Link.findOneAndUpdate(
@@ -45,7 +49,9 @@ export async function updateLink(
   );
 
   if (!link) {
-    return response.status(404).json({ error: "no such link" });
+    if (!link) {
+      return response.status(404).json({ error: "no such link" });
+    }
   }
 
   return response.status(200).json(link);
@@ -64,7 +70,7 @@ export async function deleteLink(
   const link = await Link.findOneAndDelete({ _id: linkId });
 
   if (!link) {
-    return response.status(404).json({ error: "no such card" });
+    return response.status(404).json({ error: "no such link" });
   }
 
   return response.status(200).json(link);

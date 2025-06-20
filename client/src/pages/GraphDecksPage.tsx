@@ -4,11 +4,12 @@ import "../constituants/DeckMenu.scss";
 import styles from "./GraphDecksPage.module.scss";
 
 import Deck from "../constituants/Deck";
-import { useDecksInfo } from "../hooks/useDecksInfo";
 import CreateDeck from "../constituants/CreateDeck";
+import { useGraphcardsStore } from "../store/store";
+import { useShallow } from "zustand/shallow";
 
 export default function GraphDecksPage() {
-  const { data: decksInfo } = useDecksInfo();
+  const decksInfo = useGraphcardsStore(useShallow((state) => state.decksInfo));
   return (
     <div className={styles.decksPageContainer}>
       <div className={styles.decksList}>

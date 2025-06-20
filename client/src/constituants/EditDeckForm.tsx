@@ -3,8 +3,8 @@ import styles from "./EditDeckForm.module.scss";
 import { DeckFields, DeckInfo } from "../Types/appDataTypes";
 import Button from "../components/Button";
 import DeckForm from "../components/DeckForm";
-import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
-import { editDeckInfoRequest } from "../services/api/deckRequests";
+import { useGraphcardsStore } from "../store/store";
+import { useShallow } from "zustand/shallow";
 
 export default function EditDeckForm({
   setEditDeckMode,
@@ -13,8 +13,9 @@ export default function EditDeckForm({
   setEditDeckMode: React.Dispatch<React.SetStateAction<string | null>>;
   deckInfo: DeckInfo;
 }) {
-  const { data: decksInfo, mutate } = useDecksInfo();
-
+  const editDeckInfo = useGraphcardsStore(
+    useShallow((state) => state.editDeckInfo)
+  );
   const [deckFields, setDeckFields] = useState<DeckFields>({
     name: deckInfo.name,
     description: deckInfo.description,
@@ -38,27 +39,7 @@ export default function EditDeckForm({
     // Set loading state and close form immediately for better UX
     setIsEditing(true);
     setEditDeckMode(null);
-
-    const optimisticDecksInfo = decksInfo.map((deckInfoElement) =>
-      deckInfoElement._id !== deckInfo._id
-        ? deckInfoElement
-        : { _id: deckInfo._id, ...deckFields }
-    );
-
-    const options = {
-      optimisticData: optimisticDecksInfo,
-      rollbackOnError: true,
-    };
-
-    mutate(
-      `/deck/all`,
-      async () => {
-        await editDeckInfoRequest(deckInfo._id, deckFields);
-        const updatedDecksInfo = await fetchDecksInfo();
-        return updatedDecksInfo;
-      },
-      options
-    );
+    editDeckInfo(deckInfo._id, deckFields);
   };
 
   return (

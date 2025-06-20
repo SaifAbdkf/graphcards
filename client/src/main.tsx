@@ -3,14 +3,14 @@ import "./main.scss";
 
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import SWRFetcher from "./SWRFetcher";
+import Fetcher from "./Fetcher";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-  <SWRFetcher>
+  <Fetcher>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </SWRFetcher>
+  </Fetcher>
   // </React.StrictMode>
 );

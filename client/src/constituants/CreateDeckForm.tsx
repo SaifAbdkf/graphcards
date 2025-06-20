@@ -1,22 +1,23 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
 import Button from "../components/Button";
-import { createDeckInfoRequest } from "../services/api/deckRequests";
 import { deepCopy } from "../utils/utils";
 import DeckForm from "../components/DeckForm";
-import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
-import { DeckFields, DeckInfo, emptyDeckFields } from "../Types/appDataTypes";
+import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
+import { useGraphcardsStore } from "../store/store";
+import { useShallow } from "zustand/shallow";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
 }: {
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { data: decksInfo, mutate } = useDecksInfo();
+  const addDeckInfo = useGraphcardsStore(
+    useShallow((state) => state.addDeckInfo)
+  );
   const [deckFields, setDeckFields] = useState<DeckFields>(
     deepCopy(emptyDeckFields)
   );
-
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCancelCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -37,25 +38,7 @@ export default function CreateDeckForm({
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreating(true);
     setCreateDeckMode(false);
-
-    const optimisticDecksInfo: DeckInfo[] = [
-      ...decksInfo,
-      { _id: Date.now().toString(), ...deckFields },
-    ];
-    const options = {
-      optimisticData: optimisticDecksInfo,
-      rollbackOnError: true,
-    };
-
-    mutate(
-      `/deck/all`,
-      async () => {
-        await createDeckInfoRequest(deckFields);
-        const updatedDecksInfo = await fetchDecksInfo();
-        return updatedDecksInfo;
-      },
-      options
-    );
+    addDeckInfo(deckFields);
   };
 
   return (

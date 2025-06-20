@@ -1,7 +1,19 @@
 import { OnConnect, OnEdgesChange, OnNodesChange } from "@xyflow/react";
-import { AppDeckInfo, CardFields, CardNode, LinkEdge } from "./appDataTypes";
+import {
+  AppDeckInfo,
+  CardFields,
+  CardNode,
+  DeckFields,
+  LinkEdge,
+} from "./appDataTypes";
 
 export type GraphdecksDataSlice = {
+  decksInfo: AppDeckInfo[];
+  setDecksInfo: (decksInfo: AppDeckInfo[]) => void;
+  deletedDecksInfo: AppDeckInfo[];
+  deleteDeckInfo: (deckInfoId: string) => void;
+  editDeckInfo: (deckInfoID: string, deckFields: DeckFields) => void;
+  addDeckInfo: (deckFields: DeckFields) => void;
   activeDeckInfo: AppDeckInfo | null;
   setActiveDeckInfo: (deckInfo: AppDeckInfo) => void;
 };

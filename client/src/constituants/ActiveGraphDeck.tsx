@@ -55,7 +55,10 @@ export default function ActiveGraphDeck() {
   const { screenToFlowPosition } = useReactFlow();
 
   const createCard = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!activeDeckInfo) throw Error("aciveDeckInfo should not be undefined");
+    if (!activeDeckInfo) {
+      console.error("aciveDeckInfo should not be undefined");
+      return;
+    }
     const { clientX, clientY } = event;
 
     const { x: graphX, y: graphY } = screenToFlowPosition({

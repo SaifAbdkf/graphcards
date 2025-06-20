@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { DeckInfo } from "../Types/appDataTypes";
 import styles from "./Deck.module.scss";
-import { deleteDeckRequest } from "../services/api/deckRequests";
 
 import EditDeckForm from "./EditDeckForm";
 import { Menu, MenuItem } from "@szhsin/react-menu";
@@ -9,17 +8,19 @@ import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
-import { fetchDecksInfo, useDecksInfo } from "../hooks/useDecksInfo";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useLabView } from "../store/UISlice";
+import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
-  const { data: decksInfo, mutate } = useDecksInfo();
-
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
   const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
+  );
+  const decksInfo = useStoreDecksInfo();
+  const deleteDeckInfo = useGraphcardsStore(
+    useShallow((state) => state.deleteDeckInfo)
   );
   const { setLabView } = useLabView();
   const handleDeckClick = (deckId: string) => {
@@ -37,27 +38,10 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   }, []);
 
   const handleDeleteDeck = useCallback(
-    async (deckId: string) => {
-      const optimisticDecksInfo = decksInfo.filter(
-        (deckInfoElement) => deckInfoElement._id !== deckId
-      );
-
-      const options = {
-        optimisticData: optimisticDecksInfo,
-        rollbackOnError: true,
-      };
-
-      mutate(
-        `/deck/all`,
-        async () => {
-          await deleteDeckRequest(deckId);
-          const updatedDecksInfo = await fetchDecksInfo();
-          return updatedDecksInfo;
-        },
-        options
-      );
+    (deckId: string) => {
+      deleteDeckInfo(deckId);
     },
-    [decksInfo, mutate]
+    [deleteDeckInfo]
   );
 
   return (
@@ -91,6 +75,7 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
           <Menu
             menuButton={
               <EllipsisVertical
+                size={16}
                 onClick={(e: React.MouseEvent) => e.stopPropagation()}
               />
             }
