@@ -1,0 +1,38 @@
+.szh-menu {
+  border: 1px solid $black;
+  font-family: sans-serif;
+  font-size: $small-font-size;
+  border-radius: 2px;
+  min-width: 7rem;
+  color: $black;
+  &--state-opening {
+    animation: szh-menu-show 0.15s ease-out;
+  }
+
+  &--state-closing {
+    animation: szh-menu-hide 0.2s ease-out forwards;
+  }
+  :last-child {
+    border-bottom: none;
+  }
+  &__item {
+    padding: 0.275rem 0.475rem;
+    border-bottom: 1px solid $black;
+    &--hover {
+      background-color: $white-hover;
+    }
+    &--submenu {
+      position: relative;
+      &::after {
+        content: url("chevron-right-solid.svg");
+        position: absolute;
+        width: 7px;
+        right: 0.625rem;
+      }
+    }
+  }
+
+  &__divider {
+    margin: 0.5rem 0.625rem;
+  }
+}
