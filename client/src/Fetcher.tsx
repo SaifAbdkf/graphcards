@@ -54,7 +54,7 @@ export default function Fetcher({ children }: { children: ReactNode }) {
       }
     };
     fetcher();
-  }, [activeDeck, setDecksInfo, setEdges, setNodes]);
+  }, [activeDeck, setEdges, setNodes]);
 
   return <>{children}</>;
 }
