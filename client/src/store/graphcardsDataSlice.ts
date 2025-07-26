@@ -14,12 +14,12 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
   get
 ) => ({
   nodes: [],
+  EditingNodeId: null,
   edges: [],
   deletedNodes: [],
   deletedEdges: [],
   onNodesChange: (changes) => {
     set({ nodes: applyNodeChanges(changes, get().nodes) });
-
     // update the node.data.xy state
     const positionChanges = changes.filter(
       (change) => change.type === "position"

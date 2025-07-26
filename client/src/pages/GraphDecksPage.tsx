@@ -1,10 +1,9 @@
 import "@szhsin/react-menu/dist/core.css";
-import "../constituants/DeckMenu.scss";
 
 import styles from "./GraphDecksPage.module.scss";
 
-import Deck from "../constituants/Deck";
-import CreateDeck from "../constituants/CreateDeck";
+import Deck from "../components/Deck";
+import CreateDeck from "../components/CreateDeck";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 

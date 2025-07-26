@@ -4,7 +4,7 @@ import Home from "./pages/HomePage";
 import LabPage from "./pages/LabPage";
 
 import styles from "./App.module.scss";
-import NavBar from "./constituants/NavBar";
+import NavBar from "./components/NavBar";
 export default function App() {
   const location = useLocation().pathname;
   return (

@@ -1,0 +1,8 @@
+.iconContainer {
+  padding: 0.125rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-color-hover;
+  }
+}

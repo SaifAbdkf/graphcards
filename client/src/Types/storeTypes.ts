@@ -20,6 +20,7 @@ export type GraphdecksDataSlice = {
 
 export type GraphcardsDataSlice = {
   nodes: CardNode[];
+  EditingNodeId: string | null;
   edges: LinkEdge[];
   deletedNodes: CardNode[];
   deletedEdges: LinkEdge[];
@@ -29,7 +30,7 @@ export type GraphcardsDataSlice = {
   setNodes: (nodes: CardNode[]) => void;
   setEdges: (edges: LinkEdge[]) => void;
   addNode: (node: CardNode) => void;
-  setNodeEditMode: (nodeID: string, editMode: boolean) => void;
+  setNodeEditMode: (nodeId: string, editMode: boolean) => void;
   editNodeCardFields: (nodeId: string, data: CardFields) => void;
   setEdgeEditMode: (edgeId: string, editMode: boolean) => void;
   editLinkEdgeLabel: (edgeId: string, newLabel: string) => void;

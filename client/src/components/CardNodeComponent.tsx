@@ -6,6 +6,8 @@ import CardDisplayContent from "./CardDisplayContent";
 import { Edit, Trash } from "lucide-react";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
+import ContextMenu from "./ContextMenu";
+import ContextMenuItem from "./ContextMenuItem";
 
 export function CardNodeComponent({
   data,
@@ -14,9 +16,10 @@ export function CardNodeComponent({
   data: AppCard;
   selected: boolean;
 }) {
-  const { deleteNode } = useGraphcardsStore(
+  const { deleteNode, setNodeEditMode } = useGraphcardsStore(
     useShallow((state) => ({
       deleteNode: state.deleteNode,
+      setNodeEditMode: state.setNodeEditMode,
     }))
   );
 
@@ -32,17 +35,22 @@ export function CardNodeComponent({
     deleteNode(data._id);
   };
 
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent node selection when clicking delete
+    setNodeEditMode(data._id, true);
+  };
+
   return (
     <>
       {selected && (
-        <div className={`${styles.contextMenuContainer}`}>
-          <div className={`${styles.iconContainer} ${styles.editContainer}`}>
-            <Edit size={16} color="gray" />
-          </div>
-          <div className={`${styles.iconContainer}`} onClick={handleDelete}>
+        <ContextMenu>
+          <ContextMenuItem onClickItem={handleEdit}>
+            <Edit size={16} />
+          </ContextMenuItem>
+          <ContextMenuItem onClickItem={handleDelete}>
             <Trash size={16} />
-          </div>
-        </div>
+          </ContextMenuItem>
+        </ContextMenu>
       )}
       <Handle
         id={"top"}

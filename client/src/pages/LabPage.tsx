@@ -1,9 +1,9 @@
 import styles from "./LabPage.module.scss";
 
-import LabBar from "../constituants/LabBar";
+import LabBar from "../components/LabBar";
 import { useLabView } from "../store/UISlice";
 import GraphDecksPage from "./GraphDecksPage";
-import ActiveGraphDeck from "../constituants/ActiveGraphDeck";
+import ActiveGraphDeck from "../components/ActiveGraphDeck";
 import { ReactFlowProvider } from "@xyflow/react";
 
 export default function LabPage() {

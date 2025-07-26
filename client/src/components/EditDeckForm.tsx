@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./EditDeckForm.module.scss";
 import { DeckFields, DeckInfo } from "../Types/appDataTypes";
-import Button from "../components/Button";
-import DeckForm from "../components/DeckForm";
+import Button from "./Button";
+import DeckForm from "./DeckForm";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 

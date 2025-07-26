@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
-import Button from "../components/Button";
+import Button from "./Button";
 import { deepCopy } from "../utils/utils";
-import DeckForm from "../components/DeckForm";
+import DeckForm from "./DeckForm";
 import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
