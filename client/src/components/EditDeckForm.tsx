@@ -9,7 +9,7 @@ export default function EditDeckForm({
   setEditDeckMode,
   deckInfo,
 }: {
-  setEditDeckMode: React.Dispatch<React.SetStateAction<string | null>>;
+  setEditDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
   deckInfo: DeckInfo;
 }) {
   const [deckFields, setDeckFields] = useState<DeckFields>({
@@ -20,7 +20,7 @@ export default function EditDeckForm({
 
   const handleCancelEditDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setEditDeckMode(null);
+    setEditDeckMode(false);
   };
 
   const handleEditDeck = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,14 +34,13 @@ export default function EditDeckForm({
 
     // Set loading state and close form immediately for better UX
     setIsEditing(true);
-    setEditDeckMode(null);
+    setEditDeckMode(false);
     await editDeckInfo(deckInfo._id, deckFields);
   };
 
   return (
     <div className={`${styles.formContainer}`}>
       <DeckForm deckFields={deckFields} setDeckFields={setDeckFields} />
-
       <div className={styles.buttonsContainer}>
         <Button onClick={handleCancelEditDeck} disabled={isEditing}>
           cancel

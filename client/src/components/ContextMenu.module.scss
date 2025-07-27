@@ -1,7 +1,14 @@
 .contextMenuContainer {
-  position: absolute;
-  transform: translateY(-110%);
+  box-sizing: border-box;
   display: flex;
   border: 1px solid black;
   background-color: $white;
+
+  div {
+    border-left: 1px solid black;
+  }
+
+  div:first-child {
+    border-left: none;
+  }
 }

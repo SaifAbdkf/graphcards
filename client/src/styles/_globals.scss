@@ -10,6 +10,7 @@ $primary-color: rgb(50, 50, 205);
 $primary-color-underline: rgba($primary-color, 0.2);
 $primary-color-background: rgba($primary-color, 0.1);
 $primary-color-hover: rgba($primary-color, 0.02);
+$primary-color-hover-darker: rgba($primary-color, 0.03);
 
 $smallest-font-size: 0.675rem;
 $small-font-size: 0.775rem;
@@ -23,7 +24,6 @@ $border-1: 1px;
 $border-2: 2px;
 $border-3: 3px;
 $border-4: 4px;
-$border-5: 4px;
 
 @mixin input_text_textarea($x: 1px, $color: #1f1f1f) {
   box-sizing: border-box;

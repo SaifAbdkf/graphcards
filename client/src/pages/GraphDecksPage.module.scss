@@ -1,13 +1,9 @@
-.decksPageContainer {
+.decksList {
   height: 100%;
   overflow: auto;
-  // margin: 3rem 3rem;
-  padding: 1rem 1rem;
-
-  .decksList {
-    margin: 1rem 0rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
+  padding: 5rem 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  row-gap: 4rem;
 }

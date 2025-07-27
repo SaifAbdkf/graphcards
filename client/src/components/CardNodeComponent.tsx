@@ -43,14 +43,16 @@ export function CardNodeComponent({
   return (
     <>
       {selected && (
-        <ContextMenu>
-          <ContextMenuItem onClickItem={handleEdit}>
-            <Edit size={16} />
-          </ContextMenuItem>
-          <ContextMenuItem onClickItem={handleDelete}>
-            <Trash size={16} />
-          </ContextMenuItem>
-        </ContextMenu>
+        <div className={`${styles.contextMenuContainer}`}>
+          <ContextMenu>
+            <ContextMenuItem onClickItem={handleEdit}>
+              <Edit size={16} />
+            </ContextMenuItem>
+            <ContextMenuItem onClickItem={handleDelete}>
+              <Trash size={16} />
+            </ContextMenuItem>
+          </ContextMenu>
+        </div>
       )}
       <Handle
         id={"top"}

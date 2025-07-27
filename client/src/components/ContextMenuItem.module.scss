@@ -1,8 +1,10 @@
 .iconContainer {
-  padding: 0.125rem;
-
+  padding: 0.175rem;
+  color: $dark-gray;
   &:hover {
     cursor: pointer;
-    background-color: $primary-color-hover;
+    color: $black;
+    background-color: $primary-color-hover-darker;
+    // color: $primary-color;
   }
 }

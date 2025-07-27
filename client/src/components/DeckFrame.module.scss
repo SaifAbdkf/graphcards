@@ -1,0 +1,22 @@
+.deckFrame {
+  box-sizing: border-box;
+  align-self: flex-start;
+  position: relative;
+  aspect-ratio: 3/5;
+  width: 180px;
+  border: 2px solid $black;
+  box-shadow: 1px 1px 0px $black;
+  border-radius: 1px;
+}
+
+.deckFrameSelected {
+  border-color: $primary-color;
+  box-shadow: 1px 1px 0px $primary-color;
+}
+
+.contextMenuContainer {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  transform: translateY(-115%);
+}

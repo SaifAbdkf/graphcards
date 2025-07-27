@@ -13,3 +13,8 @@
   border: 2px solid $primary-color;
   box-shadow: 1px 1px 0px $primary-color;
 }
+
+.contextMenuContainer {
+  position: absolute;
+  transform: translateY(-110%);
+}
