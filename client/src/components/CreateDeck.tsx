@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CreateDeck.module.scss";
 import CreateDeckForm from "./CreateDeckForm";
+import { deepCopy } from "../utils/utils";
+import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
 
 export default function CreateDeck() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
   const frameRef = useRef<HTMLDivElement>(null);
-
+  const [deckFields, setDeckFields] = useState<DeckFields>(
+    deepCopy(emptyDeckFields)
+  );
   useEffect(() => {
-    // if (!createDeckMode) return;
     function handleClickOutside(event: MouseEvent) {
       if (
         frameRef.current &&
@@ -40,17 +43,16 @@ export default function CreateDeck() {
       }`}
     >
       {!createDeckMode ? (
-        <div
-          className={`${styles.scrollableDeckContent}`}
-          onClick={() => !createDeckMode && setCreateDeckMode(true)}
-        >
+        <>
           <div>Create </div>
           <div>GraphDeck</div>
-        </div>
+        </>
       ) : (
-        <div className={`${styles.scrollableDeckContent}`}>
-          <CreateDeckForm setCreateDeckMode={setCreateDeckMode} />
-        </div>
+        <CreateDeckForm
+          setCreateDeckMode={setCreateDeckMode}
+          deckFields={deckFields}
+          setDeckFields={setDeckFields}
+        />
       )}
     </div>
   );

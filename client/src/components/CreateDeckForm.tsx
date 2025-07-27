@@ -1,30 +1,22 @@
 import { useState } from "react";
 import styles from "./CreateDeckForm.module.scss";
 import Button from "./Button";
-import { deepCopy } from "../utils/utils";
+
 import DeckForm from "./DeckForm";
-import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
-import { useGraphcardsStore } from "../store/store";
-import { useShallow } from "zustand/shallow";
+import { DeckFields } from "../Types/appDataTypes";
+
+import { createDeckInfo } from "../services/api/deckInfoApi";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
+  deckFields,
+  setDeckFields,
 }: {
   setCreateDeckMode: React.Dispatch<React.SetStateAction<boolean>>;
+  deckFields: DeckFields;
+  setDeckFields: React.Dispatch<React.SetStateAction<DeckFields>>;
 }) {
-  const addDeckInfo = useGraphcardsStore(
-    useShallow((state) => state.addDeckInfo)
-  );
-  const [deckFields, setDeckFields] = useState<DeckFields>(
-    deepCopy(emptyDeckFields)
-  );
   const [isCreating, setIsCreating] = useState(false);
-
-  const handleCancelCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setDeckFields(deepCopy(emptyDeckFields));
-    setCreateDeckMode(false);
-  };
 
   const handleCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -38,7 +30,7 @@ export default function CreateDeckForm({
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreating(true);
     setCreateDeckMode(false);
-    addDeckInfo(deckFields);
+    createDeckInfo(deckFields);
   };
 
   return (
@@ -46,9 +38,6 @@ export default function CreateDeckForm({
       <DeckForm deckFields={deckFields} setDeckFields={setDeckFields} />
 
       <div className={styles.buttonsContainer}>
-        <Button onClick={handleCancelCreateDeck} disabled={isCreating}>
-          cancel
-        </Button>
         <Button
           onClick={handleCreateDeck}
           disabled={isCreating || deckFields.name === ""}

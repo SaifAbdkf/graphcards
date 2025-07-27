@@ -1,4 +1,4 @@
-import { DeckInfo } from "../../Types/appDataTypes";
+import { DeckFields, DeckInfo } from "../../Types/appDataTypes";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -36,6 +36,27 @@ export async function editDeckInfo(
 
   if (json.status === "success") {
     return json.data;
+  } else {
+    throw new Error(json.message || "API error");
+  }
+}
+
+export async function createDeckInfo(deckData: DeckFields): Promise<DeckInfo> {
+  const response = await fetch(`${BACKEND_URL}/deck`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(deckData),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData?.message || `HTTP error!`);
+  }
+  const json = await response.json();
+
+  if (json.status === "success") {
+    return json.dataSingular;
   } else {
     throw new Error(json.message || "API error");
   }
