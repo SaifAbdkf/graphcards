@@ -1,4 +1,4 @@
-import { DeckInfo } from "../Types/appDataTypes";
+import { DeckFields, DeckInfo } from "../Types/appDataTypes";
 import styles from "./DeckFrame.module.scss";
 import "@szhsin/react-menu/dist/core.css";
 import "./DeckMenu.scss";
@@ -7,36 +7,46 @@ import EditDeckForm from "./EditDeckForm";
 import { useState, useRef, useEffect, useCallback } from "react";
 import ContextMenu from "./ContextMenu";
 import ContextMenuItem from "./ContextMenuItem";
-import { Network, Pen, SquarePen, Trash } from "lucide-react";
+import { Network, SquarePen, Trash } from "lucide-react";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 import { useLabView } from "../store/UISlice";
+import { editDeckInfo } from "../services/api/deckInfoApi";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
 
+  // is gonna cost a lot of prop drilling but i can call editDeckField in use effect when clicking outside
+  // will be fixed in the future when i use the store for this and dbAction
+  const [deckFields, setDeckFields] = useState<DeckFields>({
+    name: deckInfo.name,
+    description: deckInfo.description,
+  });
+
+  console.log("-----deck fields", deckFields);
+
   const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
   );
 
   const decksInfo = useStoreDecksInfo();
-
   const { setLabView } = useLabView();
 
   useEffect(() => {
     if (!showMenu) return;
-    function handleClickOutside(event: MouseEvent) {
-      console.log("---", frameRef.current, event.target);
-
+    async function handleClickOutside(event: MouseEvent) {
       if (
         frameRef.current &&
         !frameRef.current.contains(event.target as Node)
       ) {
         setShowMenu(false);
         if (editingDeck) {
+          console.log("gonna edit", deckFields);
+
+          await editDeckInfo(deckInfo._id, deckFields);
           setEditingDeck(false);
         }
       }
@@ -45,7 +55,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showMenu, editingDeck]);
+  }, [showMenu, editingDeck, deckFields, deckInfo._id]);
 
   const viewDeck = (deckId: string) => {
     const activeDeckInfo = decksInfo.find(
@@ -70,7 +80,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
       onClick={() => setShowMenu(true)}
     >
       {editingDeck ? (
-        <EditDeckForm deckInfo={deckInfo} setEditDeckMode={setEditingDeck} />
+        <EditDeckForm deckFields={deckFields} setDeckFields={setDeckFields} />
       ) : (
         <DisplayDeckInfo deckInfo={deckInfo} />
       )}

@@ -9,6 +9,8 @@ export default function DeckForm({
   deckFields: DeckFields;
   setDeckFields: React.Dispatch<React.SetStateAction<DeckFields>>;
 }) {
+  console.log("deckfields now is from deckform", deckFields);
+
   const handleFieldChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;

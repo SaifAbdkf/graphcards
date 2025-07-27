@@ -15,7 +15,7 @@ $primary-color-hover-darker: rgba($primary-color, 0.03);
 $smallest-font-size: 0.675rem;
 $small-font-size: 0.775rem;
 $smallish-font-size: 0.925rem;
-$normal-font-size: 1rem;
+$medium-font-size: 1rem;
 $big-font-size: 1.275rem;
 
 $navbar-height: 3rem;
@@ -24,6 +24,15 @@ $border-1: 1px;
 $border-2: 2px;
 $border-3: 3px;
 $border-4: 4px;
+
+// Remove focus outline from form elements
+input,
+textarea,
+select {
+  &:focus {
+    outline: none;
+  }
+}
 
 @mixin input_text_textarea($x: 1px, $color: #1f1f1f) {
   box-sizing: border-box;

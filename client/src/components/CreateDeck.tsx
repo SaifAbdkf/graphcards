@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./CreateDeck.module.scss";
 import CreateDeckForm from "./CreateDeckForm";
 
 export default function CreateDeck() {
   const [createDeckMode, setCreateDeckMode] = useState<boolean>(false);
+  const frameRef = useRef<HTMLDivElement>(null);
 
-  const handleContainerClick = (e: React.MouseEvent) => {
-    // Only respond to clicks directly on the container (e.currentTarget), not on children elements (e.target)
-    // this is necessary because every click inside addDeck div will trigger this method handleContainerClick
+  useEffect(() => {
+    // if (!createDeckMode) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        frameRef.current &&
+        !frameRef.current.contains(event.target as Node)
+      ) {
+        setCreateDeckMode(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const activateCreateDeckMode = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       if (!createDeckMode) {
         setCreateDeckMode(true);
@@ -17,7 +32,8 @@ export default function CreateDeck() {
 
   return (
     <div
-      onClick={handleContainerClick}
+      ref={frameRef}
+      onClick={activateCreateDeckMode}
       key="add-decks"
       className={`${styles.deckRepresentation} ${styles.addDeck} ${
         createDeckMode ? styles.addDeckNoHover : ""

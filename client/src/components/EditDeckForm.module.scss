@@ -1,7 +1,13 @@
 .formContainer {
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
   text-align: center;
   scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .buttonsContainer {
     margin-top: 1rem;
