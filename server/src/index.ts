@@ -16,7 +16,7 @@ app.use(cors());
 
 // ROUTES
 app.use("/api/card", cardRoutes);
-app.use("/api/Deck", deckRoutes);
+app.use("/api/deck", deckRoutes);
 
 //CONNECT TO DB
 if (process.env.MONGO_URI) {

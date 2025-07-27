@@ -64,10 +64,6 @@ export type AppLink = Link & {
   editMode: boolean;
 };
 
-export type AppDeckInfo = DeckInfo & {
-  dbAction: DbAction;
-};
-
 export type CardNode = Node<AppCard>;
 export type LinkEdge = Edge<AppLink>;
 

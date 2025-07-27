@@ -1,9 +1,8 @@
-import { FileDown, FileUp, Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import styles from "./LabBar.module.scss";
 import {
   CardPayload,
   DbAction,
-  DeckInfoPayload,
   LinkPayload,
   UpdateGraphPayload,
 } from "../Types/storageManagementTypes";
@@ -22,19 +21,8 @@ export default function LabBar() {
   const { labView, setLabView } = useLabView();
 
   const handleSaveGraphDeck = useCallback(() => {
-    const { activeDeckInfo, nodes, edges, deletedNodes, deletedEdges } =
+    const { nodes, edges, deletedNodes, deletedEdges } =
       useGraphcardsStore.getState();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let deckInfoPayload: DeckInfoPayload = null;
-    if (activeDeckInfo && activeDeckInfo.dbAction !== "none") {
-      const { dbAction: deckInfoDbAction, ...deckInfoData } = activeDeckInfo;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      deckInfoPayload = {
-        dbAction: deckInfoDbAction,
-        data: deckInfoData,
-      };
-    }
 
     const editedAndCreatedCardsPayload: CardPayload[] = nodes
       .filter((card) => card.data.dbAction !== "none")
@@ -87,7 +75,11 @@ export default function LabBar() {
     ];
 
     const updateGraphPayload: UpdateGraphPayload = {
-      // deckInfo: deckInfoPayload, //todo: bring this back
+      deckId:
+        cardsPayload[0].data.deckId ||
+        linksPayload[0].data.deckId ||
+        activeDeckInfo?._id ||
+        "DECKID SHOULD BE DEFINED HERE", //smelly af
       cards: cardsPayload,
       links: linksPayload,
     };
@@ -162,11 +154,11 @@ export default function LabBar() {
         )}
       </div>
       <div className={`${styles.storageManagementTools}`}>
-        <div className={`${styles.importIconContainer}`}>
-          <FileDown />
-        </div>
-        <div className={`${styles.exportIconContainer}`}>
-          <FileUp />
+        <div
+          className={`${styles.exportIconContainer}`}
+          onClick={handleSaveGraphDeck}
+        >
+          <Save />
         </div>
       </div>
     </div>

@@ -3,8 +3,7 @@ import styles from "./EditDeckForm.module.scss";
 import { DeckFields, DeckInfo } from "../Types/appDataTypes";
 import Button from "./Button";
 import DeckForm from "./DeckForm";
-import { useGraphcardsStore } from "../store/store";
-import { useShallow } from "zustand/shallow";
+import { editDeckInfo } from "../services/api/deckInfoApi";
 
 export default function EditDeckForm({
   setEditDeckMode,
@@ -13,9 +12,6 @@ export default function EditDeckForm({
   setEditDeckMode: React.Dispatch<React.SetStateAction<string | null>>;
   deckInfo: DeckInfo;
 }) {
-  const editDeckInfo = useGraphcardsStore(
-    useShallow((state) => state.editDeckInfo)
-  );
   const [deckFields, setDeckFields] = useState<DeckFields>({
     name: deckInfo.name,
     description: deckInfo.description,
@@ -27,7 +23,7 @@ export default function EditDeckForm({
     setEditDeckMode(null);
   };
 
-  const handleEditDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditDeck = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // Validate form fields
@@ -39,7 +35,7 @@ export default function EditDeckForm({
     // Set loading state and close form immediately for better UX
     setIsEditing(true);
     setEditDeckMode(null);
-    editDeckInfo(deckInfo._id, deckFields);
+    await editDeckInfo(deckInfo._id, deckFields);
   };
 
   return (

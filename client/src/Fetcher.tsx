@@ -1,9 +1,10 @@
 import { ReactNode, useEffect } from "react";
 import { useGraphcardsStore } from "./store/store";
 import { useShallow } from "zustand/shallow";
-import { AppDeckInfo, CardNode } from "./Types/appDataTypes";
+import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
-import { fetchDeck, fetchDecksInfo } from "./services/api/apiRequests";
+import { fetchDecksInfo } from "./services/api/deckInfoApi";
+import { fetchDeck } from "./services/api/deckApi";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(
@@ -18,11 +19,7 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetcher = async () => {
       const fetchedDecksInfo = await fetchDecksInfo();
-      const appDecksInfo: AppDeckInfo[] = fetchedDecksInfo.map((deckInfo) => ({
-        ...deckInfo,
-        dbAction: "none" as DbAction,
-      }));
-      setDecksInfo(appDecksInfo);
+      setDecksInfo(fetchedDecksInfo); //smelly
     };
     fetcher();
   }, [setDecksInfo]);

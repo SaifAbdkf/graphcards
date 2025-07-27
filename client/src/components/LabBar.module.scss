@@ -53,15 +53,12 @@
     box-sizing: border-box;
     display: flex;
     height: 100%;
-    border-left: $border-2 solid $black;
+    border-left: 0.5px solid $black;
     .importIconContainer,
     .exportIconContainer {
       display: flex;
       align-items: center;
       padding: 0.325rem;
-    }
-    .exportIconContainer {
-      border-left: $border-1 solid $black;
     }
   }
 }

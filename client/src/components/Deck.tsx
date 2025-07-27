@@ -12,6 +12,7 @@ import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useLabView } from "../store/UISlice";
 import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
+import { deleteDeck } from "../services/api/deckApi";
 
 export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState<string | null>(null);
@@ -19,16 +20,14 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
     useShallow((state) => state.setActiveDeckInfo)
   );
   const decksInfo = useStoreDecksInfo();
-  const deleteDeckInfo = useGraphcardsStore(
-    useShallow((state) => state.deleteDeckInfo)
-  );
+
   const { setLabView } = useLabView();
   const handleDeckClick = (deckId: string) => {
     const activeDeckInfo = decksInfo.find(
       (deckInfo) => deckInfo._id === deckId
     );
     if (activeDeckInfo) {
-      setActiveDeckInfo({ ...activeDeckInfo, dbAction: "none" });
+      setActiveDeckInfo(activeDeckInfo);
       setLabView("activeDeck");
     }
   };
@@ -37,12 +36,11 @@ export default function Deck({ deckInfo }: { deckInfo: DeckInfo }) {
     setEditingDeck(deckId);
   }, []);
 
-  const handleDeleteDeck = useCallback(
-    (deckId: string) => {
-      deleteDeckInfo(deckId);
-    },
-    [deleteDeckInfo]
-  );
+  const handleDeleteDeck = useCallback(async (deckId: string) => {
+    //TODO: delete deck
+    const response = await deleteDeck(deckId);
+    console.log("deletion successful ", response);
+  }, []);
 
   return (
     <div key={deckInfo._id} className={`${styles.deckSpace}`}>
