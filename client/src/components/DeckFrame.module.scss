@@ -7,6 +7,10 @@
   border: 2px solid $black;
   box-shadow: 1px 1px 0px $black;
   border-radius: 1px;
+  &:hover {
+    border: 2px solid $primary-color;
+    box-shadow: 1px 1px 0px $primary-color;
+  }
 }
 
 .deckFrameSelected {

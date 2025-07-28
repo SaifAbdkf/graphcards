@@ -38,7 +38,7 @@ export default function CreateDeck() {
       ref={frameRef}
       onClick={activateCreateDeckMode}
       key="add-decks"
-      className={`${styles.deckRepresentation} ${styles.addDeck} ${
+      className={`${styles.addDeckFrame} ${
         createDeckMode ? styles.addDeckNoHover : ""
       }`}
     >
