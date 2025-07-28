@@ -5,7 +5,8 @@ import Button from "./Button";
 import DeckForm from "./DeckForm";
 import { DeckFields } from "../Types/appDataTypes";
 
-import { createDeckInfo } from "../services/api/deckInfoApi";
+import { createDeckInfo } from "../services/nodeApi/deckInfoNodeApi";
+import { createDXDeckInfo } from "../services/dexieApi/DeckinfoDexieApi";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
@@ -18,7 +19,7 @@ export default function CreateDeckForm({
 }) {
   const [isCreating, setIsCreating] = useState(false);
 
-  const handleCreateDeck = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateDeck = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // Validate form fields
@@ -31,6 +32,7 @@ export default function CreateDeckForm({
     setIsCreating(true);
     setCreateDeckMode(false);
     createDeckInfo(deckFields);
+    await createDXDeckInfo(deckFields);
   };
 
   return (

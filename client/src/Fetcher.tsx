@@ -3,8 +3,8 @@ import { useGraphcardsStore } from "./store/store";
 import { useShallow } from "zustand/shallow";
 import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
-import { fetchDecksInfo } from "./services/api/deckInfoApi";
-import { fetchDeck } from "./services/api/deckApi";
+import { fetchDecksInfo } from "./services/nodeApi/deckInfoNodeApi";
+import { fetchDeck } from "./services/nodeApi/graphdeckNodeApi";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(

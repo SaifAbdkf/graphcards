@@ -1,5 +1,5 @@
 import { Deck, DeckInfo } from "../../Types/appDataTypes";
-import { BACKEND_URL } from "./deckInfoApi";
+import { BACKEND_URL } from "./deckInfoNodeApi";
 
 export async function fetchDeck(deckId: string): Promise<Deck> {
   const response = await fetch(`${BACKEND_URL}${`/deck/${deckId}`}`);

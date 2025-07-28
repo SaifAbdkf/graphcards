@@ -12,7 +12,7 @@ import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 import { useLabView } from "../store/UISlice";
-import { editDeckInfo } from "../services/api/deckInfoApi";
+import { editDeckInfo } from "../services/nodeApi/deckInfoNodeApi";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
@@ -25,8 +25,6 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     name: deckInfo.name,
     description: deckInfo.description,
   });
-
-  console.log("-----deck fields", deckFields);
 
   const setActiveDeckInfo = useGraphcardsStore(
     useShallow((state) => state.setActiveDeckInfo)
