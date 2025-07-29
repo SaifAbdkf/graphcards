@@ -12,6 +12,7 @@ import { useShallow } from "zustand/shallow";
 import { dummy } from "../utils/utils";
 import { LabView } from "../Types/storeTypes";
 import { useLabView } from "../store/UISlice";
+import { useDatabaseType } from "../store/settingsSlice";
 
 export default function LabBar() {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -19,6 +20,14 @@ export default function LabBar() {
     useShallow((state) => state.activeDeckInfo)
   );
   const { labView, setLabView } = useLabView();
+  const { databaseType, setDatabaseType } = useDatabaseType();
+
+  const changeDatabaseType = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDatabaseType(event.target.checked ? "local" : "cloud");
+    },
+    [setDatabaseType]
+  );
 
   const handleSaveGraphDeck = useCallback(() => {
     const { nodes, edges, deletedNodes, deletedEdges } =
@@ -153,7 +162,14 @@ export default function LabBar() {
           </div>
         )}
       </div>
+
       <div className={`${styles.storageManagementTools}`}>
+        <label>local storage</label>
+        <input
+          type="checkbox"
+          checked={databaseType === "local"}
+          onChange={changeDatabaseType}
+        ></input>
         <div
           className={`${styles.exportIconContainer}`}
           onClick={handleSaveGraphDeck}

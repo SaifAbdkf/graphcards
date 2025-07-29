@@ -5,8 +5,7 @@ import Button from "./Button";
 import DeckForm from "./DeckForm";
 import { DeckFields } from "../Types/appDataTypes";
 
-import { createDeckInfo } from "../services/nodeApi/deckInfoNodeApi";
-import { createDXDeckInfo } from "../services/dexieApi/DeckinfoDexieApi";
+import { useDeckInfoAPI } from "../hooks/useDeckInfoAPI";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
@@ -18,6 +17,8 @@ export default function CreateDeckForm({
   setDeckFields: React.Dispatch<React.SetStateAction<DeckFields>>;
 }) {
   const [isCreating, setIsCreating] = useState(false);
+
+  const deckInfoAPI = useDeckInfoAPI();
 
   const handleCreateDeck = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -31,8 +32,7 @@ export default function CreateDeckForm({
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreating(true);
     setCreateDeckMode(false);
-    createDeckInfo(deckFields);
-    await createDXDeckInfo(deckFields);
+    await deckInfoAPI.createDeckInfo(deckFields);
   };
 
   return (

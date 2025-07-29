@@ -12,7 +12,8 @@ import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 import { useLabView } from "../store/UISlice";
-import { editDeckInfo } from "../services/nodeApi/deckInfoNodeApi";
+import { useDeckInfoAPI } from "../hooks/useDeckInfoAPI";
+import { deleteDeck } from "../services/nodeApi/graphdeckNodeApi";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
@@ -32,7 +33,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
 
   const decksInfo = useStoreDecksInfo();
   const { setLabView } = useLabView();
-
+  const deckInfoAPI = useDeckInfoAPI();
   useEffect(() => {
     if (!showMenu) return;
     async function handleClickOutside(event: MouseEvent) {
@@ -44,8 +45,8 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
         if (editingDeck) {
           console.log("gonna edit", deckFields);
 
-          await editDeckInfo(deckInfo._id, deckFields);
           setEditingDeck(false);
+          await deckInfoAPI.updateDeckInfo(deckInfo._id, deckFields);
         }
       }
     }
@@ -53,7 +54,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showMenu, editingDeck, deckFields, deckInfo._id]);
+  }, [showMenu, editingDeck, deckFields, deckInfo._id, deckInfoAPI]);
 
   const viewDeck = (deckId: string) => {
     const activeDeckInfo = decksInfo.find(
@@ -65,7 +66,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     }
   };
 
-  const deleteDeck = useCallback(async (deckId: string) => {
+  const onDeleteDeck = useCallback(async (deckId: string) => {
     const response = await deleteDeck(deckId);
     console.log("deletion successful ", response);
   }, []);
@@ -91,7 +92,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
             <ContextMenuItem onClickItem={() => setEditingDeck(true)}>
               <SquarePen size={18} />
             </ContextMenuItem>
-            <ContextMenuItem onClickItem={() => deleteDeck(deckInfo._id)}>
+            <ContextMenuItem onClickItem={() => onDeleteDeck(deckInfo._id)}>
               <Trash size={18} />
             </ContextMenuItem>
           </ContextMenu>

@@ -52,6 +52,9 @@
   .storageManagementTools {
     box-sizing: border-box;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
     height: 100%;
     border-left: 0.5px solid $black;
     .importIconContainer,

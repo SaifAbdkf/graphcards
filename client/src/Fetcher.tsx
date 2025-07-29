@@ -3,8 +3,8 @@ import { useGraphcardsStore } from "./store/store";
 import { useShallow } from "zustand/shallow";
 import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
-import { fetchDecksInfo } from "./services/nodeApi/deckInfoNodeApi";
 import { fetchDeck } from "./services/nodeApi/graphdeckNodeApi";
+import { useDeckInfoAPI } from "./hooks/useDeckInfoAPI";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(
@@ -15,14 +15,14 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   );
   const setNodes = useGraphcardsStore((state) => state.setNodes);
   const setEdges = useGraphcardsStore((state) => state.setEdges);
-
+  const deckInfoAPI = useDeckInfoAPI();
   useEffect(() => {
     const fetcher = async () => {
-      const fetchedDecksInfo = await fetchDecksInfo();
+      const fetchedDecksInfo = await deckInfoAPI.fetchAllDecksInfo();
       setDecksInfo(fetchedDecksInfo); //smelly
     };
     fetcher();
-  }, [setDecksInfo]);
+  }, [deckInfoAPI, setDecksInfo]);
 
   useEffect(() => {
     const fetcher = async () => {

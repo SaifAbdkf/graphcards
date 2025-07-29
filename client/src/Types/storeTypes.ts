@@ -33,3 +33,9 @@ export type UISlice = {
   labView: LabView;
   setLabView: (view: LabView) => void;
 };
+
+export type DatabaseType = "local" | "cloud";
+export type SettingsSlice = {
+  databaseType: DatabaseType;
+  setDatabaseType: (databaseType: DatabaseType) => void;
+};
