@@ -1,4 +1,4 @@
-import { getDeckInfoAPIStrategy } from "../services/dexieApi/DeckinfoDexieApi";
+import { getDeckInfoAPIStrategy } from "../services/strategies/deckInfoStrategy";
 import { useDatabaseType } from "../store/settingsSlice";
 
 export function useDeckInfoAPI() {

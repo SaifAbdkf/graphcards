@@ -6,6 +6,7 @@ import DeckForm from "./DeckForm";
 import { DeckFields } from "../Types/appDataTypes";
 
 import { useDeckInfoAPI } from "../hooks/useDeckInfoAPI";
+import { useSWRConfig } from "swr";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
@@ -17,7 +18,7 @@ export default function CreateDeckForm({
   setDeckFields: React.Dispatch<React.SetStateAction<DeckFields>>;
 }) {
   const [isCreating, setIsCreating] = useState(false);
-
+  const { mutate } = useSWRConfig();
   const deckInfoAPI = useDeckInfoAPI();
 
   const handleCreateDeck = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +33,8 @@ export default function CreateDeckForm({
     // Set loading state (isCreating) and close form immediately for better UX
     setIsCreating(true);
     setCreateDeckMode(false);
-    await deckInfoAPI.createDeckInfo(deckFields);
+    await deckInfoAPI.createDeckInfo(deckFields, mutate);
+    // mutate("/decksInfo");
   };
 
   return (

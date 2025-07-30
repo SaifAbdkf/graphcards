@@ -5,6 +5,7 @@ import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
 import { fetchDeck } from "./services/nodeApi/graphdeckNodeApi";
 import { useDeckInfoAPI } from "./hooks/useDeckInfoAPI";
+import useSWR from "swr";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(
@@ -16,13 +17,18 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   const setNodes = useGraphcardsStore((state) => state.setNodes);
   const setEdges = useGraphcardsStore((state) => state.setEdges);
   const deckInfoAPI = useDeckInfoAPI();
+
+  const fetcher = async () => {
+    const fetchedDecksInfo = await deckInfoAPI.fetchAllDecksInfo();
+    return fetchedDecksInfo;
+  };
+  const { data } = useSWR("/decksInfo", fetcher);
+
   useEffect(() => {
-    const fetcher = async () => {
-      const fetchedDecksInfo = await deckInfoAPI.fetchAllDecksInfo();
-      setDecksInfo(fetchedDecksInfo); //smelly
-    };
-    fetcher();
-  }, [deckInfoAPI, setDecksInfo]);
+    if (data) {
+      setDecksInfo(data);
+    }
+  }, [data, setDecksInfo]);
 
   useEffect(() => {
     const fetcher = async () => {

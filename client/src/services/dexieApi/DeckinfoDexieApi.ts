@@ -2,17 +2,17 @@ import { v4 } from "uuid";
 import { db } from "../../dexieDB/dexieDb";
 import { DeckFields } from "../../Types/appDataTypes";
 import { DeckInfoAPIStrategy } from "../strategies/deckInfoStrategy";
-import { DatabaseType } from "../../Types/storeTypes";
-import { deckInfoNodeAPI } from "../nodeApi/deckInfoNodeApi";
+import { ScopedMutator } from "swr";
 
 export const deckInfoDexieAPI: DeckInfoAPIStrategy = {
-  createDeckInfo: async (deckFields: DeckFields) => {
+  createDeckInfo: async (deckFields: DeckFields, mutate: ScopedMutator) => {
     try {
       const newId = v4();
       const newDeckInfoID = await db.DeckInfo.add({
         id: newId,
         ...deckFields,
       });
+      mutate("decksInfo");
       console.log("newDeckField is", newDeckInfoID);
       return { _id: newId, ...deckFields };
     } catch (error) {
@@ -33,12 +33,17 @@ export const deckInfoDexieAPI: DeckInfoAPIStrategy = {
       throw error;
     }
   },
-  updateDeckInfo: async (deckId: string, deckFields: DeckFields) => {
+  updateDeckInfo: async (
+    deckId: string,
+    deckFields: DeckFields,
+    mutate: ScopedMutator
+  ) => {
     try {
       const updatedCount = await db.DeckInfo.update(deckId, {
         name: deckFields.name,
         description: deckFields.description,
       });
+      mutate("decksInfo");
 
       if (updatedCount === 0) {
         throw new Error(`DeckInfo with deckId ${deckId} not found`);
@@ -55,9 +60,3 @@ export const deckInfoDexieAPI: DeckInfoAPIStrategy = {
     }
   },
 };
-
-export function getDeckInfoAPIStrategy(
-  databaseType: DatabaseType
-): DeckInfoAPIStrategy {
-  return databaseType === "local" ? deckInfoDexieAPI : deckInfoNodeAPI;
-}

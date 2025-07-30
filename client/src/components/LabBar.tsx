@@ -6,21 +6,30 @@ import {
   LinkPayload,
   UpdateGraphPayload,
 } from "../Types/storageManagementTypes";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { dummy } from "../utils/utils";
 import { LabView } from "../Types/storeTypes";
 import { useLabView } from "../store/UISlice";
 import { useDatabaseType } from "../store/settingsSlice";
+import { useSWRConfig } from "swr";
 
 export default function LabBar() {
+  const { mutate } = useSWRConfig();
+
   const [hovered, setHovered] = useState<string | null>(null);
   const activeDeckInfo = useGraphcardsStore(
     useShallow((state) => state.activeDeckInfo)
   );
   const { labView, setLabView } = useLabView();
   const { databaseType, setDatabaseType } = useDatabaseType();
+
+  // React to database type changes and trigger mutate
+  // for dev
+  useEffect(() => {
+    mutate("/decksInfo");
+  }, [databaseType, mutate]);
 
   const changeDatabaseType = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
