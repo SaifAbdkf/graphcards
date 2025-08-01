@@ -1,10 +1,10 @@
 import { Plus, Save } from "lucide-react";
 import styles from "./LabBar.module.scss";
 import {
-  CardPayload,
+  CardChangePayload,
+  LinkChangePayload,
+  GraphdeckChangePayload,
   DbAction,
-  LinkPayload,
-  UpdateGraphPayload,
 } from "../Types/storageManagementTypes";
 import { useCallback, useState, useEffect } from "react";
 import { useGraphcardsStore } from "../store/store";
@@ -14,6 +14,7 @@ import { LabView } from "../Types/storeTypes";
 import { useLabView } from "../store/UISlice";
 import { useDatabaseType } from "../store/settingsSlice";
 import { useSWRConfig } from "swr";
+import { graphdeckDexieApi } from "../services/dexieApi/graphdeckDexieApi";
 
 export default function LabBar() {
   const { mutate } = useSWRConfig();
@@ -42,19 +43,24 @@ export default function LabBar() {
     const { nodes, edges, deletedNodes, deletedEdges } =
       useGraphcardsStore.getState();
 
-    const editedAndCreatedCardsPayload: CardPayload[] = nodes
+    const editedAndCreatedCardsPayload: CardChangePayload[] = nodes
       .filter((card) => card.data.dbAction !== "none")
       .map((filteredCard) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { dbAction, editMode, ...cardData } = filteredCard.data;
-        return { dbAction, data: cardData };
+        return { dbAction, data: cardData } as CardChangePayload;
       });
 
-    const deletedCardsPayload: CardPayload[] = deletedNodes.map((node) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { dbAction, editMode, ...cardData } = node.data;
-      return { dbAction: "delete" as DbAction, data: cardData };
-    });
+    const deletedCardsPayload: CardChangePayload[] = deletedNodes.map(
+      (node) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { dbAction, editMode, ...cardData } = node.data;
+        return {
+          dbAction: "delete" as DbAction,
+          data: cardData,
+        } as CardChangePayload;
+      }
+    );
 
     const cardsPayload = [
       ...editedAndCreatedCardsPayload,
@@ -65,34 +71,37 @@ export default function LabBar() {
     const linksToUpdate = edges.filter(
       (link) => link.data !== undefined && link.data.dbAction !== "none"
     );
-    const editedAndCreatedLinksPayload: LinkPayload[] = linksToUpdate
+    const editedAndCreatedLinksPayload: LinkChangePayload[] = linksToUpdate
       .map((filteredLink) => {
         if (filteredLink.data) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { dbAction, editMode, ...linkData } = filteredLink.data;
-          return { dbAction, data: linkData };
+          return { dbAction, data: linkData } as LinkChangePayload;
         }
         return undefined;
       })
-      .filter((link): link is LinkPayload => link !== undefined);
+      .filter((link): link is LinkChangePayload => link !== undefined);
 
-    const deletedLinksPayload: LinkPayload[] = deletedEdges
+    const deletedLinksPayload: LinkChangePayload[] = deletedEdges
       .map((edge) => {
         if (edge.data) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { dbAction, editMode, ...linkData } = edge.data;
-          return { dbAction: "delete" as DbAction, data: linkData };
+          return {
+            dbAction: "delete" as DbAction,
+            data: linkData,
+          } as LinkChangePayload;
         }
         return undefined;
       })
-      .filter((link): link is LinkPayload => link !== undefined);
+      .filter((link): link is LinkChangePayload => link !== undefined);
 
     const linksPayload = [
       ...editedAndCreatedLinksPayload,
       ...deletedLinksPayload,
     ];
 
-    const updateGraphPayload: UpdateGraphPayload = {
+    const updateGraphPayload: GraphdeckChangePayload = {
       deckId:
         cardsPayload[0].data.deckId ||
         linksPayload[0].data.deckId ||
@@ -101,8 +110,9 @@ export default function LabBar() {
       cards: cardsPayload,
       links: linksPayload,
     };
+    graphdeckDexieApi.updateGraphdeck(updateGraphPayload);
     console.log("save", updateGraphPayload);
-  }, []);
+  }, [activeDeckInfo?._id]);
 
   const handleLabViewChange = useCallback(
     (view: string): React.MouseEventHandler<HTMLDivElement> =>
@@ -139,7 +149,7 @@ export default function LabBar() {
           onMouseEnter={handleMouseEnter("graphdecksNavLink")}
           onMouseLeave={handleMouseLeave}
         >
-          GraphDecks
+          graphdecks
         </div>
         {activeDeckInfo !== null && (
           <div className={`${styles.activeDeckTools}`}>

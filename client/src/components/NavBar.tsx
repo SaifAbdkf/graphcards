@@ -26,7 +26,7 @@ export default function NavBar() {
         onMouseEnter={handleMouseEnter("home")}
         onMouseLeave={handleMouseLeave}
       >
-        GraphCards
+        graphcards
       </Link>
       <Link
         to="/lab"
@@ -36,7 +36,7 @@ export default function NavBar() {
           (location === "/lab" || hoveredLink === "lab") && styles.selectedColor
         }`}
       >
-        <div key={"lab"}>Lab</div>
+        <div key={"lab"}>lab</div>
       </Link>
     </div>
   );

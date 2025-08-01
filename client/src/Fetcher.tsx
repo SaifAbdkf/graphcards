@@ -3,9 +3,10 @@ import { useGraphcardsStore } from "./store/store";
 import { useShallow } from "zustand/shallow";
 import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
-import { fetchDeck } from "./services/nodeApi/graphdeckNodeApi";
-import { useDeckInfoAPI } from "./hooks/useDeckInfoAPI";
+
 import useSWR from "swr";
+import { useDeckInfoApi } from "./hooks/useDeckInfoApi";
+import { useGraphdeckApi } from "./hooks/useGraphDeckApi";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(
@@ -16,24 +17,25 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   );
   const setNodes = useGraphcardsStore((state) => state.setNodes);
   const setEdges = useGraphcardsStore((state) => state.setEdges);
-  const deckInfoAPI = useDeckInfoAPI();
+  const deckInfoAPI = useDeckInfoApi();
+  const graphdeckApi = useGraphdeckApi();
 
   const fetcher = async () => {
     const fetchedDecksInfo = await deckInfoAPI.fetchAllDecksInfo();
     return fetchedDecksInfo;
   };
-  const { data } = useSWR("/decksInfo", fetcher);
+  const { data: decksInfoData } = useSWR("/decksInfo", fetcher);
 
   useEffect(() => {
-    if (data) {
-      setDecksInfo(data);
+    if (decksInfoData) {
+      setDecksInfo(decksInfoData);
     }
-  }, [data, setDecksInfo]);
+  }, [decksInfoData, setDecksInfo]);
 
   useEffect(() => {
     const fetcher = async () => {
       if (activeDeck) {
-        const fetchedDeck = await fetchDeck(activeDeck._id);
+        const fetchedDeck = await graphdeckApi.fetchGraphDeck(activeDeck._id);
         const cardNodes: CardNode[] = fetchedDeck.cards.map((card, index) => ({
           id: card._id,
           type: "cardNode",
@@ -57,7 +59,7 @@ export default function Fetcher({ children }: { children: ReactNode }) {
       }
     };
     fetcher();
-  }, [activeDeck, setEdges, setNodes]);
+  }, [activeDeck, graphdeckApi, setEdges, setNodes]);
 
   return <>{children}</>;
 }

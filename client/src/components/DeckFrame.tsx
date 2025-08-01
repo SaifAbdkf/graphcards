@@ -12,8 +12,9 @@ import { useGraphcardsStore } from "../store/store";
 import { useShallow } from "zustand/shallow";
 import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 import { useLabView } from "../store/UISlice";
-import { useDeckInfoAPI } from "../hooks/useDeckInfoAPI";
-import { deleteDeck } from "../services/nodeApi/graphdeckNodeApi";
+import { useDeckInfoApi } from "../hooks/useDeckInfoApi";
+import { useSWRConfig } from "swr";
+import { useGraphdeckApi } from "../hooks/useGraphDeckApi";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
@@ -31,9 +32,12 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     useShallow((state) => state.setActiveDeckInfo)
   );
 
+  const { mutate } = useSWRConfig();
+  const graphdeckAPI = useGraphdeckApi();
+
   const decksInfo = useStoreDecksInfo();
   const { setLabView } = useLabView();
-  const deckInfoAPI = useDeckInfoAPI();
+  const deckInfoAPI = useDeckInfoApi();
   useEffect(() => {
     if (!showMenu) return;
     async function handleClickOutside(event: MouseEvent) {
@@ -46,7 +50,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
           console.log("gonna edit", deckFields);
 
           setEditingDeck(false);
-          await deckInfoAPI.updateDeckInfo(deckInfo._id, deckFields);
+          await deckInfoAPI.updateDeckInfo(deckInfo._id, deckFields, mutate);
         }
       }
     }
@@ -54,7 +58,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showMenu, editingDeck, deckFields, deckInfo._id, deckInfoAPI]);
+  }, [showMenu, editingDeck, deckFields, deckInfo._id, deckInfoAPI, mutate]);
 
   const viewDeck = (deckId: string) => {
     const activeDeckInfo = decksInfo.find(
@@ -66,10 +70,13 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
     }
   };
 
-  const onDeleteDeck = useCallback(async (deckId: string) => {
-    const response = await deleteDeck(deckId);
-    console.log("deletion successful ", response);
-  }, []);
+  const onDeleteDeck = useCallback(
+    async (deckId: string) => {
+      const response = await graphdeckAPI.deleteGraphDeck(deckId);
+      console.log("deletion successful ", response);
+    },
+    [graphdeckAPI]
+  );
 
   return (
     <div

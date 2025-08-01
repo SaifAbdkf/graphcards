@@ -1,20 +1,50 @@
-import { Card, Link } from "./appDataTypes";
+import { Card, CardFields, Link, LinkFields } from "./appDataTypes";
 
 // for import export JSON feature
-export type DbAction = "create" | "update" | "none";
+export type DbAction = "create" | "update" | "delete" | "none";
 
-export type CardPayload = {
-  dbAction: DbAction;
+export type CardChangePayload =
+  | CardCreatePayload
+  | CardUpdatePayload
+  | CardDeletePayload;
+
+export type CardCreatePayload = {
+  dbAction: "create";
+  data: CardFields;
+};
+
+export type CardUpdatePayload = {
+  dbAction: "update";
   data: Card;
 };
 
-export type LinkPayload = {
-  dbAction: DbAction;
+export type CardDeletePayload = {
+  dbAction: "delete";
+  data: Card;
+};
+
+export type LinkChangePayload =
+  | LinkCreatePayload
+  | LinkUpdatePayload
+  | LinkDeletePayload;
+
+export type LinkCreatePayload = {
+  dbAction: "create";
+  data: LinkFields;
+};
+
+export type LinkUpdatePayload = {
+  dbAction: "update";
   data: Link;
 };
 
-export type UpdateGraphPayload = {
+export type LinkDeletePayload = {
+  dbAction: "delete";
+  data: Link;
+};
+
+export type GraphdeckChangePayload = {
   deckId: string;
-  cards: CardPayload[];
-  links: LinkPayload[];
+  cards: CardChangePayload[];
+  links: LinkChangePayload[];
 };

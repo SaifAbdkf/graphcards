@@ -44,8 +44,8 @@ export default function CreateDeck() {
     >
       {!createDeckMode ? (
         <>
-          <div>Create </div>
-          <div>GraphDeck</div>
+          <div>create </div>
+          <div>graphdeck</div>
         </>
       ) : (
         <CreateDeckForm

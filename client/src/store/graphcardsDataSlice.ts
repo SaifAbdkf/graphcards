@@ -7,7 +7,12 @@ import {
   Connection,
 } from "@xyflow/react";
 import { DbAction } from "../Types/storageManagementTypes";
-import { CardFields, CardNode, LinkEdge } from "../Types/appDataTypes";
+import {
+  CardFields,
+  CardNode,
+  DeckInfo,
+  LinkEdge,
+} from "../Types/appDataTypes";
 
 export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
   set,
@@ -78,6 +83,11 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     });
   },
   onConnect: (connection: Connection) => {
+    console.log(connection);
+    // Access activeDeckInfo from the full store state
+    const storeState = get() as GraphcardsDataSlice & {
+      activeDeckInfo: DeckInfo;
+    };
     const edgeTempId = `tempId-${connection.source}-${
       connection.target
     }-${Date.now().toString()}`;
@@ -88,7 +98,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
       type: "LinkEdge",
       selected: true,
       data: {
-        deckId: "dummy",
+        deckId: storeState.activeDeckInfo._id,
         _id: edgeTempId,
         dbAction: "create",
         editMode: true,
