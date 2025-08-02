@@ -5,8 +5,8 @@ import { CardNode } from "./Types/appDataTypes";
 import { DbAction } from "./Types/storageManagementTypes";
 
 import useSWR from "swr";
-import { useDeckInfoApi } from "./hooks/useDeckInfoApi";
 import { useGraphdeckApi } from "./hooks/useGraphDeckApi";
+import { useDeckInfoApi } from "./hooks/useDeckInfoAPI";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
   const activeDeck = useGraphcardsStore(

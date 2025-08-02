@@ -6,7 +6,7 @@ import DeckForm from "./DeckForm";
 import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
 
 import { useSWRConfig } from "swr";
-import { useDeckInfoApi } from "../hooks/useDeckInfoApi";
+import { useDeckInfoApi } from "../hooks/useDeckInfoAPI";
 
 export default function CreateDeckForm({
   setCreateDeckMode,
