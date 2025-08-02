@@ -1,9 +1,10 @@
 import { v4 } from "uuid";
 import { GraphdeckApiStrategy } from "../strategies/graphdeckStrategy";
 import { db } from "../../dexieDB/dexieDb";
+import { ScopedMutator } from "swr";
 
 export const graphdeckDexieApi: GraphdeckApiStrategy = {
-  fetchGraphDeck: async (deckId: string) => {
+  fetchGraphdeck: async (deckId: string) => {
     try {
       const deckInfo = await db.DeckInfo.get(deckId);
 
@@ -47,7 +48,7 @@ export const graphdeckDexieApi: GraphdeckApiStrategy = {
     }
   },
 
-  updateGraphdeck: async (graphdeckUpdatePayload) => {
+  updateGraphdeck: async (graphdeckUpdatePayload, mutate: ScopedMutator) => {
     //cards
     const cardPayloads = graphdeckUpdatePayload.cards;
     cardPayloads.forEach(async (cardPayload) => {
@@ -141,12 +142,15 @@ export const graphdeckDexieApi: GraphdeckApiStrategy = {
           }
       }
     });
+
+    mutate(graphdeckUpdatePayload.deckId);
   },
 
-  deleteGraphDeck: async (deckId: string) => {
+  deleteGraphdeck: async (deckId: string, mutate: ScopedMutator) => {
     try {
       await db.DeckInfo.delete(deckId);
       console.log(`Deleted deck with id ${deckId}`);
+      mutate("decksInfo");
     } catch (error) {
       console.log("Error deleting deck:", error);
       throw error;

@@ -72,7 +72,7 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
 
   const onDeleteDeck = useCallback(
     async (deckId: string) => {
-      const response = await graphdeckAPI.deleteGraphDeck(deckId);
+      const response = await graphdeckAPI.deleteGraphdeck(deckId);
       console.log("deletion successful ", response);
     },
     [graphdeckAPI]

@@ -1,3 +1,4 @@
+import { ScopedMutator } from "swr";
 import { DeckFields, DeckInfo } from "../../Types/appDataTypes";
 import { DeckInfoAPIStrategy } from "../strategies/deckInfoStrategy";
 
@@ -19,7 +20,7 @@ export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
     }
   },
 
-  createDeckInfo: async (deckFields: DeckFields) => {
+  createDeckInfo: async (deckFields: DeckFields, mutate: ScopedMutator) => {
     const response = await fetch(`${BACKEND_URL}/deck`, {
       method: "POST",
       headers: {
@@ -34,13 +35,18 @@ export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
     const json = await response.json();
 
     if (json.status === "success") {
+      mutate("decksInfo");
       return json.dataSingular;
     } else {
       throw new Error(json.message || "API error");
     }
   },
 
-  updateDeckInfo: async (deckId: string, deckFields: Partial<DeckInfo>) => {
+  updateDeckInfo: async (
+    deckId: string,
+    deckFields: Partial<DeckInfo>,
+    mutate: ScopedMutator
+  ) => {
     const response = await fetch(`${BACKEND_URL}/deck/${deckId}`, {
       method: "PATCH",
       headers: {
@@ -55,6 +61,7 @@ export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
     const json = await response.json();
 
     if (json.status === "success") {
+      mutate("decksInfo");
       return json.data;
     } else {
       throw new Error(json.message || "API error");

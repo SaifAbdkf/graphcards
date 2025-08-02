@@ -29,7 +29,7 @@ export default function LabBar() {
   // React to database type changes and trigger mutate
   // for dev
   useEffect(() => {
-    mutate("/decksInfo");
+    mutate("decksInfo");
   }, [databaseType, mutate]);
 
   const changeDatabaseType = useCallback(
@@ -110,9 +110,9 @@ export default function LabBar() {
       cards: cardsPayload,
       links: linksPayload,
     };
-    graphdeckDexieApi.updateGraphdeck(updateGraphPayload);
+    graphdeckDexieApi.updateGraphdeck(updateGraphPayload, mutate);
     console.log("save", updateGraphPayload);
-  }, [activeDeckInfo?._id]);
+  }, [activeDeckInfo?._id, mutate]);
 
   const handleLabViewChange = useCallback(
     (view: string): React.MouseEventHandler<HTMLDivElement> =>

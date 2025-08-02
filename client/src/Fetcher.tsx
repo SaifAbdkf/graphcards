@@ -20,11 +20,11 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   const deckInfoAPI = useDeckInfoApi();
   const graphdeckApi = useGraphdeckApi();
 
-  const fetcher = async () => {
+  const decksInfoFetcher = async () => {
     const fetchedDecksInfo = await deckInfoAPI.fetchAllDecksInfo();
     return fetchedDecksInfo;
   };
-  const { data: decksInfoData } = useSWR("/decksInfo", fetcher);
+  const { data: decksInfoData } = useSWR("decksInfo", decksInfoFetcher);
 
   useEffect(() => {
     if (decksInfoData) {
@@ -32,34 +32,44 @@ export default function Fetcher({ children }: { children: ReactNode }) {
     }
   }, [decksInfoData, setDecksInfo]);
 
-  useEffect(() => {
-    const fetcher = async () => {
-      if (activeDeck) {
-        const fetchedDeck = await graphdeckApi.fetchGraphDeck(activeDeck._id);
-        const cardNodes: CardNode[] = fetchedDeck.cards.map((card, index) => ({
-          id: card._id,
-          type: "cardNode",
-          data: { ...card, dbAction: "none", editMode: false },
-          position: { x: index * 100, y: 100 },
-        }));
-        setNodes(cardNodes);
+  const graphdeckFetcher = async () => {
+    if (activeDeck) {
+      const fetchedGraphdeck = await graphdeckApi.fetchGraphdeck(
+        activeDeck._id
+      );
+      return fetchedGraphdeck;
+    }
+  };
 
-        const linkEdges = fetchedDeck.links.map((link) => ({
-          id: link._id,
-          type: "LinkEdge",
-          data: { ...link, dbAction: "none" as DbAction, editMode: false },
-          isDirected: link.isDirected,
-          label: link.label,
-          source: link.from,
-          target: link.to,
-          sourceHandle: link.fromSide,
-          targetHandle: link.toSide,
-        }));
-        setEdges(linkEdges);
-      }
-    };
-    fetcher();
-  }, [activeDeck, graphdeckApi, setEdges, setNodes]);
+  const { data: graphdeckData } = useSWR(
+    activeDeck?._id || null,
+    graphdeckFetcher
+  );
+
+  useEffect(() => {
+    if (graphdeckData) {
+      const cardNodes: CardNode[] = graphdeckData.cards.map((card) => ({
+        id: card._id,
+        type: "cardNode",
+        data: { ...card, dbAction: "none", editMode: false },
+        position: { x: card.x, y: card.y },
+      }));
+      setNodes(cardNodes);
+
+      const linkEdges = graphdeckData.links.map((link) => ({
+        id: link._id,
+        type: "LinkEdge",
+        data: { ...link, dbAction: "none" as DbAction, editMode: false },
+        isDirected: link.isDirected,
+        label: link.label,
+        source: link.from,
+        target: link.to,
+        sourceHandle: link.fromSide,
+        targetHandle: link.toSide,
+      }));
+      setEdges(linkEdges);
+    }
+  }, [activeDeck, graphdeckApi, graphdeckData, setEdges, setNodes]);
 
   return <>{children}</>;
 }

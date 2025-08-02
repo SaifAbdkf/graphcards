@@ -34,7 +34,6 @@ export default function CreateDeckForm({
     setIsCreating(true);
     setCreateDeckMode(false);
     await deckInfoAPI.createDeckInfo(deckFields, mutate);
-    // mutate("/decksInfo");
   };
 
   return (

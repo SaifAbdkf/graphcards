@@ -142,6 +142,7 @@ export default function ActiveGraphDeck() {
         onNodeDoubleClick={(event, node) => doubleClickCard(event, node)}
         onEdgeDoubleClick={(event, edge) => doubleClickEdge(event, edge)}
         onPaneClick={setCardEditModeOff}
+        maxZoom={10}
       >
         <Controls />
       </ReactFlow>
