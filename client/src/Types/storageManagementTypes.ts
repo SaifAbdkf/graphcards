@@ -1,4 +1,4 @@
-import { Card, CardFields, Link, LinkFields } from "./appDataTypes";
+import { Card, Link } from "./appDataTypes";
 
 // for import export JSON feature
 export type DbAction = "create" | "update" | "delete" | "none";
