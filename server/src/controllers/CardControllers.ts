@@ -14,9 +14,17 @@ import assert from "assert";
 // Creates links attached to the card too.
 // TODO maybe make function createCardAndLinks that is a transaction calling createCard and CreaeLink
 export async function createCard(request: Request, response: Response) {
-  const { deckId, x, y, front, back, links } = ApiConnectedCardSchema.parse(
-    request.body
-  );
+  const validationResult = ApiConnectedCardSchema.safeParse(request.body);
+
+  if (!validationResult.success) {
+    return response
+      .status(400)
+      .json(
+        failureResponseObject("Invalid request data", validationResult.error)
+      );
+  }
+
+  const { deckId, x, y, front, back, links } = validationResult.data;
   // TODO find a way to create a card where its linkedCards are not already created, but needs to be created
 
   const session = await mongoose.startSession();
