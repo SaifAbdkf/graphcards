@@ -17,11 +17,22 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
     ) => {
       const { name, value } = e.target;
       editNodeCardFields(cardData._id, {
+        deckId: cardData.deckId,
         front: name === "front" ? value : cardData.front,
         back: name === "back" ? value : cardData.back,
+        x: cardData.x,
+        y: cardData.y,
       });
     },
-    [cardData._id, cardData.front, cardData.back, editNodeCardFields]
+    [
+      editNodeCardFields,
+      cardData._id,
+      cardData.deckId,
+      cardData.front,
+      cardData.back,
+      cardData.x,
+      cardData.y,
+    ]
   );
 
   return (
