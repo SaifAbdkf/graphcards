@@ -6,7 +6,7 @@ export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
   fetchAllDecksInfo: async () => {
-    const response = await fetch(`${BACKEND_URL}${"/deck/all"}`);
+    const response = await fetch(`${BACKEND_URL}${"/deckinfo/all"}`);
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData?.message || `HTTP error!`);
@@ -21,7 +21,7 @@ export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
   },
 
   createDeckInfo: async (deckFields: DeckFields, mutate: ScopedMutator) => {
-    const response = await fetch(`${BACKEND_URL}/deck`, {
+    const response = await fetch(`${BACKEND_URL}/deckinfo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const deckInfoNodeAPI: DeckInfoAPIStrategy = {
     deckFields: Partial<DeckInfo>,
     mutate: ScopedMutator
   ) => {
-    const response = await fetch(`${BACKEND_URL}/deck/${deckId}`, {
+    const response = await fetch(`${BACKEND_URL}/deckinfo/${deckId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

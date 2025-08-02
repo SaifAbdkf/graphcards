@@ -3,7 +3,7 @@ import styles from "./CreateDeckForm.module.scss";
 import Button from "./Button";
 
 import DeckForm from "./DeckForm";
-import { DeckFields } from "../Types/appDataTypes";
+import { DeckFields, emptyDeckFields } from "../Types/appDataTypes";
 
 import { useSWRConfig } from "swr";
 import { useDeckInfoApi } from "../hooks/useDeckInfoApi";
@@ -34,6 +34,7 @@ export default function CreateDeckForm({
     setIsCreating(true);
     setCreateDeckMode(false);
     await deckInfoAPI.createDeckInfo(deckFields, mutate);
+    setDeckFields(emptyDeckFields);
   };
 
   return (

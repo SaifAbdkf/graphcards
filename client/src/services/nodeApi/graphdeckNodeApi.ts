@@ -5,7 +5,7 @@ import { BACKEND_URL } from "./deckInfoNodeApi";
 
 export const graphdeckNodeApi = {
   fetchGraphdeck: async (deckId: string): Promise<GraphDeck> => {
-    const response = await fetch(`${BACKEND_URL}${`/deck/${deckId}`}`);
+    const response = await fetch(`${BACKEND_URL}${`/graphdeck/${deckId}`}`);
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData?.message || `HTTP error!`);
@@ -42,7 +42,7 @@ export const graphdeckNodeApi = {
     deckId: string,
     mutate: ScopedMutator
   ): Promise<DeckInfo> => {
-    const response = await fetch(`${BACKEND_URL}/deck/${deckId}`, {
+    const response = await fetch(`${BACKEND_URL}/graphdeck/${deckId}`, {
       method: "DELETE",
     });
     if (!response.ok) {

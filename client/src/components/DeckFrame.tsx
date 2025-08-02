@@ -47,8 +47,6 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
       ) {
         setShowMenu(false);
         if (editingDeck) {
-          console.log("gonna edit", deckFields);
-
           setEditingDeck(false);
           await deckInfoAPI.updateDeckInfo(deckInfo._id, deckFields, mutate);
         }
@@ -72,10 +70,10 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
 
   const onDeleteDeck = useCallback(
     async (deckId: string) => {
-      const response = await graphdeckAPI.deleteGraphdeck(deckId);
+      const response = await graphdeckAPI.deleteGraphdeck(deckId, mutate);
       console.log("deletion successful ", response);
     },
-    [graphdeckAPI]
+    [graphdeckAPI, mutate]
   );
 
   return (
