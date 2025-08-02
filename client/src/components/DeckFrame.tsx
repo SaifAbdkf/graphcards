@@ -14,7 +14,7 @@ import { useStoreDecksInfo } from "../store/graphdecksDataSlice";
 import { useLabView } from "../store/UISlice";
 import { useSWRConfig } from "swr";
 import { useGraphdeckApi } from "../hooks/useGraphDeckApi";
-import { useDeckInfoApi } from "../hooks/useDeckInfoAPI";
+import { useDeckInfoApi } from "../hooks/useDeckInfoApi";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
