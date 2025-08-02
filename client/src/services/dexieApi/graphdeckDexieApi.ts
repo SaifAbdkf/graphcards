@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { GraphdeckApiStrategy } from "../strategies/graphdeckStrategy";
 import { db } from "../../dexieDB/dexieDb";
 import { ScopedMutator } from "swr";
+import { ObjectId } from "bson";
 
 export const graphdeckDexieApi: GraphdeckApiStrategy = {
   fetchGraphdeck: async (deckId: string) => {
@@ -55,9 +56,8 @@ export const graphdeckDexieApi: GraphdeckApiStrategy = {
       switch (cardPayload.dbAction) {
         case "create":
           try {
-            const newId = v4();
             const newCardId = await db.Card.add({
-              id: newId,
+              id: cardPayload.data._id,
               ...cardPayload.data,
             });
             console.log("newCard Id is", newCardId);
@@ -100,9 +100,8 @@ export const graphdeckDexieApi: GraphdeckApiStrategy = {
       switch (linkPayload.dbAction) {
         case "create":
           try {
-            const newId = v4();
             const newLinkId = await db.Link.add({
-              id: newId,
+              id: linkPayload.data._id,
               ...linkPayload.data,
             });
             console.log("newLink Id is", newLinkId);

@@ -4,8 +4,8 @@
   border-bottom: $border-3 solid $black;
   display: flex;
   justify-content: space-between;
-  height: $navbar-height * 0.7;
   align-items: center;
+  height: $navbar-height * 0.7;
 
   .leftSideLabBar {
     display: flex;
@@ -20,6 +20,7 @@
     }
 
     .activeDeckTools {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       .selectedDeckName {
@@ -59,9 +60,15 @@
     border-left: 0.5px solid $black;
     .importIconContainer,
     .exportIconContainer {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
-      padding: 0.325rem;
+      padding: 0rem 0.325rem;
+
+      &:hover {
+        cursor: pointer;
+        color: $primary-color;
+      }
     }
   }
 }

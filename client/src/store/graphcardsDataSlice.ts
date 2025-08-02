@@ -13,6 +13,7 @@ import {
   DeckInfo,
   LinkEdge,
 } from "../Types/appDataTypes";
+import { ObjectId } from "bson";
 
 export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
   set,
@@ -34,7 +35,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
       positionChanges.forEach((change) => {
         const nodeChanged = nodes.find((node) => node.id === change.id);
         if (nodeChanged && change.position !== undefined) {
-          const position = change.position; // Store it in a variable after the check
+          const position = change.position;
           set({
             nodes: nodes.map((node) =>
               node.id === nodeChanged.id
@@ -46,7 +47,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
                         node.data.dbAction === "create"
                           ? ("create" as DbAction)
                           : ("update" as DbAction),
-                      x: position.x, // Now TypeScript knows this is defined
+                      x: position.x,
                       y: position.y,
                     },
                   }
@@ -66,6 +67,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     set({
       edges: applyEdgeChanges(changes, get().edges),
     });
+    console.log("------", get().edges);
 
     // case: edge was selected and have editMode true.
     const newEdges = get().edges.map((storeEdge) =>
@@ -88,18 +90,16 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     const storeState = get() as GraphcardsDataSlice & {
       activeDeckInfo: DeckInfo;
     };
-    const edgeTempId = `tempId-${connection.source}-${
-      connection.target
-    }-${Date.now().toString()}`;
+    const edgeId = new ObjectId().toHexString();
 
     const newEdge: LinkEdge = {
       ...connection,
-      id: edgeTempId,
+      id: edgeId,
       type: "LinkEdge",
       selected: true,
       data: {
         deckId: storeState.activeDeckInfo._id,
-        _id: edgeTempId,
+        _id: edgeId,
         dbAction: "create",
         editMode: true,
         isDirected: true,

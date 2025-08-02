@@ -47,12 +47,14 @@ export default function Fetcher({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    console.log("setting new graphdeck in the store");
+
     if (graphdeckData) {
       const cardNodes: CardNode[] = graphdeckData.cards.map((card) => ({
         id: card._id,
         type: "cardNode",
         data: { ...card, dbAction: "none", editMode: false },
-        position: { x: card.x, y: card.y },
+        position: { x: card.x || 0, y: card.y || 0 },
       }));
       setNodes(cardNodes);
 

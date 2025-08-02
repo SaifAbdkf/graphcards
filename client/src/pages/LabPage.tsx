@@ -12,14 +12,15 @@ export default function LabPage() {
   return (
     <div className={styles.labContainer}>
       <LabBar />
-
-      {labView === "graphdecks" ? (
-        <GraphDecksPage />
-      ) : (
-        <ReactFlowProvider>
-          <ActiveGraphDeck />
-        </ReactFlowProvider>
-      )}
+      <div className={`${styles.labContentContainer}`}>
+        {labView === "graphdecks" ? (
+          <GraphDecksPage />
+        ) : (
+          <ReactFlowProvider>
+            <ActiveGraphDeck />
+          </ReactFlowProvider>
+        )}
+      </div>
     </div>
   );
 }

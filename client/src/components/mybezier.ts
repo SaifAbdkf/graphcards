@@ -80,9 +80,9 @@ function calculateControlOffset(
   _curvature: number
 ): number {
   if (distance >= 0) {
-    return 0.5 * distance + 150;
+    return 0.5 * distance + 50;
   }
-  return 0.5 * -distance + 150;
+  return 0.5 * -distance + 50;
 }
 
 function getControlWithCurvature({

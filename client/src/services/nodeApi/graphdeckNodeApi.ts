@@ -23,10 +23,11 @@ export const graphdeckNodeApi = {
     graphdeckUpdatePayload: GraphdeckChangePayload,
     mutate: ScopedMutator
   ) => {
-    console.log("update graphdeck node api");
-
     const response = await fetch(`${BACKEND_URL}/graphdeck`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(graphdeckUpdatePayload),
     });
     if (!response.ok) {
@@ -34,7 +35,10 @@ export const graphdeckNodeApi = {
       throw new Error(errorData?.message || `HTTP error!`);
     }
     const json = await response.json();
-    mutate(json.dataSingular.deckId);
+    console.log(json);
+
+    await mutate(json.dataSingular._id);
+
     return json.dataSingular;
   },
 

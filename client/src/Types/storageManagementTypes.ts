@@ -3,43 +3,13 @@ import { Card, CardFields, Link, LinkFields } from "./appDataTypes";
 // for import export JSON feature
 export type DbAction = "create" | "update" | "delete" | "none";
 
-export type CardChangePayload =
-  | CardCreatePayload
-  | CardUpdatePayload
-  | CardDeletePayload;
-
-export type CardCreatePayload = {
-  dbAction: "create";
-  data: CardFields;
-};
-
-export type CardUpdatePayload = {
-  dbAction: "update";
+export type CardChangePayload = {
+  dbAction: "create" | "update" | "delete";
   data: Card;
 };
 
-export type CardDeletePayload = {
-  dbAction: "delete";
-  data: Card;
-};
-
-export type LinkChangePayload =
-  | LinkCreatePayload
-  | LinkUpdatePayload
-  | LinkDeletePayload;
-
-export type LinkCreatePayload = {
-  dbAction: "create";
-  data: LinkFields;
-};
-
-export type LinkUpdatePayload = {
-  dbAction: "update";
-  data: Link;
-};
-
-export type LinkDeletePayload = {
-  dbAction: "delete";
+export type LinkChangePayload = {
+  dbAction: "create" | "update" | "delete";
   data: Link;
 };
 

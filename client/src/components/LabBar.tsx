@@ -14,10 +14,11 @@ import { LabView } from "../Types/storeTypes";
 import { useLabView } from "../store/UISlice";
 import { useDatabaseType } from "../store/settingsSlice";
 import { useSWRConfig } from "swr";
-import { graphdeckDexieApi } from "../services/dexieApi/graphdeckDexieApi";
+import { useGraphdeckApi } from "../hooks/useGraphDeckApi";
 
 export default function LabBar() {
   const { mutate } = useSWRConfig();
+  const graphdeckApi = useGraphdeckApi();
 
   const [hovered, setHovered] = useState<string | null>(null);
   const activeDeckInfo = useGraphcardsStore(
@@ -101,6 +102,11 @@ export default function LabBar() {
       ...deletedLinksPayload,
     ];
 
+    if (cardsPayload.length === 0 && linksPayload.length === 0) {
+      console.log("nothing to update");
+      return;
+    }
+
     const updateGraphPayload: GraphdeckChangePayload = {
       deckId:
         cardsPayload[0].data.deckId ||
@@ -110,9 +116,12 @@ export default function LabBar() {
       cards: cardsPayload,
       links: linksPayload,
     };
-    graphdeckDexieApi.updateGraphdeck(updateGraphPayload, mutate);
+    graphdeckApi.updateGraphdeck(updateGraphPayload, mutate);
+
+    //if success reset store
+
     console.log("save", updateGraphPayload);
-  }, [activeDeckInfo?._id, mutate]);
+  }, [activeDeckInfo?._id, graphdeckApi, mutate]);
 
   const handleLabViewChange = useCallback(
     (view: string): React.MouseEventHandler<HTMLDivElement> =>
@@ -183,18 +192,20 @@ export default function LabBar() {
       </div>
 
       <div className={`${styles.storageManagementTools}`}>
+        {labView === "activeDeck" && (
+          <div
+            className={`${styles.exportIconContainer}`}
+            onClick={handleSaveGraphDeck}
+          >
+            <Save size={22} />
+          </div>
+        )}
         <label>local storage</label>
         <input
           type="checkbox"
           checked={databaseType === "local"}
           onChange={changeDatabaseType}
         ></input>
-        <div
-          className={`${styles.exportIconContainer}`}
-          onClick={handleSaveGraphDeck}
-        >
-          <Save />
-        </div>
       </div>
     </div>
   );

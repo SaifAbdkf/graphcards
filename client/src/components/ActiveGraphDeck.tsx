@@ -12,6 +12,7 @@ import { useShallow } from "zustand/shallow";
 import { useCallback, useRef, useState } from "react";
 import LinkEdgeComponent from "./LinkEdgeComponent";
 import styles from "./ActiveGraphDeck.module.scss";
+import { ObjectId } from "bson";
 const nodeTypes = {
   cardNode: CardNodeComponent,
 };
@@ -66,9 +67,9 @@ export default function ActiveGraphDeck() {
       y: clientY,
     });
 
-    const cardTempId = `temp-${Date.now()}`;
+    const newCardId = new ObjectId().toHexString();
     const emptyCardNode: CardNode = {
-      id: cardTempId,
+      id: newCardId,
       type: "cardNode",
       selected: true,
       position: {
@@ -78,7 +79,7 @@ export default function ActiveGraphDeck() {
       data: {
         dbAction: "create",
         editMode: true,
-        _id: cardTempId,
+        _id: newCardId,
         deckId: activeDeckInfo?._id,
         x: graphX,
         y: graphY,

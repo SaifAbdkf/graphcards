@@ -19,6 +19,51 @@ export const ApiConnectedCardSchema = z.object({
   links: z.array(ApiLinkSchema),
 });
 
+// Schemas for GraphdeckChangePayload
+const CardSchema = z.object({
+  _id: z.string(),
+  deckId: z.string(),
+  x: z.number(),
+  y: z.number(),
+  front: z.string(),
+  back: z.string(),
+});
+
+const LinkSchema = z.object({
+  _id: z.string(),
+  deckId: z.string(),
+  isDirected: z.boolean(),
+  from: z.string(),
+  to: z.string(),
+  fromSide: z.string(),
+  toSide: z.string(),
+  label: z.string().optional(),
+});
+
+const CardChangePayloadSchema = z.object({
+  dbAction: z.union([
+    z.literal("create"),
+    z.literal("update"),
+    z.literal("delete"),
+  ]),
+  data: CardSchema,
+});
+
+const LinkChangePayloadSchema = z.object({
+  dbAction: z.union([
+    z.literal("create"),
+    z.literal("update"),
+    z.literal("delete"),
+  ]),
+  data: LinkSchema,
+});
+
+export const GraphdeckChangePayloadSchema = z.object({
+  deckId: z.string(),
+  cards: z.array(CardChangePayloadSchema),
+  links: z.array(LinkChangePayloadSchema),
+});
+
 export type ApiConnectedCard = z.infer<typeof ApiConnectedCardSchema>;
 export type ApiLink = z.infer<typeof ApiLinkSchema>;
 
