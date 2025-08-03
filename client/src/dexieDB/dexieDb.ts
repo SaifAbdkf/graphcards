@@ -16,7 +16,7 @@ interface Card {
   leitnerBox: number; //1 to 7
 }
 
-export type Link = {
+interface Link {
   id: string;
   deckId: string;
   isDirected: boolean;
@@ -25,15 +25,15 @@ export type Link = {
   fromSide: string;
   toSide: string;
   label?: string;
-};
+}
 
-export type Test = {
+interface Test {
   id: string;
   deckId: string;
   leitnerBox: number;
-  testedCards: { cardId: string; score: number }[]; //add later maybe
+  testedCards: { cardId: string; score: number }[];
   date: Date;
-};
+}
 
 // await Dexie.delete("GraphcardsDB");
 
@@ -41,6 +41,7 @@ export const db = new Dexie("GraphcardsDB") as Dexie & {
   DeckInfo: EntityTable<DeckInfo, "id">;
   Card: EntityTable<Card, "id">;
   Link: EntityTable<Link, "id">;
+  Test: EntityTable<Test, "id">;
 };
 
 db.version(1).stores({

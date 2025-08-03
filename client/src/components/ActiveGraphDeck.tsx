@@ -112,6 +112,7 @@ export default function ActiveGraphDeck() {
         y: graphY,
         front: "",
         back: "",
+        leitnerBox: 1,
       },
     };
     setcurrentlyEditingCardId(emptyCardNode.id);

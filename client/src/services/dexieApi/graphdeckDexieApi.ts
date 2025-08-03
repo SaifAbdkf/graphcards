@@ -24,21 +24,11 @@ export const graphdeckDexieApi: GraphdeckApiStrategy = {
         description: deckInfo.description,
         cards: cards.map((card) => ({
           _id: card.id,
-          deckId: card.deckId,
-          x: card.x,
-          y: card.y,
-          front: card.front,
-          back: card.back,
+          ...card,
         })),
         links: links.map((link) => ({
           _id: link.id,
-          deckId: link.deckId,
-          isDirected: link.isDirected,
-          from: link.from,
-          to: link.to,
-          fromSide: link.fromSide,
-          toSide: link.toSide,
-          label: link.label,
+          ...link,
         })),
       };
     } catch (error) {

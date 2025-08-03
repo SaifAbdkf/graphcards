@@ -24,7 +24,17 @@ export type Card = {
   y: number;
   front: string;
   back: string;
+  leitnerBox: number;
 };
+
+export type Test = {
+  _id: string;
+  deckId: string;
+  leitnerBox: number;
+  testedCards: { cardId: string; score: number }[];
+  date: Date;
+};
+
 export type CardFields = Omit<Card, "_id">;
 
 export type Link = {
