@@ -4,7 +4,6 @@ interface DeckInfo {
   id: string;
   name: string;
   description: string;
-  tests: Test[];
 }
 
 interface Card {
@@ -29,8 +28,10 @@ export type Link = {
 };
 
 export type Test = {
-  box: number;
-  // cardsTested: { cardId: string; score: number }[]; //add later maybe
+  id: string;
+  deckId: string;
+  leitnerBox: number;
+  testedCards: { cardId: string; score: number }[]; //add later maybe
   date: Date;
 };
 
@@ -46,4 +47,5 @@ db.version(1).stores({
   DeckInfo: "&id, name, description, tests",
   Card: "&id, deckId, x, y, front, back, leitnerBox",
   Link: "&id, deckId, isDirected, from, to, fromSide, toSide, label",
+  Test: "&id, deckId, leitnerBox, testedCards, date",
 });
