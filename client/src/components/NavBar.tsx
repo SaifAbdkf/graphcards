@@ -1,8 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./NavBar.module.scss";
 import { useCallback, useState } from "react";
+import { useLabView } from "../store/UISlice";
+import { useActiveDeckInfo } from "../store/graphdecksDataSlice";
 
 export default function NavBar() {
+  const { labView } = useLabView();
+  const activeDeckInfo = useActiveDeckInfo();
   const location = useLocation().pathname;
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const handleMouseEnter = useCallback(
@@ -29,7 +33,11 @@ export default function NavBar() {
         graphcards
       </Link>
       <Link
-        to="/lab"
+        to={
+          labView === "activeDeck" && activeDeckInfo !== null
+            ? `/lab/${activeDeckInfo._id}`
+            : "/lab/graphdecks"
+        }
         onMouseEnter={handleMouseEnter("lab")}
         onMouseLeave={handleMouseLeave}
         className={`${styles.link}  ${

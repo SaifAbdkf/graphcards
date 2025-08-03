@@ -21,3 +21,10 @@ export const useStoreDecksInfo = () => {
   const decksInfo = useGraphcardsStore(useShallow((state) => state.decksInfo));
   return decksInfo;
 };
+
+export const useActiveDeckInfo = () => {
+  const activeDeckInfo = useGraphcardsStore(
+    useShallow((state) => state.activeDeckInfo)
+  );
+  return activeDeckInfo;
+};

@@ -7,10 +7,10 @@ import Fetcher from "./Fetcher";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-  <Fetcher>
-    <BrowserRouter>
+  <BrowserRouter>
+    <Fetcher>
       <App />
-    </BrowserRouter>
-  </Fetcher>
+    </Fetcher>
+  </BrowserRouter>
   // </React.StrictMode>
 );

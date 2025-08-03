@@ -20,7 +20,14 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/lab" element={<LabPage />} />
+          <Route
+            path="/lab/graphdecks"
+            element={<LabPage labView="graphdecks" />}
+          />
+          <Route
+            path="/lab/:graphdeckId"
+            element={<LabPage labView="activeDeck" />}
+          />
         </Routes>
       </div>
     </div>

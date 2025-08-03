@@ -15,6 +15,7 @@ import { useLabView } from "../store/UISlice";
 import { useSWRConfig } from "swr";
 import { useGraphdeckApi } from "../hooks/useGraphDeckApi";
 import { useDeckInfoApi } from "../hooks/useDeckInfoApi";
+import { Link } from "react-router-dom";
 
 export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
   const [editingDeck, setEditingDeck] = useState(false);
@@ -92,7 +93,9 @@ export default function DeckFrame({ deckInfo }: { deckInfo: DeckInfo }) {
         <div className={`${styles.contextMenuContainer}`}>
           <ContextMenu>
             <ContextMenuItem onClickItem={() => viewDeck(deckInfo._id)}>
-              <Network size={18} />
+              <Link to={`/lab/${deckInfo._id}`}>
+                <Network size={18} />
+              </Link>
             </ContextMenuItem>
             <ContextMenuItem onClickItem={() => setEditingDeck(true)}>
               <SquarePen size={18} />

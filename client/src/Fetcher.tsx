@@ -7,8 +7,12 @@ import { DbAction } from "./Types/storageManagementTypes";
 import useSWR from "swr";
 import { useGraphdeckApi } from "./hooks/useGraphDeckApi";
 import { useDeckInfoApi } from "./hooks/useDeckInfoApi";
+import { useParams } from "react-router-dom";
 
 export default function Fetcher({ children }: { children: ReactNode }) {
+  const { graphdeckId } = useParams();
+  console.log("graphdeckId", graphdeckId);
+
   const activeDeck = useGraphcardsStore(
     useShallow((state) => state.activeDeckInfo)
   );

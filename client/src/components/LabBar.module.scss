@@ -10,8 +10,13 @@
   .leftSideLabBar {
     display: flex;
     height: 100%;
-
+    .noStyle {
+      height: 100%;
+      color: $black;
+      text-decoration: none;
+    }
     .graphdecksNavLink {
+      height: 100%;
       cursor: pointer;
       align-content: center;
       font-weight: 600;

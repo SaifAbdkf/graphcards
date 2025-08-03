@@ -15,6 +15,7 @@ import { useLabView } from "../store/UISlice";
 import { useDatabaseType } from "../store/settingsSlice";
 import { useSWRConfig } from "swr";
 import { useGraphdeckApi } from "../hooks/useGraphDeckApi";
+import { Link } from "react-router-dom";
 
 export default function LabBar() {
   const { mutate } = useSWRConfig();
@@ -145,34 +146,41 @@ export default function LabBar() {
   return (
     <div className={`${styles.labBar}`}>
       <div className={`${styles.leftSideLabBar}`}>
-        <div
-          className={`${styles.graphdecksNavLink} ${
-            (hovered === "graphdecksNavLink" || labView === "graphdecks") &&
-            styles.hoveredColor
-          } ${
-            labView === "graphdecks" &&
-            activeDeckInfo === null &&
-            styles.noBorder
-          }  `}
-          onClick={handleLabViewChange("graphdecks")}
-          onMouseEnter={handleMouseEnter("graphdecksNavLink")}
-          onMouseLeave={handleMouseLeave}
-        >
-          graphdecks
-        </div>
+        <Link to="/lab/graphdecks" className={`${styles.noStyle}`}>
+          <div
+            className={`${styles.graphdecksNavLink} ${
+              (hovered === "graphdecksNavLink" || labView === "graphdecks") &&
+              styles.hoveredColor
+            } ${
+              labView === "graphdecks" &&
+              activeDeckInfo === null &&
+              styles.noBorder
+            }  `}
+            onClick={handleLabViewChange("graphdecks")}
+            onMouseEnter={handleMouseEnter("graphdecksNavLink")}
+            onMouseLeave={handleMouseLeave}
+          >
+            graphdecks
+          </div>
+        </Link>
         {activeDeckInfo !== null && (
           <div className={`${styles.activeDeckTools}`}>
-            <div
-              className={`${styles.selectedDeckName} ${
-                (hovered === "deckName" || labView === "activeDeck") &&
-                styles.hoveredColor
-              } ${labView !== "activeDeck" && styles.noBorder} `}
-              onClick={handleLabViewChange("activeDeck")}
-              onMouseEnter={handleMouseEnter("deckName")}
-              onMouseLeave={handleMouseLeave}
+            <Link
+              to={`/lab/${activeDeckInfo._id}`}
+              className={`${styles.noStyle}`}
             >
-              {activeDeckInfo.name}
-            </div>
+              <div
+                className={`${styles.selectedDeckName} ${
+                  (hovered === "deckName" || labView === "activeDeck") &&
+                  styles.hoveredColor
+                } ${labView !== "activeDeck" && styles.noBorder} `}
+                onClick={handleLabViewChange("activeDeck")}
+                onMouseEnter={handleMouseEnter("deckName")}
+                onMouseLeave={handleMouseLeave}
+              >
+                {activeDeckInfo.name}
+              </div>
+            </Link>
             {labView === "activeDeck" && (
               <div className={`${styles.addCardIconContainer}`}>
                 <div
