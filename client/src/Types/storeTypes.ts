@@ -28,6 +28,18 @@ export type GraphcardsDataSlice = {
   deleteEdge: (edgeId: string) => void;
 };
 
+export type TestSlice = {
+  deckId: string | null;
+  previousTestLeitnerBox: number | null;
+  date: Date | null;
+  leitnerBox: number | null; //1 to 6 //7 is heaven
+  testedCards: { cardId: string; score: number }[]; // score is 0 for no remember, 1 for remember//extendable to anki alg
+  setDeckId: (deckId: string) => void;
+  setPreviousTestLeitnerBox: (leitnerBox: number) => void;
+  setDate: (date: Date) => void;
+  addTestedCard: (cardId: string, score: number) => void;
+};
+
 export type LabView = "graphdecks" | "activeDeck";
 export type UISlice = {
   labView: LabView;

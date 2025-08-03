@@ -4,6 +4,7 @@ interface DeckInfo {
   id: string;
   name: string;
   description: string;
+  tests: Test[];
 }
 
 interface Card {
@@ -13,6 +14,7 @@ interface Card {
   y: number;
   front: string;
   back: string;
+  leitnerBox: number; //1 to 7
 }
 
 export type Link = {
@@ -26,6 +28,12 @@ export type Link = {
   label?: string;
 };
 
+export type Test = {
+  box: number;
+  // cardsTested: { cardId: string; score: number }[]; //add later maybe
+  date: Date;
+};
+
 // await Dexie.delete("GraphcardsDB");
 
 export const db = new Dexie("GraphcardsDB") as Dexie & {
@@ -35,7 +43,7 @@ export const db = new Dexie("GraphcardsDB") as Dexie & {
 };
 
 db.version(1).stores({
-  DeckInfo: "&id, name, description",
-  Card: "&id, deckId, x, y, front, back",
+  DeckInfo: "&id, name, description, tests",
+  Card: "&id, deckId, x, y, front, back, leitnerBox",
   Link: "&id, deckId, isDirected, from, to, fromSide, toSide, label",
 });
