@@ -21,7 +21,7 @@ export default function LabPage({ labView }: { labView: LabView }) {
   if (graphdeckId && !activeDeckInfo) {
     setActiveDeckInfo({
       _id: graphdeckId,
-      name: "dummy",
+      name: "deck not found",
       description: "dummy 2",
     });
   }
