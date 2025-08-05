@@ -5,7 +5,6 @@ import {
   Controls,
   ReactFlow,
   useReactFlow,
-  useViewport,
 } from "@xyflow/react";
 import { CardNodeComponent } from "./CardNodeComponent";
 import { GraphcardsStoreState, useGraphcardsStore } from "../store/store";
@@ -14,7 +13,6 @@ import { useCallback, useRef, useState } from "react";
 import LinkEdgeComponent from "./LinkEdgeComponent";
 import styles from "./ActiveGraphDeck.module.scss";
 import { ObjectId } from "bson";
-import { animateViewport } from "../services/viewport/animateViewport";
 const nodeTypes = {
   cardNode: CardNodeComponent,
 };
@@ -57,18 +55,18 @@ export default function ActiveGraphDeck() {
 
   const { screenToFlowPosition } = useReactFlow();
 
-  const { setViewport } = useReactFlow();
-  const { x: currX, y: currY, zoom: currZ } = useViewport();
-  console.log({ x: currX, y: currY, zoom: currZ });
+  // const { setViewport } = useReactFlow();
+  // const { x: currX, y: currY, zoom: currZ } = useViewport();
+  // console.log({ x: currX, y: currY, zoom: currZ });
 
-  const handleAnimate = () => {
-    animateViewport(
-      setViewport,
-      { x: currX, y: currY, zoom: currZ },
-      { x: 100, y: 100, zoom: 1.5 },
-      800
-    );
-  };
+  // const handleAnimate = () => {
+  //   animateViewport(
+  //     setViewport,
+  //     { x: currX, y: currY, zoom: currZ },
+  //     { x: 100, y: 100, zoom: 1.5 },
+  //     800
+  //   );
+  // };
 
   const handleCanvasClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -156,7 +154,7 @@ export default function ActiveGraphDeck() {
 
   return (
     <div ref={containerRef} className={styles.canvasContainer}>
-      <button onClick={handleAnimate}>animate</button>
+      {/* <button onClick={handleAnimate}>animate</button> */}
       <ReactFlow
         nodes={nodes}
         edges={edges}

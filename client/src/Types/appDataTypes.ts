@@ -62,5 +62,9 @@ export type AppLink = Link & {
 export type CardNode = Node<AppCard>;
 export type LinkEdge = Edge<AppLink>;
 
+export type TestGraphdeckCard = Card & {
+  toTest: boolean;
+};
+
 //PROJECT CONVENTION
 // IF EDGE IS UNDIRECTED FROM := THE CARD BEING CREATED, TO := already existing card

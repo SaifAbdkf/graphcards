@@ -10,7 +10,6 @@ export function animateViewport(
     const elapsed = now - start;
     const t = Math.min(elapsed / duration, 1); // normalized time [0, 1]
 
-    // Ease in-out function (optional, you can tweak it)
     const easeInOut = t * t * (3 - 2 * t);
 
     const x = from.x + (to.x - from.x) * easeInOut;

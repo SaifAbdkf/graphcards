@@ -5,6 +5,7 @@ import LabPage from "./pages/LabPage";
 
 import styles from "./App.module.scss";
 import NavBar from "./components/NavBar";
+import TestPage from "./pages/TestPage";
 export default function App() {
   const location = useLocation().pathname;
   return (
@@ -28,6 +29,7 @@ export default function App() {
             path="/lab/:graphdeckId"
             element={<LabPage labView="activeDeck" />}
           />
+          <Route path="/lab/test/:graphdeckId" element={<TestPage />} />
         </Routes>
       </div>
     </div>

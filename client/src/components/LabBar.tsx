@@ -200,20 +200,23 @@ export default function LabBar() {
       </div>
 
       <div className={`${styles.storageManagementTools}`}>
-        {labView === "activeDeck" && (
+        {labView === "activeDeck" ? (
           <div
             className={`${styles.exportIconContainer}`}
             onClick={handleSaveGraphDeck}
           >
             <Save size={22} />
           </div>
+        ) : (
+          <>
+            <label>local storage</label>
+            <input
+              type="checkbox"
+              checked={databaseType === "local"}
+              onChange={changeDatabaseType}
+            ></input>
+          </>
         )}
-        <label>local storage</label>
-        <input
-          type="checkbox"
-          checked={databaseType === "local"}
-          onChange={changeDatabaseType}
-        ></input>
       </div>
     </div>
   );

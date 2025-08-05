@@ -4,13 +4,15 @@ import { useGraphcardsStore } from "./store";
 import { useShallow } from "zustand/shallow";
 
 export const createTestSlice: StateCreator<TestSlice> = (set, get) => ({
-  deckId: null,
+  testingDeckId: null,
   previousTestLeitnerBox: null,
   date: null,
   leitnerBox: null, //1 to 6 //7 is heaven
   testedCards: [], // score is 0 for no remember, 1 for remember//extendable to anki alg
-  setDeckId: (deckId: string) => {
-    set({ deckId: deckId });
+  setTestingDeckId: (deckId: string) => {
+    console.log("asbaaa");
+
+    set({ testingDeckId: deckId });
   },
   setPreviousTestLeitnerBox: (leitnerBox: number) => {
     set({ previousTestLeitnerBox: leitnerBox });
@@ -25,13 +27,18 @@ export const createTestSlice: StateCreator<TestSlice> = (set, get) => ({
   },
 });
 
-export function useLabView() {
-  const { labView, setLabView } = useGraphcardsStore(
+export const useTestDeck = () => {
+  const { testingDeckId, setTestingDeckId, decksInfo } = useGraphcardsStore(
     useShallow((state) => ({
-      labView: state.labView,
-      setLabView: state.setLabView,
+      testingDeckId: state.testingDeckId,
+      setTestingDeckId: state.setTestingDeckId,
+      decksInfo: state.decksInfo,
     }))
   );
 
-  return { labView, setLabView };
-}
+  const testingDeckName = decksInfo
+    .filter((deckinfo) => deckinfo._id)
+    ?.at(0)?.name;
+
+  return { testingDeckId, setTestingDeckId, testingDeckName };
+};

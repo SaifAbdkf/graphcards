@@ -3,11 +3,15 @@ import styles from "./NavBar.module.scss";
 import { useCallback, useState } from "react";
 import { useLabView } from "../store/UISlice";
 import { useActiveDeckInfo } from "../store/graphdecksDataSlice";
+import { useTestDeck } from "../store/testSlice";
 
 export default function NavBar() {
+  const location = useLocation().pathname;
   const { labView } = useLabView();
   const activeDeckInfo = useActiveDeckInfo();
-  const location = useLocation().pathname;
+  const { testingDeckId } = useTestDeck();
+  console.log(testingDeckId);
+
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const handleMouseEnter = useCallback(
     (page: string): React.MouseEventHandler<HTMLAnchorElement> =>
@@ -20,6 +24,7 @@ export default function NavBar() {
   const handleMouseLeave = useCallback(() => {
     setHoveredLink(null);
   }, []);
+
   return (
     <div className={`${styles.navBar}`}>
       <Link
@@ -41,11 +46,13 @@ export default function NavBar() {
         onMouseEnter={handleMouseEnter("lab")}
         onMouseLeave={handleMouseLeave}
         className={`${styles.link}  ${
-          (location === "/lab" || hoveredLink === "lab") && styles.selectedColor
+          (location.includes("/lab") && testingDeckId === null) ||
+          (hoveredLink === "lab" && styles.selectedColor)
         }`}
       >
-        <div key={"lab"}>lab</div>
+        <div>Library</div>
       </Link>
+      {testingDeckId && <div className={`${styles.testing}`}>testing </div>}
     </div>
   );
 }
