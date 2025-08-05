@@ -18,13 +18,20 @@ export const createGraphdecksDataSlice: StateCreator<GraphdecksDataSlice> = (
 });
 
 export const useStoreDecksInfo = () => {
-  const decksInfo = useGraphcardsStore(useShallow((state) => state.decksInfo));
+  const { decksInfo } = useGraphcardsStore(
+    useShallow((state) => ({
+      decksInfo: state.decksInfo,
+    }))
+  );
   return decksInfo;
 };
 
 export const useActiveDeckInfo = () => {
-  const activeDeckInfo = useGraphcardsStore(
-    useShallow((state) => state.activeDeckInfo)
+  const { activeDeckInfo, setActiveDeckInfo } = useGraphcardsStore(
+    useShallow((state) => ({
+      activeDeckInfo: state.activeDeckInfo,
+      setActiveDeckInfo: state.setActiveDeckInfo,
+    }))
   );
-  return activeDeckInfo;
+  return { activeDeckInfo, setActiveDeckInfo };
 };

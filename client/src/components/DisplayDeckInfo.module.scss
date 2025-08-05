@@ -22,3 +22,19 @@
   width: 90%;
   text-align: center;
 }
+
+.deckOptionsContainer {
+  display: flex;
+  gap: 0.325rem;
+}
+.button {
+  background-color: $white;
+  border: 1px solid $black;
+  border-radius: 0.125rem;
+  padding: 0.125rem 0.875rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-color-hover;
+  }
+}
