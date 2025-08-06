@@ -89,6 +89,7 @@ export default function ActiveGraphDeck() {
     };
 
     addNode(emptyCardNode);
+    setNodeEditMode(newCardId, true);
   };
 
   const doubleClickCard = (

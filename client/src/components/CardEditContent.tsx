@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { AppCard } from "../Types/appDataTypes";
 import { useGraphcardsStore } from "../store/store";
 import styles from "./CardEditContent.module.scss";
@@ -11,7 +11,16 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
     }))
   );
 
-  const handleFieldChange = useCallback(
+  const [localFront, setLocalFront] = useState(cardData.front);
+  const [localBack, setLocalBack] = useState(cardData.back);
+  const [localLeitnerBox, setLocalLeitnerBox] = useState(cardData.leitnerBox);
+
+  useEffect(() => {
+    setLocalFront(cardData.front);
+    setLocalBack(cardData.back);
+  }, [cardData.front, cardData.back]);
+
+  const updateCardData = useCallback(
     (
       e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
@@ -44,22 +53,25 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
         name="front"
         className={`nodrag ${styles.frontInput}`}
         placeholder="title"
-        onChange={handleFieldChange}
-        value={cardData.front}
+        onChange={(e) => setLocalFront(e.target.value)}
+        onBlur={updateCardData}
+        value={localFront}
+        autoComplete="off"
       />
       <textarea
         name="back"
         className={`nodrag ${styles.backTextarea}`}
         placeholder="body"
-        onChange={handleFieldChange}
-        value={cardData.back}
+        onChange={(e) => setLocalBack(e.target.value)}
+        onBlur={updateCardData}
+        value={localBack}
       />
       <input
         placeholder="leitner box"
         type="number"
         name="leitnerBox"
-        onChange={handleFieldChange}
-        value={cardData.leitnerBox}
+        onChange={(e) => setLocalLeitnerBox(parseInt(e.target.value))}
+        value={localLeitnerBox}
       ></input>
     </div>
   );
