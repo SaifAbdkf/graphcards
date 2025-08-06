@@ -14,6 +14,8 @@ import {
   LinkEdge,
 } from "../Types/appDataTypes";
 import { ObjectId } from "bson";
+import { useGraphcardsStore } from "./store";
+import { useShallow } from "zustand/shallow";
 
 export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
   set,
@@ -58,6 +60,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
       });
     }
   },
+
   onEdgesChange: (changes) => {
     console.log("edge change", changes);
     const edgeSelectionChange = changes.filter(
@@ -122,6 +125,8 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     set({ nodes: [...get().nodes, node] });
   },
   setNodeEditMode: (nodeId: string, editMode: boolean) => {
+    set({ EditingNodeId: editMode ? nodeId : null });
+
     const newNodes = get().nodes.map((storeNode) =>
       storeNode.id === nodeId
         ? { ...storeNode, data: { ...storeNode.data, editMode: editMode } }
@@ -142,6 +147,7 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
                   : ("update" as DbAction),
               front: data.front,
               back: data.back,
+              leitnerBox: data.leitnerBox,
             },
           }
         : storeNode
@@ -225,3 +231,41 @@ export const createGraphcardsDataSlice: StateCreator<GraphcardsDataSlice> = (
     }
   },
 });
+
+export function useActiveGraphcard() {
+  const {
+    nodes,
+    edges,
+    editingNodeId,
+    setNodeEditMode,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    addNode,
+    setEdgeEditMode,
+  } = useGraphcardsStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      edges: state.edges,
+      editingNodeId: state.EditingNodeId,
+      setNodeEditMode: state.setNodeEditMode,
+      onNodesChange: state.onNodesChange,
+      onEdgesChange: state.onEdgesChange,
+      onConnect: state.onConnect,
+      addNode: state.addNode,
+      setEdgeEditMode: state.setEdgeEditMode,
+    }))
+  );
+
+  return {
+    nodes,
+    edges,
+    editingNodeId,
+    setNodeEditMode,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    addNode,
+    setEdgeEditMode,
+  };
+}

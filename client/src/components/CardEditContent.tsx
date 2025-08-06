@@ -22,6 +22,8 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
         back: name === "back" ? value : cardData.back,
         x: cardData.x,
         y: cardData.y,
+        leitnerBox:
+          name === "leitnerBox" ? parseInt(value) : cardData.leitnerBox,
       });
     },
     [
@@ -32,6 +34,7 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
       cardData.back,
       cardData.x,
       cardData.y,
+      cardData.leitnerBox,
     ]
   );
 
@@ -51,6 +54,13 @@ export default function CardEditContent({ cardData }: { cardData: AppCard }) {
         onChange={handleFieldChange}
         value={cardData.back}
       />
+      <input
+        placeholder="leitner box"
+        type="number"
+        name="leitnerBox"
+        onChange={handleFieldChange}
+        value={cardData.leitnerBox}
+      ></input>
     </div>
   );
 }

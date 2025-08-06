@@ -7,12 +7,12 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { CardNodeComponent } from "./CardNodeComponent";
-import { GraphcardsStoreState, useGraphcardsStore } from "../store/store";
-import { useShallow } from "zustand/shallow";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import LinkEdgeComponent from "./LinkEdgeComponent";
 import styles from "./ActiveGraphDeck.module.scss";
 import { ObjectId } from "bson";
+import { useActiveDeckInfo } from "../store/graphdecksDataSlice";
+import { useActiveGraphcard } from "../store/graphcardsDataSlice";
 const nodeTypes = {
   cardNode: CardNodeComponent,
 };
@@ -21,52 +21,26 @@ const edgeTypes = {
   LinkEdge: LinkEdgeComponent,
 };
 
-const ReactFlowDataSelector = (state: GraphcardsStoreState) => ({
-  activeDeckInfo: state.activeDeckInfo,
-  nodes: state.nodes,
-  edges: state.edges,
-  onNodesChange: state.onNodesChange,
-  onEdgesChange: state.onEdgesChange,
-  onConnect: state.onConnect,
-  addNode: state.addNode,
-  setNodeEditMode: state.setNodeEditMode,
-  setEdgeEditMode: state.setEdgeEditMode,
-});
-
 export default function ActiveGraphDeck() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [currentlyEditingCardId, setcurrentlyEditingCardId] = useState<
-    string | null
-  >(null);
-
   const {
-    activeDeckInfo,
     nodes,
     edges,
+    editingNodeId,
+    setNodeEditMode,
     onNodesChange,
     onEdgesChange,
     onConnect,
     addNode,
-    setNodeEditMode,
     setEdgeEditMode,
-  } = useGraphcardsStore(useShallow(ReactFlowDataSelector));
+  } = useActiveGraphcard();
+
+  const { activeDeckInfo } = useActiveDeckInfo();
+
   console.log("nodes are ", nodes);
 
   const { screenToFlowPosition } = useReactFlow();
-
-  // const { setViewport } = useReactFlow();
-  // const { x: currX, y: currY, zoom: currZ } = useViewport();
-  // console.log({ x: currX, y: currY, zoom: currZ });
-
-  // const handleAnimate = () => {
-  //   animateViewport(
-  //     setViewport,
-  //     { x: currX, y: currY, zoom: currZ },
-  //     { x: 100, y: 100, zoom: 1.5 },
-  //     800
-  //   );
-  // };
 
   const handleCanvasClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -113,7 +87,7 @@ export default function ActiveGraphDeck() {
         leitnerBox: 1,
       },
     };
-    setcurrentlyEditingCardId(emptyCardNode.id);
+
     addNode(emptyCardNode);
   };
 
@@ -123,25 +97,22 @@ export default function ActiveGraphDeck() {
   ) => {
     event.stopPropagation();
     setNodeEditMode(node.id, true);
-    setcurrentlyEditingCardId(node.id);
   };
 
   const setCardEditModeOff = useCallback(() => {
-    if (currentlyEditingCardId) {
-      setNodeEditMode(currentlyEditingCardId, false);
-      setcurrentlyEditingCardId(null);
+    if (editingNodeId) {
+      setNodeEditMode(editingNodeId, false);
     }
-  }, [currentlyEditingCardId, setNodeEditMode]);
+  }, [editingNodeId, setNodeEditMode]);
 
   const maybeSetCardEditModeOff = useCallback(
     (e: React.MouseEvent<Element, MouseEvent>, node: CardNode) => {
       e.stopPropagation();
-      if (currentlyEditingCardId && currentlyEditingCardId !== node.id) {
-        setcurrentlyEditingCardId(null);
-        setNodeEditMode(currentlyEditingCardId, false);
+      if (editingNodeId && editingNodeId !== node.id) {
+        setNodeEditMode(editingNodeId, false);
       }
     },
-    [currentlyEditingCardId, setNodeEditMode]
+    [editingNodeId, setNodeEditMode]
   );
 
   const doubleClickEdge = (
