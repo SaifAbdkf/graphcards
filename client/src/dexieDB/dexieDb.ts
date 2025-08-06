@@ -32,7 +32,7 @@ interface Test {
   deckId: string;
   leitnerBox: number;
   testedCards: { cardId: string; score: number }[];
-  date: Date;
+  createdAt: string;
 }
 
 // await Dexie.delete("GraphcardsDB");
@@ -48,5 +48,11 @@ db.version(1).stores({
   DeckInfo: "&id, name, description, tests",
   Card: "&id, deckId, x, y, front, back, leitnerBox",
   Link: "&id, deckId, isDirected, from, to, fromSide, toSide, label",
-  Test: "&id, deckId, leitnerBox, testedCards, date",
+  Test: "&id, deckId, leitnerBox, testedCards, createdAt",
+});
+
+db.Test.hook("creating", (_, test) => {
+  if (!test.createdAt) {
+    test.createdAt = new Date().toISOString();
+  }
 });

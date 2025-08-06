@@ -13,7 +13,7 @@ export const cardSchema = new Schema(
       required: true,
       // false in case AI or user creates a link card to be filled later or maybe if it is a group Card?
     },
-    metadata: { type: Map, of: Schema.Types.Mixed },
+    leitnerBox: { type: Number, required: true },
   },
   { timesstamps: true, strict: false }
 );
