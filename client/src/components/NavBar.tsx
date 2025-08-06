@@ -8,7 +8,7 @@ import { useTestDeck } from "../store/testSlice";
 export default function NavBar() {
   const location = useLocation().pathname;
   const { labView } = useLabView();
-  const activeDeckInfo = useActiveDeckInfo();
+  const { activeDeckInfo } = useActiveDeckInfo();
   const { testingDeckId } = useTestDeck();
   console.log(testingDeckId);
 
@@ -46,11 +46,12 @@ export default function NavBar() {
         onMouseEnter={handleMouseEnter("lab")}
         onMouseLeave={handleMouseLeave}
         className={`${styles.link}  ${
-          (location.includes("/lab") && testingDeckId === null) ||
-          (hoveredLink === "lab" && styles.selectedColor)
+          ((location.includes("/lab") && testingDeckId === null) ||
+            hoveredLink === "lab") &&
+          styles.selectedColor
         }`}
       >
-        <div>Library</div>
+        Library
       </Link>
       {testingDeckId && <div className={`${styles.testing}`}>testing </div>}
     </div>
